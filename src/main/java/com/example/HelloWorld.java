@@ -7,6 +7,6 @@ public class HelloWorld {
     }
 
     public static void print(PrintStream out) {
-        out.print("Hello,");
+        out.print("Hello World");
     }
 }
