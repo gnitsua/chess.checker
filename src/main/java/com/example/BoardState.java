@@ -27,12 +27,12 @@ public class BoardState {
     }
 
     private HashSet<String> flip_rows(HashSet<String> pieces) {
-        HashSet<String> result = new HashSet<>();
-        for (String piece : pieces) {
-            char row = piece.charAt(2);
-            char new_row = (char) ('8' - row + '1');
-            result.add(piece.substring(0, 2) + new_row);
-        }
+        final HashSet<String> result = new HashSet<>(0);
+        pieces.forEach(piece -> {
+            final char row = piece.charAt(2);
+            final char newRow = (char) (('8' - row) + '1');
+            result.add(piece.substring(0, 2) + newRow);
+        });
         return result;
     }
 
