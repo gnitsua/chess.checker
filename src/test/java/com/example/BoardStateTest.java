@@ -19,6 +19,21 @@ public class BoardStateTest {
         Assert.assertEquals("Move not empty",empty,sut.getMove());
     }
     @Test
+    public void test_flip_black_white() {
+        HashSet<String> white_set = new HashSet<>(Arrays.asList("Rf1", "Kg1", "Pf2", "Ph2", "Pg3"));
+        HashSet<String> white_set_flipped = new HashSet<>(Arrays.asList("Rf8", "Kg8", "Pf7", "Ph7", "Pg6"));
+        HashSet<String> black_set = new HashSet<>(Arrays.asList("Kb8", "Ne8", "Pa7", "Pb7", "Pc7", "Ra5"));
+        HashSet<String> black_set_flipped = new HashSet<>(Arrays.asList("Kb1", "Ne1", "Pa2", "Pb2", "Pc2", "Ra4"));
+        HashSet<String> move_set = new HashSet<>(Arrays.asList("Rf1"));
+        BoardState sut = new BoardState(white_set,black_set,move_set);
+        sut.flip_black_white();
+        Assert.assertEquals(white_set_flipped,sut.getWhite());
+        Assert.assertEquals(black_set_flipped,sut.getBlack());
+        Assert.assertEquals(move_set,sut.getMove());
+
+    }
+
+    @Test
     public void test_toString() {
         String testString = "[a, b, c]\n[a, b, c]\n[a, b, c]";
         String[] set = {"a", "b", "c"};
