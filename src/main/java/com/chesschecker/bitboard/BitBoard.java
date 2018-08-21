@@ -2,7 +2,7 @@ package com.chesschecker.bitboard;
 
 import com.chesschecker.util.StringHelper;
 
-public class BitBoard {
+public final class BitBoard {
 
     private long state;
 
@@ -51,7 +51,7 @@ public class BitBoard {
 
     }
 
-    public final void mirrorVertical() {
+    public void mirrorVertical() {
         final long k1 = 0x00FF00FF00FF00FFL;
         final long k2 = 0x0000FFFF0000FFFFL;
         final long oneRow = 8L;
@@ -63,7 +63,7 @@ public class BitBoard {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         final long oneRow = 8L;
         final StringBuilder result = new StringBuilder(0);
         result.append(StringHelper.NEW_LINE);
@@ -77,19 +77,19 @@ public class BitBoard {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
+    public boolean equals(final Object obj) {
+        boolean returnVal = false;
+        if (obj == this) {
+            returnVal = true;
+        } else if (obj instanceof BitBoard) {
+
+            // typecast o to Complex so that we can compare data members
+            final BitBoard otherBoard = (BitBoard) obj;
+
+            // Compare the data members and return accordingly
+            returnVal = this.getState() == otherBoard.getState();
         }
 
-        if (!(o instanceof BitBoard)) {
-            return false;
-        }
-
-        // typecast o to Complex so that we can compare data members
-        final BitBoard c = (BitBoard) o;
-
-        // Compare the data members and return accordingly
-        return this.state == c.getState();
+        return returnVal;
     }
 }
