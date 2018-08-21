@@ -10,6 +10,22 @@ public class BitBoard {
         this.state = 0L;
     }
 
+    public BitBoard(long state) {
+        this.state = state;
+    }
+
+    public static BitBoard or(BitBoard a, BitBoard b) {
+        return new BitBoard(a.getState() | b.getState());
+    }
+
+    public static BitBoard and(BitBoard a, BitBoard b) {
+        return new BitBoard(a.getState() & b.getState());
+    }
+
+    public static BitBoard xor(BitBoard a, BitBoard b) {
+        return new BitBoard(a.getState() ^ b.getState());
+    }
+
     public long getState() {
         return this.state;
     }
@@ -53,7 +69,7 @@ public class BitBoard {
         result.append(StringHelper.NEW_LINE);
         for (int j = 0; 8 > j; j++) {
             for (int i = 0; 8 > i; i++) {
-                result.append((this.state >> (((long)j * oneRow) + (long)i)) & 0x01L);
+                result.append((this.state >> (((long) j * oneRow) + (long) i)) & 0x01L);
             }
             result.append(StringHelper.NEW_LINE);
         }

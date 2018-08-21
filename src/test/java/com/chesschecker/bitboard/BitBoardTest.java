@@ -89,4 +89,58 @@ public class BitBoardTest {
         other.setOccupancy(2,4);
         Assert.assertEquals(sut,other);
     }
+
+    @Test
+    public void test_or(){
+        BitBoard a = new BitBoard();
+        a.setOccupancy(2,4);
+        a.setOccupancy(4,4);
+
+        BitBoard b = new BitBoard();
+        b.setOccupancy(6,4);
+        b.setOccupancy(4,4);
+
+        BitBoard sut = BitBoard.or(a,b);
+
+        BitBoard expectedOutput = new BitBoard();
+        expectedOutput.setOccupancy(2,4);
+        expectedOutput.setOccupancy(6,4);
+        expectedOutput.setOccupancy(4,4);
+        Assert.assertEquals(expectedOutput,sut);
+    }
+
+    @Test
+    public void test_and(){
+        BitBoard a = new BitBoard();
+        a.setOccupancy(2,4);
+        a.setOccupancy(4,4);
+
+        BitBoard b = new BitBoard();
+        b.setOccupancy(6,4);
+        b.setOccupancy(4,4);
+
+        BitBoard sut = BitBoard.and(a,b);
+
+        BitBoard expectedOutput = new BitBoard();
+        expectedOutput.setOccupancy(4,4);
+        Assert.assertEquals(expectedOutput,sut);
+    }
+
+    @Test
+    public void test_xor(){
+        BitBoard a = new BitBoard();
+        a.setOccupancy(2,4);
+        a.setOccupancy(4,4);
+
+        BitBoard b = new BitBoard();
+        b.setOccupancy(6,4);
+        b.setOccupancy(4,4);
+
+        BitBoard sut = BitBoard.xor(a,b);
+
+        BitBoard expectedOutput = new BitBoard();
+        expectedOutput.setOccupancy(2,4);
+        expectedOutput.setOccupancy(6,4);
+        Assert.assertEquals(expectedOutput,sut);
+    }
 }
