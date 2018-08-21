@@ -1,4 +1,4 @@
-package com.example;
+package com.chesschecker.input;
 
 import java.util.HashSet;
 import java.util.logging.Logger;
@@ -11,7 +11,7 @@ public class BoardState {
     private HashSet<String> move;
 
 
-    BoardState() {
+    public BoardState() {
         super();
         this.white = new HashSet<>(0);
         this.black = new HashSet<>(0);
@@ -19,7 +19,7 @@ public class BoardState {
     }
 
 
-    BoardState(HashSet<String> white_in, HashSet<String> black_in, HashSet<String> move_in) {
+    public BoardState(HashSet<String> white_in, HashSet<String> black_in, HashSet<String> move_in) {
         super();
         this.white = white_in;// making the assumption that this is Hash set of String elements that are 3 characters
         this.black = black_in;

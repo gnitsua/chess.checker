@@ -1,4 +1,4 @@
-package com.example;
+package com.chesschecker.input;
 
 import java.io.*;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ public class InputParser {
     private BufferedReader input;
     private PrintWriter output;
 
-    InputParser(InputStream source, OutputStream prompt) {
+    public InputParser(InputStream source, OutputStream prompt) {
         super();
         this.input = new BufferedReader(new InputStreamReader(source));
         this.output = new PrintWriter(new OutputStreamWriter(prompt));

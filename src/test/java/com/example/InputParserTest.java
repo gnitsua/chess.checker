@@ -1,8 +1,11 @@
 package com.example;
 
+import com.chesschecker.input.BoardState;
+import com.chesschecker.input.InputParser;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -13,20 +16,23 @@ public class InputParserTest {
 
     @Test
     public void test_parseInput() {
-        HashSet<String> white_set = new HashSet<>(Arrays.asList("Rf1", "Kg1", "Pf2", "Ph2", "Pg3"));
-        HashSet<String> black_set = new HashSet<>(Arrays.asList("Kb8", "Ne8", "Pa7", "Pb7", "Pc7", "Ra5"));
-        HashSet<String> move_set = new HashSet<>(Arrays.asList("Rf1"));
-        String string = "Rf1, Kg1, Pf2, Ph2, Pg3\nKb8, Ne8, Pa7, Pb7, Pc7, Ra5\nRf1\n";
-        InputStream mockInput = new java.io.ByteArrayInputStream(string.getBytes());
+        final HashSet<String> whiteSet = new HashSet<>(Arrays.asList("Rf1", "Kg1", "Pf2", "Ph2", "Pg3"));
+        final HashSet<String> blackSet = new HashSet<>(Arrays.asList("Kb8", "Ne8", "Pa7", "Pb7", "Pc7", "Ra5"));
+        final HashSet<String> moveSet = new HashSet<>(Arrays.asList("Rf1"));
+        final String expectedOutput = "WHITE: BLACK: PIECE TO MOVE: ";
+        String inputString = "Rf1, Kg1, Pf2, Ph2, Pg3\nKb8, Ne8, Pa7, Pb7, Pc7, Ra5\nRf1\n";
+        InputStream mockInput = new java.io.ByteArrayInputStream(inputString.getBytes());
 
-        PrintStream mockOutput = new PrintStream(new java.io.ByteArrayOutputStream());
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream mockOutput = new PrintStream(baos);
         InputParser sut = new InputParser(mockInput, mockOutput);
 
-        try {// TODO: how should this be tested?
+        try {// TODO: test throwing the exception
             BoardState test = sut.parseInput();
-            Assert.assertEquals(test.getWhite(), white_set);
-            Assert.assertEquals(test.getBlack(), black_set);
-            Assert.assertEquals(test.getMove(), move_set);
+            Assert.assertEquals(test.getWhite(), whiteSet);
+            Assert.assertEquals(test.getBlack(), blackSet);
+            Assert.assertEquals(test.getMove(), moveSet);
+            Assert.assertEquals(expectedOutput,baos.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

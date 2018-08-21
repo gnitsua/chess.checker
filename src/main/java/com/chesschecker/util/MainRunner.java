@@ -1,8 +1,10 @@
-package com.example;
+package com.chesschecker.util;
+import com.chesschecker.input.InputParser;
+
 import java.io.IOException;
 import java.io.PrintStream;
 
-public class HelloWorld {
+public class MainRunner {
     public static void main(String[] args){
         InputParser ip = new InputParser(System.in,System.out);
 

@@ -1,5 +1,6 @@
 package com.example;
 
+import com.chesschecker.input.BoardState;
 import org.junit.Assert;
 import org.junit.Test;
 
