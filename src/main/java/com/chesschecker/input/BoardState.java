@@ -1,5 +1,7 @@
 package com.chesschecker.input;
 
+import com.chesschecker.util.StringHelper;
+
 import java.util.HashSet;
 import java.util.logging.Logger;
 
@@ -19,26 +21,26 @@ public class BoardState {
     }
 
 
-    public BoardState(HashSet<String> white_in, HashSet<String> black_in, HashSet<String> move_in) {
+    public BoardState(final HashSet<String> whiteIn, final HashSet<String> blackIn, final HashSet<String> moveIn) {
         super();
-        this.white = white_in;// making the assumption that this is Hash set of String elements that are 3 characters
-        this.black = black_in;
-        this.move = move_in;
+        this.white = whiteIn;// making the assumption that this is Hash set of String elements that are 3 characters
+        this.black = blackIn;
+        this.move = moveIn;
     }
 
-    private HashSet<String> flip_rows(HashSet<String> pieces) {
+    private static HashSet<String> flip_rows(final HashSet<String> pieces) {
         final HashSet<String> result = new HashSet<>(0);
         pieces.forEach(piece -> {
             final char row = piece.charAt(2);
-            final char newRow = (char) (('8' - row) + '1');
+            final char newRow = (char) (((int)'8' - (int)row) + (int)'1');
             result.add(piece.substring(0, 2) + newRow);
         });
         return result;
     }
 
     public void flip_black_white() {
-        this.white = this.flip_rows(this.white);
-        this.black = this.flip_rows(this.black);
+        this.white = BoardState.flip_rows(this.white);
+        this.black = BoardState.flip_rows(this.black);
     }
 
     public HashSet<String> getWhite() {
@@ -55,6 +57,13 @@ public class BoardState {
 
     @Override
     public String toString() {
-        return this.getWhite().toString() + '\n' + this.getBlack().toString() + "\n" + this.getMove().toString();
+        StringBuilder result = new StringBuilder(0);
+        result.append(this.getWhite());
+        result.append(StringHelper.NEW_LINE);
+        result.append(this.getBlack());
+        result.append(StringHelper.NEW_LINE);
+        result.append(this.getMove());
+        result.append(StringHelper.NEW_LINE);
+        return result.toString();
     }
 }

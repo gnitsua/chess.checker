@@ -36,7 +36,7 @@ public class BoardStateTest {
 
     @Test
     public void test_toString() {
-        String testString = "[a, b, c]\n[a, b, c]\n[a, b, c]";
+        String testString = "[a, b, c]\n[a, b, c]\n[a, b, c]\n";
         String[] set = {"a", "b", "c"};
         HashSet<String> white = new HashSet<String>(Arrays.asList(set));
         HashSet<String> black = new HashSet<String>(Arrays.asList(set));
