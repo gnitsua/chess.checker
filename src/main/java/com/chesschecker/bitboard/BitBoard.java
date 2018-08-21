@@ -13,7 +13,28 @@ public class BitBoard {
     }
 
     public void setOccupancy(final int row, final int col) {
-        this.state |= (long)Math.pow((double)2,(double)((7 - col) + ((7 - row) * 8)));
+        if(0 <= row){
+            if(8 >= row){
+                if(0 <= col){
+                    if(8 >= col){
+                        this.state |= (long)Math.pow((double)2,(double)((7 - col) + ((7 - row) * 8)));
+                    }
+                    else{
+                        return;
+                    }
+                }
+                else{
+                    return;
+                }
+            }
+            else{
+                return;
+            }
+        }
+        else{
+            return;
+        }
+
     }
 
     @Override
