@@ -7,6 +7,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 
+@SuppressWarnings("ALL")
 public class BitBoardTest {
 
     @Test
