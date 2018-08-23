@@ -8,7 +8,7 @@ import com.chesschecker.bitboard.BitBoard;
  * The rook may move to any square along the file or the rank on which it stands.
  * This is defined in 3.3 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
-public class RookMove extends SlideMove{
+public class RookMove extends SlideMove {
     protected static final String PIECE_ABBREVIATION = "R";
 
 
@@ -18,25 +18,22 @@ public class RookMove extends SlideMove{
 
     @Override
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if(super.isValid(friendly, foe)){
-            if (this.startRow == this.endRow){
+        if (super.isValid(friendly, foe)) {
+            if (this.startRow == this.endRow) {
                 return true;
-            }
-            else{
-                if(this.startCol == this.endCol){
+            } else {
+                if (this.startCol == this.endCol) {
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
             }
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    public String toString(){
-        return this.PIECE_ABBREVIATION + super.toString();
+    public String toString() {
+        return PIECE_ABBREVIATION + super.toString();
     }
 }
