@@ -1,5 +1,12 @@
 package com.chesschecker.moves;
 
+import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.util.Column;
+
+/**
+ * A board move is defined as a move that starts and ends on a valid square of a 8x8 chess board
+ * This comes from rule 2.1 of https://www.fide.com/fide/handbook.html?id=171&view=article
+ */
 public class BoardMove extends Move {
     protected int startRow;
     protected int startCol;
@@ -38,7 +45,7 @@ public class BoardMove extends Move {
         }
     }
 
-    public boolean isValid() {
+    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
         if (BoardMove.isValidRow(this.startRow)) {
             if (BoardMove.isValidRow(this.endRow)) {
                 if (BoardMove.isValidCol(this.startCol)) {
@@ -56,5 +63,15 @@ public class BoardMove extends Move {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public final String toString() {
+        final StringBuilder result = new StringBuilder(0);
+        result.append(Move.PIECE_ABBREVIATION);
+        final String str = Column.columnNumberToLetter(this.endCol);
+        result.append(str);
+        result.append(this.endRow+1);
+        return result.toString();
     }
 }

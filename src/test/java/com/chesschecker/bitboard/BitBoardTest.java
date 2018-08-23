@@ -1,10 +1,8 @@
 package com.chesschecker.bitboard;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 
 @SuppressWarnings("ALL")
@@ -55,11 +53,26 @@ public class BitBoardTest {
                 "\n00000000" +
                 "\n00000000" +
                 "\n00000000" +
-                "\n00010000" +
+                "\n00001000" +
                 "\n00000000" +
                 "\n00000000\n";
         final BitBoard sut = new BitBoard();
         sut.setOccupancy(2, 4);
+        Assert.assertThat("toString() does not produce the correct output", sut.toString(), is(expectedOut));
+    }
+
+    @Test
+    public void test_toString_2() {
+        final String expectedOut = "\n00000000" +
+                "\n00000000" +
+                "\n00000000" +
+                "\n00000000" +
+                "\n00000000" +
+                "\n00000000" +
+                "\n00000000" +
+                "\n10000000\n";
+        final BitBoard sut = new BitBoard();
+        sut.setOccupancy(0, 0);
         Assert.assertThat("toString() does not produce the correct output", sut.toString(), is(expectedOut));
     }
 
@@ -70,78 +83,101 @@ public class BitBoardTest {
         Assert.assertEquals(Long.parseLong("8796093022208"), sut.getState());
     }
 
+    /**
+     * Test to check behavior of the internal long at the edge case
+     */
+    @Test
+    public void setOccupancy_2() {
+        BitBoard sut = new BitBoard();
+        sut.setOccupancy(0, 0);
+        Assert.assertEquals(true, Long.parseUnsignedLong("9223372036854775808")==sut.getState());
+    }
+
 
     @Test
     public void equals_self() {
         BitBoard sut = new BitBoard();
-        Assert.assertEquals(sut,sut);
+        Assert.assertEquals(sut, sut);
     }
 
     @Test
     public void equals_another_class() {
         BitBoard sut = new BitBoard();
-        Assert.assertFalse("Comparision to another class does not return false",sut.equals(1));
+        Assert.assertFalse("Comparision to another class does not return false", sut.equals(1));
     }
+
     @Test
     public void equals_another_bitboard() {
         BitBoard sut = new BitBoard();
-        sut.setOccupancy(2,4);
+        sut.setOccupancy(2, 4);
         BitBoard other = new BitBoard();
-        other.setOccupancy(2,4);
-        Assert.assertEquals(sut,other);
+        other.setOccupancy(2, 4);
+        Assert.assertEquals(sut, other);
     }
 
     @Test
-    public void test_or(){
+    public void test_or() {
         BitBoard a = new BitBoard();
-        a.setOccupancy(2,4);
-        a.setOccupancy(4,4);
+        a.setOccupancy(2, 4);
+        a.setOccupancy(4, 4);
 
         BitBoard b = new BitBoard();
-        b.setOccupancy(6,4);
-        b.setOccupancy(4,4);
+        b.setOccupancy(6, 4);
+        b.setOccupancy(4, 4);
 
-        BitBoard sut = BitBoard.or(a,b);
+        BitBoard sut = BitBoard.or(a, b);
 
         BitBoard expectedOutput = new BitBoard();
-        expectedOutput.setOccupancy(2,4);
-        expectedOutput.setOccupancy(6,4);
-        expectedOutput.setOccupancy(4,4);
-        Assert.assertEquals(expectedOutput,sut);
+        expectedOutput.setOccupancy(2, 4);
+        expectedOutput.setOccupancy(6, 4);
+        expectedOutput.setOccupancy(4, 4);
+        Assert.assertEquals(expectedOutput, sut);
     }
 
     @Test
-    public void test_and(){
+    public void test_and() {
         BitBoard a = new BitBoard();
-        a.setOccupancy(2,4);
-        a.setOccupancy(4,4);
+        a.setOccupancy(2, 4);
+        a.setOccupancy(4, 4);
 
         BitBoard b = new BitBoard();
-        b.setOccupancy(6,4);
-        b.setOccupancy(4,4);
+        b.setOccupancy(6, 4);
+        b.setOccupancy(4, 4);
 
-        BitBoard sut = BitBoard.and(a,b);
+        BitBoard sut = BitBoard.and(a, b);
 
         BitBoard expectedOutput = new BitBoard();
-        expectedOutput.setOccupancy(4,4);
-        Assert.assertEquals(expectedOutput,sut);
+        expectedOutput.setOccupancy(4, 4);
+        Assert.assertEquals(expectedOutput, sut);
     }
 
     @Test
-    public void test_xor(){
+    public void test_xor() {
         BitBoard a = new BitBoard();
-        a.setOccupancy(2,4);
-        a.setOccupancy(4,4);
+        a.setOccupancy(2, 4);
+        a.setOccupancy(4, 4);
 
         BitBoard b = new BitBoard();
-        b.setOccupancy(6,4);
-        b.setOccupancy(4,4);
+        b.setOccupancy(6, 4);
+        b.setOccupancy(4, 4);
 
-        BitBoard sut = BitBoard.xor(a,b);
+        BitBoard sut = BitBoard.xor(a, b);
 
         BitBoard expectedOutput = new BitBoard();
-        expectedOutput.setOccupancy(2,4);
-        expectedOutput.setOccupancy(6,4);
-        Assert.assertEquals(expectedOutput,sut);
+        expectedOutput.setOccupancy(2, 4);
+        expectedOutput.setOccupancy(6, 4);
+        Assert.assertEquals(expectedOutput, sut);
+    }
+
+    @Test
+    public void isNotEmpty() {
+        BitBoard sut = new BitBoard();
+        sut.setOccupancy(4,4);
+        Assert.assertEquals(false, sut.isEmpty());
+    }
+    @Test
+    public void isEmpty() {
+        BitBoard sut = new BitBoard();
+        Assert.assertEquals(true, sut.isEmpty());
     }
 }

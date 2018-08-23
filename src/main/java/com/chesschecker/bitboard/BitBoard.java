@@ -2,6 +2,8 @@ package com.chesschecker.bitboard;
 
 import com.chesschecker.util.StringHelper;
 
+import java.math.BigDecimal;
+
 public final class BitBoard {
 
     private long state;
@@ -26,6 +28,10 @@ public final class BitBoard {
         return new BitBoard(a.getState() ^ b.getState());
     }
 
+    public static BitBoard not(BitBoard a) {
+        return new BitBoard(~a.getState());
+    }
+
     public long getState() {
         return this.state;
     }
@@ -35,7 +41,8 @@ public final class BitBoard {
             if (8 >= row) {
                 if (0 <= col) {
                     if (8 >= col) {
-                        this.state |= (long) Math.pow((double) 2, (double) ((7 - col) + ((7 - row) * 8)));
+                        BigDecimal two = new BigDecimal("2");
+                        this.state |= two.pow(((7 - col) + ((7 - row) * 8))).longValue();
                     } else {
                         return;
                     }
@@ -68,12 +75,16 @@ public final class BitBoard {
         final StringBuilder result = new StringBuilder(0);
         result.append(StringHelper.NEW_LINE);
         for (int j = 0; 8 > j; j++) {
-            for (int i = 0; 8 > i; i++) {
+            for (int i = 7; 0 <= i; i--) {
                 result.append((this.state >> (((long) j * oneRow) + (long) i)) & 0x01L);
             }
             result.append(StringHelper.NEW_LINE);
         }
         return result.toString();
+    }
+
+    public boolean isEmpty() {
+        return 0L == this.state;
     }
 
     @Override
