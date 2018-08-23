@@ -7,11 +7,12 @@ import com.chesschecker.util.Column;
  * A board move is defined as a move that starts and ends on a valid square of a 8x8 chess board
  * This comes from rule 2.1 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
-public class BoardMove extends Move {
-    protected int startRow;
-    protected int startCol;
-    protected int endRow;
-    protected int endCol;
+public class BoardMove implements Move{
+    int startRow;
+    int startCol;
+    int endRow;
+    int endCol;
+
 
     public BoardMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super();
@@ -66,9 +67,8 @@ public class BoardMove extends Move {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         final StringBuilder result = new StringBuilder(0);
-        result.append(Move.PIECE_ABBREVIATION);
         final String str = Column.columnNumberToLetter(this.endCol);
         result.append(str);
         result.append(this.endRow+1);

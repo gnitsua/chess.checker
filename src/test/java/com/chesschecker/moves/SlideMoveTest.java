@@ -6,6 +6,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("ALL")
 public class SlideMoveTest {
@@ -52,8 +55,6 @@ public class SlideMoveTest {
         BitBoard friendly = new BitBoard();
         friendly.setOccupancy(4,0);
         SlideMove sut = new SlideMove(0,0,7,0);
-//        Assert.assertEquals(true,((BoardMove)sut).isValid(friendly,empty)); // TODO: come up with a way to check super call
-//        Assert.assertEquals(true,((ColoredMove)sut).isValid(friendly,empty));
         Assert.assertEquals(false,sut.isValid(friendly,empty));//check to make sure both friendly and foes block move
         Assert.assertEquals(false,sut.isValid(friendly,friendly));
         Assert.assertEquals(false,sut.isValid(empty,friendly));
@@ -65,8 +66,6 @@ public class SlideMoveTest {
         BitBoard friendly = new BitBoard();
         friendly.setOccupancy(0,4);
         SlideMove sut = new SlideMove(0,0,0,7);
-//        Assert.assertEquals(true,((BoardMove)sut).isValid(friendly,empty));
-//        Assert.assertEquals(true,((ColoredMove)sut).isValid(friendly,empty));
         Assert.assertEquals(false,sut.isValid(friendly,empty));
         Assert.assertEquals(false,sut.isValid(friendly,friendly));
         Assert.assertEquals(false,sut.isValid(empty,friendly));
@@ -78,8 +77,6 @@ public class SlideMoveTest {
         BitBoard friendly = new BitBoard();
         friendly.setOccupancy(4,4);
         SlideMove sut = new SlideMove(0,0,7,7);
-//        Assert.assertEquals(true,((BoardMove)sut).isValid(friendly,empty));
-//        Assert.assertEquals(true,((ColoredMove)sut).isValid(friendly,empty));
         Assert.assertEquals(false,sut.isValid(friendly,empty));
         Assert.assertEquals(false,sut.isValid(friendly,friendly));
         Assert.assertEquals(false,sut.isValid(empty,friendly));
@@ -91,8 +88,6 @@ public class SlideMoveTest {
         BitBoard friendly = new BitBoard();
         friendly.setOccupancy(3,4);
         SlideMove sut = new SlideMove(0,7,7,0);
-//        Assert.assertEquals(true,((BoardMove)sut).isValid(friendly,empty));
-//        Assert.assertEquals(true,((ColoredMove)sut).isValid(friendly,empty));
         Assert.assertEquals(false,sut.isValid(friendly,empty));
         Assert.assertEquals(false,sut.isValid(friendly,friendly));
         Assert.assertEquals(false,sut.isValid(empty,friendly));

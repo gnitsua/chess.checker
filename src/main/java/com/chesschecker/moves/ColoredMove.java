@@ -8,7 +8,7 @@ import com.chesschecker.bitboard.BitBoard;
  * or if the piece it lands on is itself (it doesn't actually move)
  * This is defined in 3.1 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
-public class ColoredMove extends BoardMove {
+public class ColoredMove extends BoardMove{
     public ColoredMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }

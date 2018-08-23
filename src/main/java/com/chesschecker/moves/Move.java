@@ -1,10 +1,8 @@
 package com.chesschecker.moves;
 
-public abstract class Move {
-    protected static final String PIECE_ABBREVIATION = "";
+import com.chesschecker.bitboard.BitBoard;
 
-    protected Move() {
-        super();
-    }
-
+public interface Move {
+    boolean isValid(final BitBoard friendly,final BitBoard foe);
+    String toString();
 }
