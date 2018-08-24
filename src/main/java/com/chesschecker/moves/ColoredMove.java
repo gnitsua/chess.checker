@@ -13,19 +13,7 @@ public class ColoredMove extends BoardMove {
         super(startrow, startcol, endrow, endcol);
     }
 
-    protected boolean isSelfMove() {
-        if (this.startRow == this.endRow) {
-            if (this.startCol == this.endCol) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    private boolean isMoveToEmpty(BitBoard friendly) {
+    protected boolean isMoveToEmpty(BitBoard friendly) {
         BitBoard temp = new BitBoard();
         temp.setOccupancy(this.endRow, this.endCol);
         if (BitBoard.and(temp, friendly).isEmpty()) {

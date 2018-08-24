@@ -23,6 +23,18 @@ public class BoardMove implements Move {
         this.endCol = endcol;
     }
 
+    final boolean isSelfMove() {
+        if (this.startRow == this.endRow) {
+            if (this.startCol == this.endCol) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     private static boolean isValidRow(final int row) {
         if (0 <= row) {
             if (8 > row) {

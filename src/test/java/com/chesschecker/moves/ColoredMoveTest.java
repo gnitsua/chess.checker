@@ -54,7 +54,7 @@ public class ColoredMoveTest {
                  * We are making the assumption that the only way for the start of a move to have a friendly
                  * piece in it is if that peice is the one making the move.
                 */
-                {0, 0, 0, 0, empty, empty, "a1", true},
+                {0, 0, 0, 0, friendly, empty, "a1", true},
                 {0, 0, 4, 4, friendly, empty, "e5", true},
                 /**
                  * This test ensures that a pieces is not allowed to land on it's friend and is allowed to
