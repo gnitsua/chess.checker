@@ -71,13 +71,10 @@ public class CastlingKingMoveTest {
                 {0, 3, 0, 2, empty, empty, "Kc1", false},//King out of position
                 {0, 5, 0, 2, empty, empty, "Kg1", false},//King out of position 2
 
-                /**
-                 * Tests for Queen Move
-                */
-                {3, 0, 3, 7, empty, empty, "Kh4", false},//Horizontal
-                {0, 3, 7, 3, empty, empty, "Kd8", false},//Vertical
-                {0, 0, 7, 7, empty, empty, "Kh8", false},//Diagonal1
-                {6, 0, 0, 6, empty, empty, "Kg1", false},//Diagonal2
+                {0, 4, 3, 7, empty, empty, "Kh4", false},//Horizontal
+                {0, 4, 7, 3, empty, empty, "Kd8", false},//Vertical
+                {0, 4, 0, 7, empty, empty, "Kd8", false},
+                {1, 4, 1, 7, empty, empty, "Kd8", false},
 
                 //TODO: does not check for check on the way there
 

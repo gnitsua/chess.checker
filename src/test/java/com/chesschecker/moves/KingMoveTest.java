@@ -59,6 +59,14 @@ public class KingMoveTest {
                 {2, 2, 3, 3, empty, friendly, "Kd4", true},
                 {2, 2, 2, 2, friendly, empty, "Kc3", true},
 
+                /**
+                 * Queen Moves that should not hold
+                */
+                {3, 0, 3, 7, empty, empty, "Kh4", false},//Horizontal
+                {0, 3, 7, 3, empty, empty, "Kd8", false},//Vertical
+                {0, 0, 7, 7, empty, empty, "Kh8", false},//Diagonal1
+                {6, 0, 0, 6, empty, empty, "Kg1", false},//Diagonal2
+
                 {2, 2, 3, 3, empty, empty, "Kd4", true},
                 {2, 2, 2, 3, empty, empty, "Kd3", true},
                 {2, 2, 1, 3, empty, empty, "Kd2", true},
