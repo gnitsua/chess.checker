@@ -9,10 +9,10 @@ import com.chesschecker.util.Column;
  */
 public class BoardMove implements Move {
     protected static final String PIECE_ABBREVIATION = "";
-    int startRow;
-    int startCol;
-    int endRow;
-    int endCol;
+    protected int startRow;
+    protected int startCol;
+    protected int endRow;
+    protected int endCol;
 
 
     public BoardMove(final int startrow, final int startcol, final int endrow, final int endcol) {
@@ -86,6 +86,14 @@ public class BoardMove implements Move {
         final BitBoard result = new BitBoard();
         result.setOccupancy(this.endRow,this.endCol);
         return result;
+    }
+
+    public int getStartRow() {
+        return this.startRow;
+    }
+
+    public int getStartCol() {
+        return this.startCol;
     }
 
     @Override

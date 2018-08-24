@@ -10,4 +10,9 @@ public class ColumnTest {
         String sut = Column.columnNumberToLetter(4);
         Assert.assertEquals("e",sut);
     }
+    @Test
+    public void columnLetterToNumber_valid() {
+        int sut = Column.columnLetterToNumber("a");
+        Assert.assertEquals(0,sut);
+    }
 }
