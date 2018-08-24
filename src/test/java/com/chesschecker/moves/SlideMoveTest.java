@@ -1,198 +1,118 @@
 package com.chesschecker.moves;
 
 import com.chesschecker.bitboard.BitBoard;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Collection;
 
 @SuppressWarnings("ALL")
+@RunWith(Parameterized.class)
 public class SlideMoveTest {
+    @Parameterized.Parameter(value = 0)
+    public int startrow;
+    @Parameterized.Parameter(value = 1)
+    public int startcol;
+    @Parameterized.Parameter(value = 2)
+    public int endrow;
+    @Parameterized.Parameter(value = 3)
+    public int endcol;
+    @Parameterized.Parameter(value = 4)
+    public BitBoard friendly;
+    @Parameterized.Parameter(value = 5)
+    public BitBoard foe;
+    @Parameterized.Parameter(value = 6)
+    public String expectedString;
+    @Parameterized.Parameter(value = 7)
+    public boolean expected;
 
-    @Test
-    public void isValidHorizontal() {
-        BitBoard empty = new BitBoard();
-        SlideMove sut = new SlideMove(0,0,7,0);
-        Assert.assertEquals(true,((BoardMove)sut).isValid(empty,empty));
-        Assert.assertEquals(true,((ColoredMove)sut).isValid(empty,empty));
-        Assert.assertEquals(true,sut.isValid(empty,empty));
-    }
 
-    @Test
-    public void isValidVertical() {
-        BitBoard empty = new BitBoard();
-        SlideMove sut = new SlideMove(0,0,0,7);
-        Assert.assertEquals(true,((BoardMove)sut).isValid(empty,empty));
-        Assert.assertEquals(true,((ColoredMove)sut).isValid(empty,empty));
-        Assert.assertEquals(true,sut.isValid(empty,empty));
-    }
-
-    @Test
-    public void isValidDiagonal1() {
-        BitBoard empty = new BitBoard();
-        SlideMove sut = new SlideMove(0,0,7,7);
-        Assert.assertEquals(true,((BoardMove)sut).isValid(empty,empty));
-        Assert.assertEquals(true,((ColoredMove)sut).isValid(empty,empty));
-        Assert.assertEquals(true,sut.isValid(empty,empty));
-    }
-
-    @Test
-    public void isValidDiagonal2() {
-        BitBoard empty = new BitBoard();
-        SlideMove sut = new SlideMove(0,7,7,0);
-        Assert.assertEquals(true,((BoardMove)sut).isValid(empty,empty));
-        Assert.assertEquals(true,((ColoredMove)sut).isValid(empty,empty));
-        Assert.assertEquals(true,sut.isValid(empty,empty));
-    }
-
-    @Test
-    public void isNotValidHorizontal() {
+    @Parameterized.Parameters(name = "{index}: Move ({0},{1})->({2},{3})")
+    public static Collection<Object[]> data() {
         BitBoard empty = new BitBoard();
         BitBoard friendly = new BitBoard();
-        friendly.setOccupancy(4,0);
-        SlideMove sut = new SlideMove(0,0,7,0);
-        Assert.assertEquals(false,sut.isValid(friendly,empty));//check to make sure both friendly and foes block move
-        Assert.assertEquals(false,sut.isValid(friendly,friendly));
-        Assert.assertEquals(false,sut.isValid(empty,friendly));
+        friendly.setOccupancy(0, 0);
+        friendly.setOccupancy(3, 3);
+
+        return Arrays.asList(new Object[][]{
+                /**
+                 * Board Move tests that should still hold
+                */
+                {0, 0, -1, 0, empty, empty, null, false},
+                {0, 0, 9, 0, empty, empty, null, false},
+                {0, 0, 0, -1, empty, empty, null, false},
+                {0, 0, 0, 9, empty, empty, null, false},
+                {-1, 0, 0, 0, empty, empty, null, false},
+                {9, 0, 0, 0, empty, empty, null, false},
+                {0, -1, 0, 0, empty, empty, null, false},
+                {0, 9, 0, 0, empty, empty, null, false},
+                /**
+                 * Colored Moves that should still hold
+                */
+                {0, 0, 3, 3, friendly, empty, "d4", false},
+                {0, 0, 3, 3, empty, friendly, "d4", true},
+                {2, 2, 2, 2, friendly, empty, "c3", true},
+                /**
+                 * Tests for SlideMove
+                */
+                {3, 0, 3, 7, empty, empty, "h4", true},//Horizontal
+                {3, 0, 3, 7, friendly, empty, "h4", false},//Horizontal blocked by friendly
+                {3, 0, 3, 7, empty, friendly, "h4", false},//Horizontal blocked by foe
+                {0, 3, 7, 3, empty, empty, "d8", true},//Vertical
+                {0, 3, 7, 3, friendly, empty, "d8", false},//Vertical blocked by friendly
+                {0, 3, 7, 3, empty, friendly, "d8", false},//Vertical blocked by foe
+                {0, 0, 7, 7, empty, empty, "h8", true},//Diagonal1
+                {0, 0, 7, 7, friendly, empty, "h8", false},//Diagonal1 blocked by friendly
+                {0, 0, 7, 7, empty, friendly, "h8", false},//Diagonal1 blocked by foe
+                {6, 0, 0, 6, empty, empty, "g1", true},//Diagonal2
+                {6, 0, 0, 6, friendly, empty, "g1", false},//Diagonal2 blocked by friendly
+                {6, 0, 0, 6, empty, friendly, "g1", false},//Diagonal2 blocked by foe
+        });
     }
 
     @Test
-    public void isNotValidVertical() {
+    public void test_Move() {
         BitBoard empty = new BitBoard();
-        BitBoard friendly = new BitBoard();
-        friendly.setOccupancy(0,4);
-        SlideMove sut = new SlideMove(0,0,0,7);
-        Assert.assertEquals(false,sut.isValid(friendly,empty));
-        Assert.assertEquals(false,sut.isValid(friendly,friendly));
-        Assert.assertEquals(false,sut.isValid(empty,friendly));
+        SlideMove sut = new SlideMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        Assert.assertEquals(this.expected, sut.isValid(this.friendly, this.foe));
     }
 
     @Test
-    public void isNotValidDiagonal1() {
-        BitBoard empty = new BitBoard();
-        BitBoard friendly = new BitBoard();
-        friendly.setOccupancy(4,4);
-        SlideMove sut = new SlideMove(0,0,7,7);
-        Assert.assertEquals(false,sut.isValid(friendly,empty));
-        Assert.assertEquals(false,sut.isValid(friendly,friendly));
-        Assert.assertEquals(false,sut.isValid(empty,friendly));
+    public void testToString() {
+        if (this.expected == true) {// only check when it is a valid move
+            SlideMove sut = new SlideMove(this.startrow, this.startcol, this.endrow, this.endcol);
+            Assert.assertEquals(this.expectedString, sut.toString());
+        }
     }
 
-    @Test
-    public void isNotValidDiagonal2() {
-        BitBoard empty = new BitBoard();
-        BitBoard friendly = new BitBoard();
-        friendly.setOccupancy(3,4);
-        SlideMove sut = new SlideMove(0,7,7,0);
-        Assert.assertEquals(false,sut.isValid(friendly,empty));
-        Assert.assertEquals(false,sut.isValid(friendly,friendly));
-        Assert.assertEquals(false,sut.isValid(empty,friendly));
+    protected SlideMove createClass(int startrow, int startcol, int endrow, int endcol) {
+
+        Class[] cArg = new Class[4];
+        cArg[0] = Integer.TYPE;
+        cArg[1] = Integer.TYPE;
+        cArg[2] = Integer.TYPE;
+        cArg[3] = Integer.TYPE;
+        Constructor constructor = null;
+        try {
+            constructor = SlideMove.class.getDeclaredConstructor(cArg);
+            SlideMove sut = (SlideMove)constructor.newInstance(startrow, startcol, endrow, endcol);
+            return sut;
+        } catch (NoSuchMethodException e1) {
+            e1.printStackTrace();
+        } catch (IllegalAccessException e1) {
+            e1.printStackTrace();
+        } catch (InstantiationException e1) {
+            e1.printStackTrace();
+        } catch (InvocationTargetException e1) {
+            e1.printStackTrace();
+        }
+        Assert.fail("Something went wrong with calling the constructor");
+        return new SlideMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
     }
 
-    @Test
-    public void getPassedThroughSquares() {
-        BitBoard expectectOutput = new BitBoard();
-        expectectOutput.setOccupancy(1,1);
-        expectectOutput.setOccupancy(2,2);
-        expectectOutput.setOccupancy(3,3);
-        expectectOutput.setOccupancy(4,4);
-        expectectOutput.setOccupancy(5,5);
-        expectectOutput.setOccupancy(6,6);
-
-        SlideMove sut = new SlideMove(0,0,7,7);
-        Assert.assertEquals(expectectOutput,sut.getPassedThroughSquares());
-    }
-
-    @Test
-    public void getPassedThroughSquares_2() {
-        BitBoard expectectOutput = new BitBoard();
-        expectectOutput.setOccupancy(1,6);
-        expectectOutput.setOccupancy(2,5);
-        expectectOutput.setOccupancy(3,4);
-        expectectOutput.setOccupancy(4,3);
-        expectectOutput.setOccupancy(5,2);
-        expectectOutput.setOccupancy(6,1);
-
-        SlideMove sut = new SlideMove(0,7,7,0);
-        Assert.assertEquals(expectectOutput,sut.getPassedThroughSquares());
-    }
-
-    @Test
-    public void getPassedThroughSquares_4() {
-        BitBoard expectectOutput = new BitBoard();
-        expectectOutput.setOccupancy(0,6);
-        expectectOutput.setOccupancy(0,5);
-        expectectOutput.setOccupancy(0,4);
-        expectectOutput.setOccupancy(0,3);
-        expectectOutput.setOccupancy(0,2);
-        expectectOutput.setOccupancy(0,1);
-
-        SlideMove sut = new SlideMove(0,0,0,7);
-        Assert.assertEquals(expectectOutput,sut.getPassedThroughSquares());
-    }
-
-    @Test
-    public void getPassedThroughSquares_5() {
-        BitBoard expectectOutput = new BitBoard();
-        expectectOutput.setOccupancy(7,6);
-        expectectOutput.setOccupancy(7,5);
-        expectectOutput.setOccupancy(7,4);
-        expectectOutput.setOccupancy(7,3);
-        expectectOutput.setOccupancy(7,2);
-        expectectOutput.setOccupancy(7,1);
-
-        SlideMove sut = new SlideMove(7,0,7,7);
-        Assert.assertEquals(expectectOutput,sut.getPassedThroughSquares());
-    }
-
-    @Test
-    public void getPassedThroughSquares_6() {
-        BitBoard expectectOutput = new BitBoard();
-        expectectOutput.setOccupancy(6,0);
-        expectectOutput.setOccupancy(5,0);
-        expectectOutput.setOccupancy(4,0);
-        expectectOutput.setOccupancy(3,0);
-        expectectOutput.setOccupancy(2,0);
-        expectectOutput.setOccupancy(1,0);
-
-        SlideMove sut = new SlideMove(0,0,7,0);
-        Assert.assertEquals(expectectOutput,sut.getPassedThroughSquares());
-    }
-
-    @Test
-    public void getPassedThroughSquares_7() {
-        BitBoard expectectOutput = new BitBoard();
-        expectectOutput.setOccupancy(6,7);
-        expectectOutput.setOccupancy(5,7);
-        expectectOutput.setOccupancy(4,7);
-        expectectOutput.setOccupancy(3,7);
-        expectectOutput.setOccupancy(2,7);
-        expectectOutput.setOccupancy(1,7);
-        SlideMove sut = new SlideMove(0,7,7,7);
-        Assert.assertEquals(expectectOutput,sut.getPassedThroughSquares());
-    }
-
-    /**
-     * Test not moving
-     */
-    @Test
-    public void getPassedThroughSquares_8() {
-        BitBoard expectectOutput = new BitBoard();
-        SlideMove sut = new SlideMove(7,7,7,7);
-        Assert.assertEquals(expectectOutput,sut.getPassedThroughSquares());
-    }
-
-    /**
-     * Test only moving one square (from experience this can be tricky)
-     */
-    @Test
-    public void getPassedThroughSquares_9() {
-        BitBoard expectectOutput = new BitBoard();
-        SlideMove sut = new SlideMove(6,6,7,7);
-        Assert.assertEquals(expectectOutput,sut.getPassedThroughSquares());
-    }
 }

@@ -13,7 +13,7 @@ import java.util.Collection;
 
 @SuppressWarnings("ALL")
 @RunWith(Parameterized.class)
-public class RookMoveTest {
+public class KnightMoveTest {
     @Parameterized.Parameter(value = 0)
     public int startrow;
     @Parameterized.Parameter(value = 1)
@@ -37,7 +37,7 @@ public class RookMoveTest {
         BitBoard empty = new BitBoard();
         BitBoard friendly = new BitBoard();
         friendly.setOccupancy(0, 0);
-        friendly.setOccupancy(3, 3);
+        friendly.setOccupancy(0, 1);
 
         return Arrays.asList(new Object[][]{
                 /**
@@ -54,45 +54,54 @@ public class RookMoveTest {
                 /**
                  * Colored Moves that should still hold
                 */
-                {3, 0, 3, 3, friendly, empty, "Rd4", false},
-                {3, 0, 3, 3, empty, friendly, "Rd4", true},
-                {2, 2, 2, 2, friendly, empty, "Rc3", true},
+                {2, 2, 0, 1, friendly, empty, "Nb1", false},
+                {2, 2, 0, 1, empty, friendly, "Nb1", true},
+                {2, 2, 2, 2, friendly, empty, "Nc3", true},
+
                 /**
-                 * Tests for SlideMove
+                 * Tests for Knight
                 */
-                {3, 0, 3, 7, empty, empty, "Rh4", true},//Horizontal
-                {3, 0, 3, 7, friendly, empty, "Rh4", false},//Horizontal blocked by friendly
-                {3, 0, 3, 7, empty, friendly, "Rh4", false},//Horizontal blocked by foe
-                {0, 3, 7, 3, empty, empty, "Rd8", true},//Vertical
-                {0, 3, 7, 3, friendly, empty, "Rd8", false},//Vertical blocked by friendly
-                {0, 3, 7, 3, empty, friendly, "Rd8", false},//Vertical blocked by foe
-                {0, 0, 7, 7, empty, empty, "Rh8", false},//Diagonal1
-                {6, 0, 0, 6, empty, empty, "Rg1", false},//Diagonal2
-
-                /*
-                * Tests for Rook Move
+                {2, 2, 1, 0, empty, empty, "Na2", true},
+                {2, 2, 0, 1, empty, empty, "Nb1", true},
+                {2, 2, 3, 0, empty, empty, "Na4", true},
+                {2, 2, 4, 1, empty, empty, "Nb5", true},
+                {2, 2, 4, 3, empty, empty, "Nd5", true},
+                {2, 2, 3, 4, empty, empty, "Ne4", true},
+                {2, 2, 1, 4, empty, empty, "Ne2", true},
+                {2, 2, 0, 3, empty, empty, "Nd1", true},
+                /**
+                 * Moving too far
                 */
-                {2, 3, 2, 7, empty, empty, "Rh3", true}
+                {2, 2, 0, 5, empty, empty, "Ne1", false},
+                {2, 2, 5, 0, empty, empty, "Na6", false},
 
+                /**
+                 * Tests Queen move
+                */
+                {3, 4, 5, 6, empty, empty, null, false},
+                {3, 4, 5, 2, empty, empty, null, false},
+                {3, 4, 3, 2, empty, empty, null, false},
+                {3, 4, 1, 2, empty, empty, null, false},
+                {2, 3, 2, 4, empty, empty, null, false},
         });
     }
 
     @Test
     public void test_Move() {
         BitBoard empty = new BitBoard();
-        RookMove sut = new RookMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        KnightMove sut = new KnightMove(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(this.expected, sut.isValid(this.friendly, this.foe));
     }
 
     @Test
     public void testToString() {
         if (this.expected == true) {// only check when it is a valid move
-            RookMove sut = new RookMove(this.startrow, this.startcol, this.endrow, this.endcol);
+            KnightMove sut = new KnightMove(this.startrow, this.startcol, this.endrow, this.endcol);
             Assert.assertEquals(this.expectedString, sut.toString());
         }
     }
 
-    protected RookMove createClass(int startrow, int startcol, int endrow, int endcol) {
+    protected KnightMove createClass(int startrow, int startcol, int endrow, int endcol) {
 
         Class[] cArg = new Class[4];
         cArg[0] = Integer.TYPE;
@@ -101,8 +110,8 @@ public class RookMoveTest {
         cArg[3] = Integer.TYPE;
         Constructor constructor = null;
         try {
-            constructor = RookMove.class.getDeclaredConstructor(cArg);
-            RookMove sut = (RookMove)constructor.newInstance(startrow, startcol, endrow, endcol);
+            constructor = KnightMove.class.getDeclaredConstructor(cArg);
+            KnightMove sut = (KnightMove) constructor.newInstance(startrow, startcol, endrow, endcol);
             return sut;
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();
@@ -114,7 +123,7 @@ public class RookMoveTest {
             e1.printStackTrace();
         }
         Assert.fail("Something went wrong with calling the constructor");
-        return new RookMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
+        return new KnightMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
     }
 
 }

@@ -3,77 +3,99 @@ package com.chesschecker.moves;
 import com.chesschecker.bitboard.BitBoard;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Collection;
 
 @SuppressWarnings("ALL")
+@RunWith(Parameterized.class)
 public class BoardMoveTest {
+    @Parameterized.Parameter(value = 0)
+    public int startrow;
+    @Parameterized.Parameter(value = 1)
+    public int startcol;
+    @Parameterized.Parameter(value = 2)
+    public int endrow;
+    @Parameterized.Parameter(value = 3)
+    public int endcol;
+    @Parameterized.Parameter(value = 4)
+    public BitBoard friendly;
+    @Parameterized.Parameter(value = 5)
+    public BitBoard foe;
+    @Parameterized.Parameter(value = 6)
+    public String expectedString;
+    @Parameterized.Parameter(value = 7)
+    public boolean expected;
 
-    @Test
-    public void isValid_1() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(0, 0, 0, 0);
-        Assert.assertEquals(sut.isValid(empty, empty), true);
+    private Class<BoardMove> classUnderTest = BoardMove.class; //class under test
+
+    @Parameterized.Parameters(name = "{index}: Move ({0},{1})->({2},{3})")
+    public static Collection<Object[]> data() {
+        BitBoard empty = new BitBoard();
+        BitBoard friendly = new BitBoard();
+        friendly.setOccupancy(0, 0);//There will always be a friendly at the start position
+
+        return Arrays.asList(new Object[][]{
+                {0, 0, -1, 0, empty, empty, null, false},
+                {0, 0, 9, 0, empty, empty, null, false},
+                {0, 0, 0, -1, empty, empty, null, false},
+                {0, 0, 0, 9, empty, empty, null, false},
+                {-1, 0, 0, 0, empty, empty, null, false},
+                {9, 0, 0, 0, empty, empty, null, false},
+                {0, -1, 0, 0, empty, empty, null, false},
+                {0, 9, 0, 0, empty, empty, null, false},
+                /**
+                 * This test ensure that it is valid for a peice to move (or not move) to its own square
+                 * We are making the assumption that the only way for the start of a move to have a friendly
+                 * piece in it is if that peice is the one making the move.
+                */
+                {0, 0, 0, 0, empty, empty, "a1", true},
+                {0, 0, 4, 4, friendly, empty, "e5", true}
+        });
     }
 
     @Test
-    public void isValid_2() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(-1, 0, 0, 0);
-        Assert.assertFalse("BoardMove on invalid row should not be valid", sut.isValid(empty, empty));
-    }
-
-
-    @Test
-    public void isValid_3() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(8, 0, 0, 0);
-        Assert.assertFalse("BoardMove on invalid row should not be valid", sut.isValid(empty, empty));
+    public void test_Move() {
+        BitBoard empty = new BitBoard();
+        BoardMove sut = this.createClass(this.startrow, this.startcol, this.endrow, this.endcol);
+        Assert.assertEquals(this.expected, sut.isValid(this.friendly, this.foe));
     }
 
     @Test
-    public void isValid_4() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(0, 0, -1, 0);
-        Assert.assertFalse("BoardMove on invalid row should not be valid", sut.isValid(empty, empty));
+    public void testToString() {
+        if (this.expected == true) {// only check when it is a valid move
+            BoardMove sut = this.createClass(this.startrow, this.startcol, this.endrow, this.endcol);
+            Assert.assertEquals(this.expectedString, sut.toString());
+        }
     }
 
-    @Test
-    public void isValid_5() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(0, 0, 9, 0);
-        Assert.assertFalse("BoardMove on invalid row should not be valid", sut.isValid(empty, empty));
+    protected BoardMove createClass(int startrow, int startcol, int endrow, int endcol) {
+
+        Class[] cArg = new Class[4];
+        cArg[0] = Integer.TYPE;
+        cArg[1] = Integer.TYPE;
+        cArg[2] = Integer.TYPE;
+        cArg[3] = Integer.TYPE;
+        Constructor constructor = null;
+        try {
+            constructor = classUnderTest.getDeclaredConstructor(cArg);
+            BoardMove sut = (BoardMove)constructor.newInstance(startrow, startcol, endrow, endcol);
+            return sut;
+        } catch (NoSuchMethodException e1) {
+            e1.printStackTrace();
+        } catch (IllegalAccessException e1) {
+            e1.printStackTrace();
+        } catch (InstantiationException e1) {
+            e1.printStackTrace();
+        } catch (InvocationTargetException e1) {
+            e1.printStackTrace();
+        }
+        Assert.fail("Something went wrong with calling the constructor");
+        return new BoardMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
     }
 
-    @Test
-    public void isValid_6() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(0, -1, 0, 0);
-        Assert.assertFalse("BoardMove on invalid row should not be valid", sut.isValid(empty, empty));
-    }
-
-    @Test
-    public void isValid_7() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(0, 9, 0, 0);
-        Assert.assertFalse("BoardMove on invalid row should not be valid", sut.isValid(empty, empty));
-    }
-
-    @Test
-    public void isValid_8() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(0, 0, 0, -1);
-        Assert.assertFalse("BoardMove on invalid row should not be valid", sut.isValid(empty, empty));
-    }
-
-    @Test
-    public void isValid_9() {
-        final BitBoard empty = new BitBoard();
-        final BoardMove sut = new BoardMove(0, 0, 0, 9);
-        Assert.assertFalse("BoardMove on invalid row should not be valid", sut.isValid(empty, empty));
-    }
-
-    @Test
-    public void toString_test() {
-        final BoardMove sut = new BoardMove(0, 0, 0, 0);
-        Assert.assertEquals("a1", sut.toString());
-    }
 }

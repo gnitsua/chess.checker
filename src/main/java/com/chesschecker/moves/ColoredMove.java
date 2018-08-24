@@ -8,12 +8,12 @@ import com.chesschecker.bitboard.BitBoard;
  * or if the piece it lands on is itself (it doesn't actually move)
  * This is defined in 3.1 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
-public class ColoredMove extends BoardMove{
+public class ColoredMove extends BoardMove {
     public ColoredMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
-    private boolean isSelfMove(){
+    private boolean isSelfMove() {
         if (this.startRow == this.endRow) {
             if (this.startCol == this.endCol) {
                 return true;
@@ -25,10 +25,10 @@ public class ColoredMove extends BoardMove{
         }
     }
 
-    private boolean isMoveToEmpty(BitBoard friendly){
+    private boolean isMoveToEmpty(BitBoard friendly) {
         BitBoard temp = new BitBoard();
         temp.setOccupancy(this.endRow, this.endCol);
-        if (BitBoard.and(temp,friendly).isEmpty()) {
+        if (BitBoard.and(temp, friendly).isEmpty()) {
             return true;
         } else {
             return false;
@@ -38,14 +38,14 @@ public class ColoredMove extends BoardMove{
     @Override
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
         if (super.isValid(friendly, foe)) {
-            if(this.isSelfMove()){
+            if (this.isSelfMove()) {
                 return true;
-            }
-            else if(this.isMoveToEmpty(friendly)) {
-                return true;
-            }
-            else {
-                return false;
+            } else {
+                if (this.isMoveToEmpty(friendly)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         } else {
             return false;
