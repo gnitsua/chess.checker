@@ -13,7 +13,7 @@ import java.util.Collection;
 
 @SuppressWarnings("ALL")
 @RunWith(Parameterized.class)
-public class PawnCaptureTest {
+public class PawnCaptureMoveTest {
     @Parameterized.Parameter(value = 0)
     public int startrow;
     @Parameterized.Parameter(value = 1)
