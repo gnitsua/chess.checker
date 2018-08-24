@@ -24,12 +24,9 @@ public class KnightMove extends ColoredMove {
                 if (2 >= Math.abs(this.startCol - this.endCol)) {
                     final QueenMove queenMove = new QueenMove(this.startRow, this.startCol, this.endRow, this.endCol);
                     if (queenMove.isValid(friendly, foe)) {
-                        if (this.startRow == this.endRow) {
-                            if (this.startCol == this.endCol) {
-                                return true;
-                            } else {
-                                return false;
-                            }
+                        if (this.isSelfMove()) {
+                            return true;
+
                         } else {
                             return false;
                         }

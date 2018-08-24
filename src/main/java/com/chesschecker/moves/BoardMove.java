@@ -67,6 +67,15 @@ public class BoardMove implements Move {
         }
     }
 
+    /**
+     * @return BitBoard with the final position of the move set to occupied
+     */
+    final BitBoard getPostmoveBitboard(){
+        final BitBoard result = new BitBoard();
+        result.setOccupancy(this.endRow,this.endCol);
+        return result;
+    }
+
     @Override
     public String toString() {
         final StringBuilder result = new StringBuilder(0);

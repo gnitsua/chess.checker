@@ -13,7 +13,7 @@ public class ColoredMove extends BoardMove {
         super(startrow, startcol, endrow, endcol);
     }
 
-    private boolean isSelfMove() {
+    protected boolean isSelfMove() {
         if (this.startRow == this.endRow) {
             if (this.startCol == this.endCol) {
                 return true;

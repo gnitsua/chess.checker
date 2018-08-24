@@ -11,9 +11,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.Assert.*;
+
 @SuppressWarnings("ALL")
 @RunWith(Parameterized.class)
-public class BoardMoveTest {
+public class PawnMoveTest {
     @Parameterized.Parameter(value = 0)
     public int startrow;
     @Parameterized.Parameter(value = 1)
@@ -31,49 +33,72 @@ public class BoardMoveTest {
     @Parameterized.Parameter(value = 7)
     public boolean expected;
 
-    private Class<BoardMove> classUnderTest = BoardMove.class; //class under test
+    private Class<PawnMove> classUnderTest = PawnMove.class; //class under test
 
     @Parameterized.Parameters(name = "{index}: Move ({0},{1})->({2},{3})")
     public static Collection<Object[]> data() {
         BitBoard empty = new BitBoard();
         BitBoard friendly = new BitBoard();
-        friendly.setOccupancy(0, 0);//There will always be a friendly at the start position
+        friendly.setOccupancy(1, 2);//There will always be a friendly at the start position
+        friendly.setOccupancy(1, 0);
+        friendly.setOccupancy(1, 0);
+        friendly.setOccupancy(2, 3);
+        friendly.setOccupancy(2, 1);
 
         return Arrays.asList(new Object[][]{
                 {0, 0, -1, 0, empty, empty, null, false},
                 {0, 0, 9, 0, empty, empty, null, false},
                 {0, 0, 0, -1, empty, empty, null, false},
                 {0, 0, 0, 9, empty, empty, null, false},
-                {-1, 0, 0, 0, empty, empty, null, false},
+                { -1, 0, 0, 0, empty, empty, null, false},
                 {9, 0, 0, 0, empty, empty, null, false},
                 {0, -1, 0, 0, empty, empty, null, false},
                 {0, 9, 0, 0, empty, empty, null, false},
                 /**
-                 * This test ensure that it is valid for a peice to move (or not move) to its own square
+                 * This test ensures that it is valid for a peice to move (or not move) to its own square
                  * We are making the assumption that the only way for the start of a move to have a friendly
                  * piece in it is if that peice is the one making the move.
                 */
-                {0, 0, 0, 0, empty, empty, "a1", true},
-                {0, 0, 4, 4, friendly, empty, "e5", true}
+                {0, 0, 0, 0, friendly, empty, "Pa1", true},
+                /**
+                 * This test ensures that a pieces is not allowed to land on it's friend and is allowed to
+                 * land on an enemy
+                */
+                {0, 0, 1, 0, friendly, empty, "Pa2", false},
+                {0, 0, 1, 0, empty, friendly, "Pa2", true},
+
+                /**
+                 * Pawn moves
+                */
+                {2, 2, 3, 2, friendly, empty, "Pc4", true},
+                {1, 2, 0, 2, empty, empty, "Pd1", false},//not backwards
+                {1, 2, 2, 3, empty, friendly, "Pd3", true},//right capture
+                {1, 2, 2, 3, empty, empty, "Pd3", false},//not right capture
+                {1, 2, 2, 1, empty, friendly, "Pb3", true},//left capture
+                {1, 2, 2, 1, empty, empty, "Pb3", false},//not left capture
+                {1, 2, 3, 2, empty, friendly, "Pd1", false},//too far forward
+                {1, 2, 2, 4, empty, friendly, "Pd1", false},//too far sidways
+
+
         });
     }
 
     @Test
     public void test_Move() {
         BitBoard empty = new BitBoard();
-        BoardMove sut = this.createClass(this.startrow, this.startcol, this.endrow, this.endcol);
+        PawnMove sut = this.createClass(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(this.expected, sut.isValid(this.friendly, this.foe));
     }
 
     @Test
     public void testToString() {
         if (this.expected == true) {// only check when it is a valid move
-            BoardMove sut = this.createClass(this.startrow, this.startcol, this.endrow, this.endcol);
+            PawnMove sut = this.createClass(this.startrow, this.startcol, this.endrow, this.endcol);
             Assert.assertEquals(this.expectedString, sut.toString());
         }
     }
 
-    protected BoardMove createClass(int startrow, int startcol, int endrow, int endcol) {
+    protected PawnMove createClass(int startrow, int startcol, int endrow, int endcol) {
 
         Class[] cArg = new Class[4];
         cArg[0] = Integer.TYPE;
@@ -83,7 +108,7 @@ public class BoardMoveTest {
         Constructor constructor = null;
         try {
             constructor = classUnderTest.getDeclaredConstructor(cArg);
-            BoardMove sut = (BoardMove)constructor.newInstance(startrow, startcol, endrow, endcol);
+            PawnMove sut = (PawnMove)constructor.newInstance(startrow, startcol, endrow, endcol);
             return sut;
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();
@@ -95,14 +120,7 @@ public class BoardMoveTest {
             e1.printStackTrace();
         }
         Assert.fail("Something went wrong with calling the constructor");
-        return new BoardMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
+        return new PawnMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
     }
 
-    @Test
-    public void getPostmoveBitboard() {
-        BitBoard expectedOutput = new BitBoard();
-        expectedOutput.setOccupancy(4,4);
-        BoardMove sut = new BoardMove(0,0,4,4);
-        Assert.assertEquals(sut.getPostmoveBitboard(),expectedOutput);
-    }
 }
