@@ -1,6 +1,6 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.util.BitBoard;
 
 /**
  * This class defines of a piece a Knight
@@ -11,28 +11,36 @@ import com.chesschecker.bitboard.BitBoard;
  * This is defined in 3.6 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
 public class KnightMove extends ColoredMove {
-    protected static final String PIECE_ABBREVIATION = "N";
+    private static final String PIECE_ABBREVIATION = "N";
 
-    public KnightMove(int startrow, int startcol, int endrow, int endcol) {
+    KnightMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
-    @Override
-    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if (super.isValid(friendly, foe)) {
-            if (2 >= Math.abs(this.startRow - this.endRow)) {
-                if (2 >= Math.abs(this.startCol - this.endCol)) {
-                    final QueenMove queenMove = new QueenMove(this.startRow, this.startCol, this.endRow, this.endCol);
-                    if (queenMove.isValid(friendly, foe)) {
-                        if (this.isSelfMove()) {
-                            return true;
+    private boolean isValidKnightMove() {
+        if (2 >= Math.abs(this.startRow - this.endRow)) {
+            if (2 >= Math.abs(this.startCol - this.endCol)) {
+                if (this.isValidQueenMove()) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
 
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return true;
-                    }
+    }
+
+    @Override
+    @SuppressWarnings("DesignForExtension")
+    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
+        if (this.isValidBoardMove()) {
+            if (this.isValidColoredMove(friendly)) {
+                if (this.isValidKnightMove()) {
+                    return true;
                 } else {
                     return false;
                 }
@@ -45,7 +53,8 @@ public class KnightMove extends ColoredMove {
     }
 
     @Override
+    @SuppressWarnings("DesignForExtension")
     public String toString() {
-        return PIECE_ABBREVIATION + super.toString();
+        return KnightMove.PIECE_ABBREVIATION + this.endPositionToString();
     }
 }

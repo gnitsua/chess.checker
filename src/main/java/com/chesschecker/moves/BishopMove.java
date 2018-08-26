@@ -1,6 +1,6 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.util.BitBoard;
 
 
 /**
@@ -8,18 +8,31 @@ import com.chesschecker.bitboard.BitBoard;
  * The bishop may move to any square along a diagonal on which it stands.
  * This is defined in 3.2 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
-public class BishopMove extends SlideMove {
-    protected static final String PIECE_ABBREVIATION = "B";
+public class BishopMove extends QueenMove {
+    private static final String PIECE_ABBREVIATION = "B";
 
-    public BishopMove(int startrow, int startcol, int endrow, int endcol) {
+    BishopMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
     @Override
+    @SuppressWarnings("DesignForExtension")
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if (super.isValid(friendly, foe)) {
-            if (Math.abs(this.startRow - this.endRow) == Math.abs(this.startCol - this.endCol)) {
-                return true;
+        if(this.isValidBoardMove()){
+            if(this.isValidColoredMove(friendly)){
+                if(this.isValidSlideMove(friendly, foe)){
+                    if(this.isValidQueenMove()) {
+                        if (this.isValidRookMove()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -29,7 +42,8 @@ public class BishopMove extends SlideMove {
     }
 
     @Override
+    @SuppressWarnings("DesignForExtension")
     public String toString() {
-        return this.PIECE_ABBREVIATION + super.toString();
+        return BishopMove.PIECE_ABBREVIATION + this.endPositionToString();
     }
 }

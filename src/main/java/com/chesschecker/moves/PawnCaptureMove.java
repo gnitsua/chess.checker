@@ -1,6 +1,7 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.input.Board;
+import com.chesschecker.util.BitBoard;
 
 /**
  * This class defines moves for a Pawn.
@@ -8,42 +9,57 @@ import com.chesschecker.bitboard.BitBoard;
  * in front of it on an adjacent file, capturing that piece.
  * This is defined in 3.7.c of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
-public class PawnCaptureMove extends ColoredMove {
-    protected static final String PIECE_ABBREVIATION = "P";
+public class PawnCaptureMove extends SlideMove {
+    private static final String PIECE_ABBREVIATION = "P";
 
-    public PawnCaptureMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    PawnCaptureMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
-    @Override
-    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if (super.isValid(friendly, foe)) {
-            if (1 == (this.endRow - this.startRow)) {
-                if (1 == Math.abs(this.startCol - this.endCol)) {
-                    if (BitBoard.and(this.getPostmoveBitboard(), foe).isEmpty()) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-
-                } else {
+    private boolean isValidPawnCaptureMove(final BitBoard foe) {
+        if (1 == (this.endRow - this.startRow)) {
+            if (1 == Math.abs(this.startCol - this.endCol)) {
+                final BitBoard postMoveBitboard = this.getPostMoveBitboard();
+                final BitBoard captures = Board.and(postMoveBitboard, foe);
+                if (BitBoard.isEmpty(captures)) {
                     return false;
-                }
-            } else {
-                if (this.isSelfMove()) {
+                } else {
                     return true;
-                } else {
-                    return false;
                 }
+
+            } else {
+                return false;
             }
         } else {
             return false;
         }
-
     }
 
     @Override
+    @SuppressWarnings("DesignForExtension")
+    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
+        if(this.isValidBoardMove()) {
+            if(this.isValidColoredMove(friendly)) {
+                if(this.isValidSlideMove(friendly, foe)) {
+                    if(this.isValidPawnCaptureMove(foe)){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    @SuppressWarnings("DesignForExtension")
     public String toString() {
-        return PIECE_ABBREVIATION + super.toString();
+        return PawnCaptureMove.PIECE_ABBREVIATION + this.endPositionToString();
     }
 }

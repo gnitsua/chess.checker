@@ -1,15 +1,19 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.input.Board;
+import com.chesschecker.util.BitBoard;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.mockito.ArgumentMatchers.notNull;
 
 @SuppressWarnings("ALL")
 @RunWith(Parameterized.class)
@@ -34,59 +38,50 @@ public class RookMoveTest {
 
     @Parameterized.Parameters(name = "{index}: Move ({0},{1})->({2},{3})")
     public static Collection<Object[]> data() {
-        BitBoard empty = new BitBoard();
-        BitBoard friendly = new BitBoard();
+        BitBoard empty = new Board();
+        BitBoard friendly = new Board();
         friendly.setOccupancy(0, 0);
         friendly.setOccupancy(3, 3);
 
         return Arrays.asList(new Object[][]{
                 /**
-                 * Board Move tests that should still hold
+                 * Tests for Rook Move
                 */
-                {0, 0, -1, 0, empty, empty, null, false},
-                {0, 0, 9, 0, empty, empty, null, false},
-                {0, 0, 0, -1, empty, empty, null, false},
-                {0, 0, 0, 9, empty, empty, null, false},
-                {-1, 0, 0, 0, empty, empty, null, false},
-                {9, 0, 0, 0, empty, empty, null, false},
-                {0, -1, 0, 0, empty, empty, null, false},
-                {0, 9, 0, 0, empty, empty, null, false},
-                /**
-                 * Colored Moves that should still hold
-                */
-                {3, 0, 3, 3, friendly, empty, "Rd4", false},
-                {3, 0, 3, 3, empty, friendly, "Rd4", true},
-                {2, 2, 2, 2, friendly, empty, "Rc3", true},
-                /**
-                 * Tests for SlideMove
-                */
-                {3, 0, 3, 7, empty, empty, "Rh4", true},//Horizontal
-                {3, 0, 3, 7, friendly, empty, "Rh4", false},//Horizontal blocked by friendly
-                {3, 0, 3, 7, empty, friendly, "Rh4", false},//Horizontal blocked by foe
-                {0, 3, 7, 3, empty, empty, "Rd8", true},//Vertical
-                {0, 3, 7, 3, friendly, empty, "Rd8", false},//Vertical blocked by friendly
-                {0, 3, 7, 3, empty, friendly, "Rd8", false},//Vertical blocked by foe
-                {0, 0, 7, 7, empty, empty, "Rh8", false},//Diagonal1
-                {6, 0, 0, 6, empty, empty, "Rg1", false},//Diagonal2
-
-                /*
-                * Tests for Rook Move
-                */
-                {2, 3, 2, 7, empty, empty, "Rh3", true}
-
+                {2, 3, 2, 7, empty, empty, "Rh3", true},
+                {2, 3, 2, 0, empty, empty, "Ra3", true},
+                {2, 3, 7, 3, empty, empty, "Rd8", true},
+                {2, 3, 0, 3, empty, empty, "Rd1", true},
+                {3, 4, 6, 7, empty, empty, "Rh7", false},
         });
     }
 
     @Test
     public void test_Move() {
-        BitBoard empty = new BitBoard();
+        BitBoard empty = new Board();
         RookMove sut = new RookMove(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(this.expected, sut.isValid(this.friendly, this.foe));
     }
 
+    /**
+     * Ensure that if any move validator above this one is false, it returns false. This tests assumes that
+     * at least one call should be true.
+     */
+    @Test
+    public void test_Heirarchy() {
+        RookMove sut = Mockito.spy(new RookMove(this.startrow, this.startcol, this.endrow, this.endcol));
+        Mockito.when(sut.isValidQueenMove()).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+        Mockito.when(sut.isValidSlideMove(this.friendly, this.foe)).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+        Mockito.when(sut.isValidColoredMove(this.friendly)).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+        Mockito.when(sut.isValidBoardMove()).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+    }
+
     @Test
     public void testToString() {
-        if (this.expected == true) {// only check when it is a valid move
+        if (this.expectedString != null) {// only check when it is a valid move
             RookMove sut = new RookMove(this.startrow, this.startcol, this.endrow, this.endcol);
             Assert.assertEquals(this.expectedString, sut.toString());
         }
@@ -102,7 +97,7 @@ public class RookMoveTest {
         Constructor constructor = null;
         try {
             constructor = RookMove.class.getDeclaredConstructor(cArg);
-            RookMove sut = (RookMove)constructor.newInstance(startrow, startcol, endrow, endcol);
+            RookMove sut = (RookMove) constructor.newInstance(startrow, startcol, endrow, endcol);
             return sut;
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();

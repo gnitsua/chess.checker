@@ -1,6 +1,7 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.input.Board;
+import com.chesschecker.util.BitBoard;
 
 /**
  * This class defines moves for a piece of a certain color.
@@ -9,35 +10,74 @@ import com.chesschecker.bitboard.BitBoard;
  * This is defined in 3.1 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
 public class ColoredMove extends BoardMove {
-    public ColoredMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    ColoredMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
-    protected boolean isMoveToEmpty(BitBoard friendly) {
-        BitBoard temp = new BitBoard();
+    final boolean isMoveToEmpty(final BitBoard friendly) {
+        final BitBoard temp = new Board();
         temp.setOccupancy(this.endRow, this.endCol);
-        if (BitBoard.and(temp, friendly).isEmpty()) {
+        final BitBoard overlapWithFriendly = Board.and(temp, friendly);
+        if (BitBoard.isEmpty(overlapWithFriendly)) {
             return true;
         } else {
             return false;
         }
     }
 
-    @Override
-    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if (super.isValid(friendly, foe)) {
-            if (this.isSelfMove()) {
+    final boolean isValidColoredMove(final BitBoard friendly) {
+        if (this.isMoveToEmpty(friendly)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    final boolean isValidBishopMove() {
+        if (Math.abs(this.startRow - this.endRow) == Math.abs(this.startCol - this.endCol)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    final boolean isValidRookMove() {
+        if (this.startRow == this.endRow) {
+            return true;
+        } else {
+            if (this.startCol == this.endCol) {
                 return true;
             } else {
-                if (this.isMoveToEmpty(friendly)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return false;
+            }
+        }
+    }
+
+    final boolean isValidQueenMove() {
+        if (this.isValidBishopMove()) {
+            return true;
+        } else {
+            if (this.isValidRookMove()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("DesignForExtension")
+    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
+        if (this.isValidBoardMove()) {
+            if (this.isValidColoredMove(friendly)) {
+                return true;
+            } else {
+                return false;
             }
         } else {
             return false;
         }
-
     }
+
+
 }

@@ -1,33 +1,54 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.util.BitBoard;
 
 /**
  * This class defines the king's half of the castling move.
  * The king is transferred from its original square two squares towards the rook on its original square
  * This is defined in 3.8.b of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
-public class CastlingKingMove extends RookMove {
+public class CastlingKingMove extends QueenMove {
     private static final String PIECE_ABBREVIATION = "K";
 
 
-    public CastlingKingMove(int startrow, int startcol, int endrow, int endcol) {
+    CastlingKingMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
-    @Override
-    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if (super.isValid(friendly, foe)) {
-            if (0 == this.startRow) {
-                if (4 == this.startCol) {
-                    if (2 == this.endCol) {
+    private boolean isValidCastlingKingMove() {
+        if (0 == this.startRow) {
+            if (4 == this.startCol) {
+                if (2 == this.endCol) {
+                    return true;
+                } else {
+                    if (6 == this.endCol) {
                         return true;
                     } else {
-                        if (6 == this.endCol) {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    @SuppressWarnings("DesignForExtension")
+    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
+        if(this.isValidBoardMove()){
+            if(this.isValidColoredMove(friendly)){
+                if(this.isValidSlideMove(friendly, foe)) {
+                    if (this.isValidQueenMove()) {
+                        if (this.isValidCastlingKingMove()) {
                             return true;
                         } else {
                             return false;
                         }
+                    } else {
+                        return false;
                     }
                 } else {
                     return false;
@@ -40,7 +61,9 @@ public class CastlingKingMove extends RookMove {
         }
     }
 
+    @Override
+    @SuppressWarnings("DesignForExtension")
     public String toString() {
-        return CastlingKingMove.PIECE_ABBREVIATION + super.toString().substring(1);
+        return CastlingKingMove.PIECE_ABBREVIATION + this.endPositionToString();
     }
 }

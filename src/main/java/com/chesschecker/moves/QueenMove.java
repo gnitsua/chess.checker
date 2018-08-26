@@ -1,6 +1,6 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.util.BitBoard;
 
 /**
  * This class defines of a piece a Queen.
@@ -8,25 +8,28 @@ import com.chesschecker.bitboard.BitBoard;
  * This is defined in 3.4 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
 public class QueenMove extends SlideMove {
-    protected static final String PIECE_ABBREVIATION = "Q";
+    private static final String PIECE_ABBREVIATION = "Q";
 
-    public QueenMove(int startrow, int startcol, int endrow, int endcol) {
+    QueenMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
     @Override
+    @SuppressWarnings("DesignForExtension")
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if (super.isValid(friendly, foe)) {
-            final BishopMove bishopMove = new BishopMove(this.startRow, this.startCol, this.endRow, this.endCol);
-            final RookMove rookMove = new RookMove(this.startRow, this.startCol, this.endRow, this.endCol);
-            if (bishopMove.isValid(friendly, foe)) {
-                return true;
-            } else {
-                if (rookMove.isValid(friendly, foe)) {
-                    return true;
+        if(this.isValidBoardMove()){
+            if(this.isValidColoredMove(friendly)){
+                if(this.isValidSlideMove(friendly, foe)){
+                    if(this.isValidQueenMove()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
                     return false;
                 }
+            } else {
+                return false;
             }
         } else {
             return false;
@@ -34,7 +37,8 @@ public class QueenMove extends SlideMove {
     }
 
     @Override
+    @SuppressWarnings("DesignForExtension")
     public String toString() {
-        return PIECE_ABBREVIATION + super.toString();
+        return QueenMove.PIECE_ABBREVIATION + this.endPositionToString();
     }
 }

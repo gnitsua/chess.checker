@@ -1,15 +1,17 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.input.Board;
+import com.chesschecker.util.BitBoard;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.mockito.ArgumentMatchers.notNull;
 
 @SuppressWarnings("ALL")
 @RunWith(Parameterized.class)
@@ -34,32 +36,14 @@ public class CastlingKingMoveTest {
 
     @Parameterized.Parameters(name = "{index}: Move ({0},{1})->({2},{3})")
     public static Collection<Object[]> data() {
-        BitBoard empty = new BitBoard();
-        BitBoard friendly = new BitBoard();
-        friendly.setOccupancy(0, 6);
-        friendly.setOccupancy(0, 3);
-        friendly.setOccupancy(0, 5);
+        BitBoard empty = new Board();
+        BitBoard friendly = new Board();
+        friendly.setOccupancy(0,3);
+        friendly.setOccupancy(0,5);
 
         return Arrays.asList(new Object[][]{
                 /**
-                 * Board Move tests that should still hold
-                */
-                {0, 0, -1, 0, empty, empty, null, false},
-                {0, 0, 9, 0, empty, empty, null, false},
-                {0, 0, 0, -1, empty, empty, null, false},
-                {0, 0, 0, 9, empty, empty, null, false},
-                {-1, 0, 0, 0, empty, empty, null, false},
-                {9, 0, 0, 0, empty, empty, null, false},
-                {0, -1, 0, 0, empty, empty, null, false},
-                {0, 9, 0, 0, empty, empty, null, false},
-                /**
-                 * Colored Moves that should still hold
-                */
-//                {0, 4, 0, 2, friendly, empty, "Kc4", false},
-//                {0, 4, 0, 2, empty, friendly, "Kc4", true},
-//                {0, 4, 0, 4, friendly, empty, "Kc3", true},//TODO:doesn't check for check
-                /**
-                 * Tests for SlideMove
+                 * Tests for Castling king
                 */
                 {0, 4, 0, 2, empty, empty, "Kc1", true},//Left
                 {0, 4, 0, 2, friendly, empty, "Kc1", false},//Left blocked by friendly
@@ -69,12 +53,12 @@ public class CastlingKingMoveTest {
                 {0, 4, 0, 6, empty, friendly, "Kg1", false},//Right blocked by foe
 
                 {0, 3, 0, 2, empty, empty, "Kc1", false},//King out of position
-                {0, 5, 0, 2, empty, empty, "Kg1", false},//King out of position 2
+                {0, 5, 0, 2, empty, empty, "Kc1", false},//King out of position 2
 
                 {0, 4, 3, 7, empty, empty, "Kh4", false},//Horizontal
                 {0, 4, 7, 3, empty, empty, "Kd8", false},//Vertical
-                {0, 4, 0, 7, empty, empty, "Kd8", false},
-                {1, 4, 1, 7, empty, empty, "Kd8", false},
+                {0, 4, 0, 7, empty, empty, "Kh1", false},
+                {1, 4, 1, 7, empty, empty, "Kh2", false},
 
                 //TODO: does not check for check on the way there
 
@@ -83,42 +67,31 @@ public class CastlingKingMoveTest {
 
     @Test
     public void test_Move() {
-        BitBoard empty = new BitBoard();
+        BitBoard empty = new Board();
         CastlingKingMove sut = new CastlingKingMove(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(this.expected, sut.isValid(this.friendly, this.foe));
     }
 
+    /**
+     * Ensure that if any move validator above this one is false, it returns false. This tests assumes that
+     * at least one call should be true.
+     */
+    @Test
+    public void test_Heirarchy() {
+        CastlingKingMove sut = Mockito.spy(new CastlingKingMove(this.startrow, this.startcol, this.endrow, this.endcol));
+        Mockito.when(sut.isValidSlideMove(this.friendly, this.foe)).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+        Mockito.when(sut.isValidColoredMove(this.friendly)).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+        Mockito.when(sut.isValidBoardMove()).thenReturn(false);//TODO: programatically figure out which methods to mock
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+    }
+
     @Test
     public void testToString() {
-        if (this.expected == true) {// only check when it is a valid move
+        if (this.expectedString != null) {// only check when it is a valid move
             CastlingKingMove sut = new CastlingKingMove(this.startrow, this.startcol, this.endrow, this.endcol);
             Assert.assertEquals(this.expectedString, sut.toString());
         }
     }
-
-    protected CastlingKingMove createClass(int startrow, int startcol, int endrow, int endcol) {
-
-        Class[] cArg = new Class[4];
-        cArg[0] = Integer.TYPE;
-        cArg[1] = Integer.TYPE;
-        cArg[2] = Integer.TYPE;
-        cArg[3] = Integer.TYPE;
-        Constructor constructor = null;
-        try {
-            constructor = CastlingKingMove.class.getDeclaredConstructor(cArg);
-            CastlingKingMove sut = (CastlingKingMove) constructor.newInstance(startrow, startcol, endrow, endcol);
-            return sut;
-        } catch (NoSuchMethodException e1) {
-            e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (InstantiationException e1) {
-            e1.printStackTrace();
-        } catch (InvocationTargetException e1) {
-            e1.printStackTrace();
-        }
-        Assert.fail("Something went wrong with calling the constructor");
-        return new CastlingKingMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
-    }
-
 }

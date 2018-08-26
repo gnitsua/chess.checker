@@ -1,6 +1,6 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.util.BitBoard;
 
 
 /**
@@ -8,32 +8,45 @@ import com.chesschecker.bitboard.BitBoard;
  * The rook may move to any square along the file or the rank on which it stands.
  * This is defined in 3.3 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
-public class RookMove extends SlideMove {
-    protected static final String PIECE_ABBREVIATION = "R";
+public class RookMove extends QueenMove {
+    private static final String PIECE_ABBREVIATION = "R";
 
 
-    public RookMove(int startrow, int startcol, int endrow, int endcol) {
+    RookMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
+
+
     @Override
+    @SuppressWarnings("DesignForExtension")
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if (super.isValid(friendly, foe)) {
-            if (this.startRow == this.endRow) {
-                return true;
-            } else {
-                if (this.startCol == this.endCol) {
-                    return true;
+        if(this.isValidBoardMove()){
+            if(this.isValidColoredMove(friendly)){
+                if(this.isValidSlideMove(friendly, foe)){
+                    if(this.isValidQueenMove()) {
+                        if (this.isValidBishopMove()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else {
+                        return false;
+                    }
                 } else {
                     return false;
                 }
+            } else {
+                return false;
             }
         } else {
             return false;
         }
     }
 
+    @Override
+    @SuppressWarnings("DesignForExtension")
     public String toString() {
-        return PIECE_ABBREVIATION + super.toString();
+        return RookMove.PIECE_ABBREVIATION + this.endPositionToString();
     }
 }

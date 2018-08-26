@@ -1,38 +1,27 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.input.Board;
+import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.Column;
 
 /**
  * A board move is defined as a move that starts and ends on a valid square of a 8x8 chess board
  * This comes from rule 2.1 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
+@SuppressWarnings("FieldNotUsedInToString")
 public class BoardMove implements Move {
-    protected static final String PIECE_ABBREVIATION = "";
     protected int startRow;
     protected int startCol;
-    protected int endRow;
-    protected int endCol;
+    int endRow;
+    int endCol;
 
 
-    public BoardMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    BoardMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super();
         this.startRow = startrow;
         this.startCol = startcol;
         this.endRow = endrow;
         this.endCol = endcol;
-    }
-
-    final boolean isSelfMove() {
-        if (this.startRow == this.endRow) {
-            if (this.startCol == this.endCol) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
     }
 
     private static boolean isValidRow(final int row) {
@@ -59,12 +48,28 @@ public class BoardMove implements Move {
         }
     }
 
-    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
+    final boolean isSelfMove() {
+        if (this.startRow == this.endRow) {
+            if (this.startCol == this.endCol) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    final boolean isValidBoardMove() {
         if (BoardMove.isValidRow(this.startRow)) {
             if (BoardMove.isValidRow(this.endRow)) {
                 if (BoardMove.isValidCol(this.startCol)) {
                     if (BoardMove.isValidCol(this.endCol)) {
-                        return true;
+                        if (this.isSelfMove()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
                     } else {
                         return false;
                     }
@@ -79,29 +84,50 @@ public class BoardMove implements Move {
         }
     }
 
+
+    @Override
+    @SuppressWarnings("DesignForExtension")
+    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
+        return this.isValidBoardMove();
+    }
+
     /**
      * @return BitBoard with the final position of the move set to occupied
      */
-    final BitBoard getPostmoveBitboard(){
-        final BitBoard result = new BitBoard();
-        result.setOccupancy(this.endRow,this.endCol);
+    final BitBoard getPostMoveBitboard() {
+        final BitBoard result = new Board();
+        result.setOccupancy(this.endRow, this.endCol);
         return result;
     }
 
-    public int getStartRow() {
+    public final int getStartRow() {
         return this.startRow;
     }
 
-    public int getStartCol() {
+    public final int getStartCol() {
         return this.startCol;
     }
 
-    @Override
-    public String toString() {
+    public final int getEndRow() {
+        return this.endRow;
+    }
+
+    public final int getEndCol() {
+        return this.endCol;
+    }
+
+    final String endPositionToString() {
         final StringBuilder result = new StringBuilder(0);
         final String str = Column.columnNumberToLetter(this.endCol);
         result.append(str);
         result.append(this.endRow + 1);
         return result.toString();
+    }
+
+
+    @Override
+    @SuppressWarnings("DesignForExtension")
+    public String toString() {
+        return this.endPositionToString();
     }
 }

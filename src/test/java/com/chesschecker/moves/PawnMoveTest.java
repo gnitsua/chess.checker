@@ -1,17 +1,17 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.input.Board;
+import com.chesschecker.util.BitBoard;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.notNull;
 
 @SuppressWarnings("ALL")
 @RunWith(Parameterized.class)
@@ -37,46 +37,22 @@ public class PawnMoveTest {
 
     @Parameterized.Parameters(name = "{index}: Move ({0},{1})->({2},{3})")
     public static Collection<Object[]> data() {
-        BitBoard empty = new BitBoard();
-        BitBoard friendly = new BitBoard();
-        friendly.setOccupancy(1, 2);//There will always be a friendly at the start position
-        friendly.setOccupancy(1, 0);
-
+        BitBoard empty = new Board();
+        BitBoard foe = new Board();
+        foe.setOccupancy(2,2);
         return Arrays.asList(new Object[][]{
-                {0, 0, -1, 0, empty, empty, null, false},
-                {0, 0, 9, 0, empty, empty, null, false},
-                {0, 0, 0, -1, empty, empty, null, false},
-                {0, 0, 0, 9, empty, empty, null, false},
-                { -1, 0, 0, 0, empty, empty, null, false},
-                {9, 0, 0, 0, empty, empty, null, false},
-                {0, -1, 0, 0, empty, empty, null, false},
-                {0, 9, 0, 0, empty, empty, null, false},
-                /**
-                 * This test ensures that it is valid for a peice to move (or not move) to its own square
-                 * We are making the assumption that the only way for the start of a move to have a friendly
-                 * piece in it is if that peice is the one making the move.
-                */
-                {0, 0, 0, 0, friendly, empty, "Pa1", true},
-                /**
-                 * This test ensures that a pieces is not allowed to land on it's friend and
-                 * also isn't allowed to land on an enemy
-                */
-                {0, 0, 1, 0, friendly, empty, "Pa2", false},
-                {0, 0, 1, 0, empty, friendly, "Pa2", false},
 
                 /**
                  * Pawn moves
                 */
-                {2, 2, 3, 2, friendly, empty, "Pc4", true},
-                {1, 2, 3, 2, friendly, empty, "Pc4", true}, //3.7.b
-                {2, 2, 4, 2, friendly, empty, "Pc4", false}, //3.7.b
-                {1, 2, 0, 2, empty, empty, "Pd1", false},//not backwards
-//                {1, 2, 2, 3, empty, friendly, "Pd3", true},//right capture
-//                {1, 2, 2, 3, empty, empty, "Pd3", false},//not right capture
-//                {1, 2, 2, 1, empty, friendly, "Pb3", true},//left capture
-//                {1, 2, 2, 1, empty, empty, "Pb3", false},//not left capture
-                {1, 2, 4, 2, empty, friendly, "Pd1", false},//too far forward
-                {1, 2, 2, 3, empty, friendly, "Pd1", false},//too far sidways
+                {2, 2, 3, 2, empty, empty, "Pc4", true},
+                {1, 2, 3, 2, empty, empty, "Pc4", true}, //3.7.b
+                {2, 2, 4, 2, empty, empty, "Pc5", false}, //3.7.b
+                {1, 2, 0, 2, empty, empty, "Pc1", false},//not backwards
+                {1, 2, 4, 2, empty, empty, "Pc5", false},//too far forward
+                {1, 2, 2, 3, empty, empty, "Pd3", false},//too far sidways
+
+                {1, 2, 2, 2, empty, foe, "Pc3", false}, //can't move into a space occupied by foe
 
 
         });
@@ -84,42 +60,31 @@ public class PawnMoveTest {
 
     @Test
     public void test_Move() {
-        BitBoard empty = new BitBoard();
-        PawnMove sut = this.createClass(this.startrow, this.startcol, this.endrow, this.endcol);
+        BitBoard empty = new Board();
+        PawnMove sut = new PawnMove(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(this.expected, sut.isValid(this.friendly, this.foe));
+    }
+
+    /**
+     * Ensure that if any move validator above this one is false, it returns false. This tests assumes that
+     * at least one call should be true.
+     */
+    @Test
+    public void test_Heirarchy() {
+        PawnMove sut = Mockito.spy(new PawnMove(this.startrow, this.startcol, this.endrow, this.endcol));
+        Mockito.when(sut.isValidSlideMove(this.friendly, this.foe)).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+        Mockito.when(sut.isValidColoredMove(this.friendly)).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+        Mockito.when(sut.isValidBoardMove()).thenReturn(false);//TODO: programatically figure out which methods to mock
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
     }
 
     @Test
     public void testToString() {
-        if (this.expected == true) {// only check when it is a valid move
-            PawnMove sut = this.createClass(this.startrow, this.startcol, this.endrow, this.endcol);
+        if (this.expectedString != null) {// only check when it is a valid move
+            PawnMove sut = new PawnMove(this.startrow, this.startcol, this.endrow, this.endcol);
             Assert.assertEquals(this.expectedString, sut.toString());
         }
     }
-
-    protected PawnMove createClass(int startrow, int startcol, int endrow, int endcol) {
-
-        Class[] cArg = new Class[4];
-        cArg[0] = Integer.TYPE;
-        cArg[1] = Integer.TYPE;
-        cArg[2] = Integer.TYPE;
-        cArg[3] = Integer.TYPE;
-        Constructor constructor = null;
-        try {
-            constructor = classUnderTest.getDeclaredConstructor(cArg);
-            PawnMove sut = (PawnMove)constructor.newInstance(startrow, startcol, endrow, endcol);
-            return sut;
-        } catch (NoSuchMethodException e1) {
-            e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (InstantiationException e1) {
-            e1.printStackTrace();
-        } catch (InvocationTargetException e1) {
-            e1.printStackTrace();
-        }
-        Assert.fail("Something went wrong with calling the constructor");
-        return new PawnMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
-    }
-
 }

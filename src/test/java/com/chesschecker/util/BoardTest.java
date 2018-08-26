@@ -1,46 +1,47 @@
-package com.chesschecker.bitboard;
+package com.chesschecker.util;
 
+import com.chesschecker.input.Board;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 
 @SuppressWarnings("ALL")
-public class BitBoardTest {
+public class BoardTest {
 
     @Test
     public void test_setOccupancy_invalid_1() {
-        BitBoard sut = new BitBoard();
+        BitBoard sut = new Board();
         sut.setOccupancy(-1, 4);
-        Assert.assertEquals(Long.parseLong("0"), sut.getState());
+        Assert.assertEquals(Long.parseLong("0"), sut.toLong());
     }
 
     @Test
     public void test_setOccupancy_invalid_2() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         sut.setOccupancy(9, 4);
-        Assert.assertEquals(Long.parseLong("0"), sut.getState());
+        Assert.assertEquals(Long.parseLong("0"), sut.toLong());
     }
 
     @Test
     public void test_setOccupancy_invalid_3() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         sut.setOccupancy(4, -1);
-        Assert.assertEquals(Long.parseLong("0"), sut.getState());
+        Assert.assertEquals(Long.parseLong("0"), sut.toLong());
     }
 
     @Test
     public void test_setOccupancy_invalid_4() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         sut.setOccupancy(4, 9);
-        Assert.assertEquals(Long.parseLong("0"), sut.getState());
+        Assert.assertEquals(Long.parseLong("0"), sut.toLong());
     }
 
     @Test
     public void test_flipVertical() {
-        final BitBoard expectedOut = new BitBoard();
+        final Board expectedOut = new Board();
         expectedOut.setOccupancy(5, 4);
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         sut.setOccupancy(2, 4);
         sut.mirrorVertical();
         Assert.assertEquals(sut, expectedOut);
@@ -56,7 +57,7 @@ public class BitBoardTest {
                 "\n00001000" +
                 "\n00000000" +
                 "\n00000000\n";
-        final BitBoard sut = new BitBoard();
+        final Board sut = new Board();
         sut.setOccupancy(2, 4);
         Assert.assertThat("toString() does not produce the correct output", sut.toString(), is(expectedOut));
     }
@@ -71,16 +72,16 @@ public class BitBoardTest {
                 "\n00000000" +
                 "\n00000000" +
                 "\n10000000\n";
-        final BitBoard sut = new BitBoard();
+        final Board sut = new Board();
         sut.setOccupancy(0, 0);
         Assert.assertThat("toString() does not produce the correct output", sut.toString(), is(expectedOut));
     }
 
     @Test
     public void setOccupancy() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         sut.setOccupancy(2, 4);
-        Assert.assertEquals(Long.parseLong("8796093022208"), sut.getState());
+        Assert.assertEquals(Long.parseLong("8796093022208"), sut.toLong());
     }
 
     /**
@@ -88,46 +89,46 @@ public class BitBoardTest {
      */
     @Test
     public void setOccupancy_2() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         sut.setOccupancy(0, 0);
-        Assert.assertEquals(true, Long.parseUnsignedLong("9223372036854775808")==sut.getState());
+        Assert.assertEquals(true, Long.parseUnsignedLong("9223372036854775808")==sut.toLong());
     }
 
 
     @Test
     public void equals_self() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         Assert.assertEquals(sut, sut);
     }
 
     @Test
     public void equals_another_class() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         Assert.assertFalse("Comparision to another class does not return false", sut.equals(1));
     }
 
     @Test
     public void equals_another_bitboard() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         sut.setOccupancy(2, 4);
-        BitBoard other = new BitBoard();
+        Board other = new Board();
         other.setOccupancy(2, 4);
         Assert.assertEquals(sut, other);
     }
 
     @Test
     public void test_or() {
-        BitBoard a = new BitBoard();
+        Board a = new Board();
         a.setOccupancy(2, 4);
         a.setOccupancy(4, 4);
 
-        BitBoard b = new BitBoard();
+        Board b = new Board();
         b.setOccupancy(6, 4);
         b.setOccupancy(4, 4);
 
-        BitBoard sut = BitBoard.or(a, b);
+        BitBoard sut = Board.or(a, b);
 
-        BitBoard expectedOutput = new BitBoard();
+        Board expectedOutput = new Board();
         expectedOutput.setOccupancy(2, 4);
         expectedOutput.setOccupancy(6, 4);
         expectedOutput.setOccupancy(4, 4);
@@ -136,34 +137,34 @@ public class BitBoardTest {
 
     @Test
     public void test_and() {
-        BitBoard a = new BitBoard();
+        Board a = new Board();
         a.setOccupancy(2, 4);
         a.setOccupancy(4, 4);
 
-        BitBoard b = new BitBoard();
+        Board b = new Board();
         b.setOccupancy(6, 4);
         b.setOccupancy(4, 4);
 
-        BitBoard sut = BitBoard.and(a, b);
+        BitBoard sut = Board.and(a, b);
 
-        BitBoard expectedOutput = new BitBoard();
+        Board expectedOutput = new Board();
         expectedOutput.setOccupancy(4, 4);
         Assert.assertEquals(expectedOutput, sut);
     }
 
     @Test
     public void test_xor() {
-        BitBoard a = new BitBoard();
+        Board a = new Board();
         a.setOccupancy(2, 4);
         a.setOccupancy(4, 4);
 
-        BitBoard b = new BitBoard();
+        Board b = new Board();
         b.setOccupancy(6, 4);
         b.setOccupancy(4, 4);
 
-        BitBoard sut = BitBoard.xor(a, b);
+        BitBoard sut = Board.xor(a, b);
 
-        BitBoard expectedOutput = new BitBoard();
+        Board expectedOutput = new Board();
         expectedOutput.setOccupancy(2, 4);
         expectedOutput.setOccupancy(6, 4);
         Assert.assertEquals(expectedOutput, sut);
@@ -171,13 +172,13 @@ public class BitBoardTest {
 
     @Test
     public void isNotEmpty() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         sut.setOccupancy(4,4);
         Assert.assertEquals(false, sut.isEmpty());
     }
     @Test
     public void isEmpty() {
-        BitBoard sut = new BitBoard();
+        Board sut = new Board();
         Assert.assertEquals(true, sut.isEmpty());
     }
 }

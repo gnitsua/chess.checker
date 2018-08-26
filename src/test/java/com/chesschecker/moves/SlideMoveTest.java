@@ -1,15 +1,18 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.input.Board;
+import com.chesschecker.util.BitBoard;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.notNull;
 
 @SuppressWarnings("ALL")
 @RunWith(Parameterized.class)
@@ -31,32 +34,14 @@ public class SlideMoveTest {
     @Parameterized.Parameter(value = 7)
     public boolean expected;
 
-
     @Parameterized.Parameters(name = "{index}: Move ({0},{1})->({2},{3})")
     public static Collection<Object[]> data() {
-        BitBoard empty = new BitBoard();
-        BitBoard friendly = new BitBoard();
+        BitBoard empty = new Board();
+        BitBoard friendly = new Board();
         friendly.setOccupancy(0, 0);
         friendly.setOccupancy(3, 3);
 
         return Arrays.asList(new Object[][]{
-                /**
-                 * Board Move tests that should still hold
-                */
-                {0, 0, -1, 0, empty, empty, null, false},
-                {0, 0, 9, 0, empty, empty, null, false},
-                {0, 0, 0, -1, empty, empty, null, false},
-                {0, 0, 0, 9, empty, empty, null, false},
-                {-1, 0, 0, 0, empty, empty, null, false},
-                {9, 0, 0, 0, empty, empty, null, false},
-                {0, -1, 0, 0, empty, empty, null, false},
-                {0, 9, 0, 0, empty, empty, null, false},
-                /**
-                 * Colored Moves that should still hold
-                */
-                {0, 0, 3, 3, friendly, empty, "d4", false},
-                {0, 0, 3, 3, empty, friendly, "d4", true},
-                {2, 2, 2, 2, friendly, empty, "c3", true},
                 /**
                  * Tests for SlideMove
                 */
@@ -80,42 +65,30 @@ public class SlideMoveTest {
 
     @Test
     public void test_Move() {
-        BitBoard empty = new BitBoard();
+        BitBoard empty = new Board();
         SlideMove sut = new SlideMove(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(this.expected, sut.isValid(this.friendly, this.foe));
     }
 
+    /**
+     * Ensure that if any move validator above this one is false, it returns false. This tests assumes that
+     * at least one call should be true.
+     */
+    @Test
+    public void test_Heirarchy() {
+        SlideMove sut = Mockito.spy(new SlideMove(this.startrow, this.startcol, this.endrow, this.endcol));
+        Mockito.when(sut.isValidColoredMove(this.friendly)).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+        Mockito.when(sut.isValidBoardMove()).thenReturn(false);
+        Assert.assertEquals(false, sut.isValid(this.friendly, this.foe));
+    }
+
     @Test
     public void testToString() {
-        if (this.expected == true) {// only check when it is a valid move
+        if (this.expectedString != null) {// only check when it is a valid move
             SlideMove sut = new SlideMove(this.startrow, this.startcol, this.endrow, this.endcol);
             Assert.assertEquals(this.expectedString, sut.toString());
         }
-    }
-
-    protected SlideMove createClass(int startrow, int startcol, int endrow, int endcol) {
-
-        Class[] cArg = new Class[4];
-        cArg[0] = Integer.TYPE;
-        cArg[1] = Integer.TYPE;
-        cArg[2] = Integer.TYPE;
-        cArg[3] = Integer.TYPE;
-        Constructor constructor = null;
-        try {
-            constructor = SlideMove.class.getDeclaredConstructor(cArg);
-            SlideMove sut = (SlideMove)constructor.newInstance(startrow, startcol, endrow, endcol);
-            return sut;
-        } catch (NoSuchMethodException e1) {
-            e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (InstantiationException e1) {
-            e1.printStackTrace();
-        } catch (InvocationTargetException e1) {
-            e1.printStackTrace();
-        }
-        Assert.fail("Something went wrong with calling the constructor");
-        return new SlideMove(0, 0, 0, 0);//TODO: I don't think this should ever happen
     }
 
 }

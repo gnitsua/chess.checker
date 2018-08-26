@@ -1,6 +1,6 @@
 package com.chesschecker.moves;
 
-import com.chesschecker.bitboard.BitBoard;
+import com.chesschecker.util.BitBoard;
 
 /**
  * This class defines moves for a Pawn (not including special moves.
@@ -11,33 +11,50 @@ import com.chesschecker.bitboard.BitBoard;
  * This is defined in 3.7.a of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
 public class PawnMove extends SlideMove {
-    protected static final String PIECE_ABBREVIATION = "P";
+    private static final String PIECE_ABBREVIATION = "P";
 
-    public PawnMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    PawnMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
-    @Override
-    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if (super.isValid(friendly, foe)) {
-            // For a pawn, both friendly and foe prevent movement. We've already checked for friendly
-            // as part of being a ColoredMoved
-            if(this.isMoveToEmpty(foe)) {
-                if (this.startCol == this.endCol) {
-                    if (0 <= (this.endRow - this.startRow)) {
-                        if (1 == this.startRow) {
-                            if (3 > (this.endRow - this.startRow)){
-                                return true;
-                            } else {
-                                return false;
-                            }
+    private boolean isValidPawnMove(final BitBoard foe) {
+        // For a pawn, both friendly and foe prevent movement. We've already checked for friendly
+        // as part of being a ColoredMoved
+        if (this.isMoveToEmpty(foe)) {
+            if (this.startCol == this.endCol) {
+                if (0 <= (this.endRow - this.startRow)) {
+                    if (1 == this.startRow) {
+                        if (3 > (this.endRow - this.startRow)) {
+                            return true;
                         } else {
-                            if (1 >= (this.endRow - this.startRow)){
-                                return true;
-                            } else {
-                                return false;
-                            }
+                            return false;
                         }
+                    } else {
+                        if (1 >= (this.endRow - this.startRow)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    @SuppressWarnings("DesignForExtension")
+    public boolean isValid(final BitBoard friendly, final BitBoard foe) {
+        if (this.isValidBoardMove()) {
+            if (this.isValidColoredMove(friendly)) {
+                if (this.isValidSlideMove(friendly, foe)) {
+                    if (this.isValidPawnMove(foe)) {
+                        return true;
                     } else {
                         return false;
                     }
@@ -50,11 +67,11 @@ public class PawnMove extends SlideMove {
         } else {
             return false;
         }
-
     }
 
     @Override
+    @SuppressWarnings("DesignForExtension")
     public String toString() {
-        return PIECE_ABBREVIATION + super.toString();
+        return PawnMove.PIECE_ABBREVIATION + this.endPositionToString();
     }
 }

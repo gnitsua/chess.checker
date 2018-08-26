@@ -1,38 +1,50 @@
-package com.chesschecker.bitboard;
+package com.chesschecker.input;
 
+import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.StringHelper;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
-public final class BitBoard {
+
+public final class Board implements BitBoard {
 
     private long state;
 
-    public BitBoard() {
+    public Board() {
+        super();
         this.state = 0L;
     }
 
-    public BitBoard(long state) {
-        this.state = state;
+    private Board(final long statein) {
+        super();
+        this.state = statein;
     }
 
-    public static BitBoard or(BitBoard a, BitBoard b) {
-        return new BitBoard(a.getState() | b.getState());
+    public static BitBoard or(final BitBoard x, final BitBoard y) {//TODO: this is x/y because intellij doesn't lie "b"
+        final long longX = x.toLong();
+        final long longY = y.toLong();
+        return new Board(longX | longY);
     }
 
-    public static BitBoard and(BitBoard a, BitBoard b) {
-        return new BitBoard(a.getState() & b.getState());
+    public static BitBoard and(final BitBoard x, final BitBoard y) {
+        final long longX = x.toLong();
+        final long longY = y.toLong();
+        return new Board(longX & longY);
     }
 
-    public static BitBoard xor(BitBoard a, BitBoard b) {
-        return new BitBoard(a.getState() ^ b.getState());
+    public static BitBoard xor(final BitBoard x, final BitBoard y) {
+        final long longX = x.toLong();
+        final long longY = y.toLong();
+        return new Board(longX ^ longY);
     }
 
-    public static BitBoard not(BitBoard a) {
-        return new BitBoard(~a.getState());
+    public static BitBoard not(final BitBoard x) {
+        final long longX = x.toLong();
+        return new Board(~longX);
     }
 
-    public long getState() {
+    public long toLong() {
         return this.state;
     }
 
@@ -41,8 +53,9 @@ public final class BitBoard {
             if (8 >= row) {
                 if (0 <= col) {
                     if (8 >= col) {
-                        BigDecimal two = new BigDecimal("2");
-                        this.state |= two.pow(((7 - col) + ((7 - row) * 8))).longValue();
+                        final BigDecimal bigTwo = new BigDecimal("2");
+                        final BigDecimal result = bigTwo.pow(((7 - col) + ((7 - row) * 8)));
+                        this.state |= result.longValue();
                     } else {
                         return;
                     }
@@ -98,9 +111,17 @@ public final class BitBoard {
             final BitBoard otherBoard = (BitBoard) obj;
 
             // Compare the data members and return accordingly
-            returnVal = this.getState() == otherBoard.getState();
+            returnVal = this.toLong() == otherBoard.toLong();
         }
 
         return returnVal;
+    }
+
+    @Override
+    @SuppressWarnings("ObjectInstantiationInEqualsHashCode")
+    public int hashCode() {
+        final long l = this.toLong();
+        final Long aLong = Long.valueOf(l);
+        return Objects.hash(aLong);
     }
 }
