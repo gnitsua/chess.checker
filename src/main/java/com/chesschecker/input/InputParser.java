@@ -22,22 +22,19 @@ public class InputParser {
         return this.input.readLine();
     }
 
-    private HashSet<String> promptForInput(String prompt) throws IOException {
+    private PieceList promptForInput(String prompt) throws IOException {
         this.output.write(prompt);
         this.output.flush();
         final String s = this.readLine();
-        final String[] pieces = s.split(", ");
-        final List<String> strings = Arrays.asList(pieces);
-        HashSet<String> pieces_set = new HashSet<>(strings);
-        return pieces_set;
+        return new PieceList(s);
     }
 
     public BoardState parseInput() throws IOException {
-        HashSet<String> white = this.promptForInput(WHITE_PROMPT);
-        HashSet<String> black = this.promptForInput(BLACK_PROMPT);
+        final PieceList white = this.promptForInput(InputParser.WHITE_PROMPT);
+        final PieceList black = this.promptForInput(InputParser.BLACK_PROMPT);
         // making this assumption that this is a valid input and therefor |move|=1
-        HashSet<String> move = this.promptForInput(MOVE_PROMPT);
-        return new BoardState(white, black, move);
+        final PieceList move = this.promptForInput(InputParser.MOVE_PROMPT);
+        return BoardStateFactory.createBoardState(white,black,move);
     }
 
 }

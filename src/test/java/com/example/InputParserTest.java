@@ -1,6 +1,7 @@
 package com.example;
 
 import com.chesschecker.input.BoardState;
+import com.chesschecker.input.WhiteBoardState;
 import com.chesschecker.input.InputParser;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,7 +32,6 @@ public class InputParserTest {
             BoardState test = sut.parseInput();
             Assert.assertEquals(test.getWhite(), whiteSet);
             Assert.assertEquals(test.getBlack(), blackSet);
-            Assert.assertEquals(test.getMove(), moveSet);
             Assert.assertEquals(expectedOutput,baos.toString());
         } catch (IOException e) {
             e.printStackTrace();
