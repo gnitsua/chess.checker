@@ -3,14 +3,20 @@ package com.chesschecker.input;
 import com.chesschecker.util.StringHelper;
 
 import java.util.HashSet;
-import java.util.logging.Logger;
+import java.util.Set;
 
 
+@SuppressWarnings("PublicMethodNotExposedInInterface")
 public class BoardState {
-    private static final Logger LOGGER = Logger.getLogger(BoardState.class.getName());
-    private HashSet<String> white;
-    private HashSet<String> black;
-    private HashSet<String> move;
+    private static final char MAXROW = '8';
+    private static final char MINROW = '1';
+    @SuppressWarnings("FieldNotUsedInToString")
+    private final Set<String> white;
+    @SuppressWarnings("FieldNotUsedInToString")
+    private final Set<String> black;
+    private final Set<String> move;
+    @SuppressWarnings("FieldNotUsedInToString")
+    private final boolean mirrored;
 
 
     public BoardState() {
@@ -18,52 +24,76 @@ public class BoardState {
         this.white = new HashSet<>(0);
         this.black = new HashSet<>(0);
         this.move = new HashSet<>(0);
+        this.mirrored = false;
     }
 
 
-    public BoardState(final HashSet<String> whiteIn, final HashSet<String> blackIn, final HashSet<String> moveIn) {
+    public BoardState(final Set<String> whiteIn, final Set<String> blackIn, final Set<String> moveIn) {
         super();
-        this.white = whiteIn;// making the assumption that this is Hash set of String elements that are 3 characters
-        this.black = blackIn;
-        this.move = moveIn;
+        if (whiteIn.containsAll(moveIn)) {
+            this.white = whiteIn;// making the assumption that this is Hash set of String elements that are 3 characters
+            this.black = blackIn;
+            this.move = moveIn;
+            this.mirrored = false;
+        } else {
+            if (blackIn.containsAll(moveIn)) {
+                this.white = BoardState.flip_rows(blackIn);
+                this.black = BoardState.flip_rows(whiteIn);
+                this.move = moveIn;
+            } else {// The piece that is supposed to be moved is not actually a peice. Should return no moves
+                this.white = new HashSet<>(0);
+                this.black = new HashSet<>(0);
+                this.move = new HashSet<>(0);
+            }
+            this.mirrored = true;
+        }
     }
 
-    private static HashSet<String> flip_rows(final HashSet<String> pieces) {
-        final HashSet<String> result = new HashSet<>(0);
-        pieces.forEach(piece -> {
+    private static Set<String> flip_rows(final Iterable<String> pieces) {
+        final Set<String> result = new HashSet<>(0);
+        for (final String piece : pieces) {
             final char row = piece.charAt(2);
-            final char newRow = (char) (((int)'8' - (int)row) + (int)'1');
-            result.add(piece.substring(0, 2) + newRow);
-        });
+            //noinspection NumericCastThatLosesPrecision
+            final char newRow = (char) (((int) BoardState.MAXROW - (int) row) + (int) BoardState.MINROW);
+            final String pieceTypeAndCol = piece.substring(0, 2);
+            result.add(pieceTypeAndCol + newRow);
+        }
         return result;
     }
 
-    public void flip_black_white() {
-        this.white = BoardState.flip_rows(this.white);
-        this.black = BoardState.flip_rows(this.black);
+//    public void flip_black_white() {
+//        this.white = BoardState.flip_rows(this.white);
+//        this.black = BoardState.flip_rows(this.black);
+//    }
+
+    public final Set<String> getWhite() {
+        if (this.mirrored) {
+            return BoardState.flip_rows(this.black);
+        } else {
+            return this.white;
+        }
     }
 
-    public HashSet<String> getWhite() {
-        return this.white;
+    public final Set<String> getBlack() {
+        if (this.mirrored) {
+            return BoardState.flip_rows(this.white);
+        } else {
+            return this.black;
+        }
     }
 
-    public HashSet<String> getBlack() {
-        return this.black;
-    }
-
-    public HashSet<String> getMove() {
+    public final Set<String> getMove() {
         return this.move;
     }
 
     @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder(0);
-        result.append(this.getWhite());
-        result.append(StringHelper.NEW_LINE);
-        result.append(this.getBlack());
-        result.append(StringHelper.NEW_LINE);
-        result.append(this.getMove());
-        result.append(StringHelper.NEW_LINE);
-        return result.toString();
+    @SuppressWarnings("NestedMethodCall")
+    public final String toString() {
+        return String.valueOf(this.getWhite()) +
+                StringHelper.NEW_LINE +
+                this.getBlack() +
+                StringHelper.NEW_LINE +
+                this.move +
+                StringHelper.NEW_LINE;
     }
 }

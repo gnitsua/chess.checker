@@ -19,7 +19,7 @@ public class PawnCaptureMove extends SlideMove {
     private boolean isValidPawnCaptureMove(final BitBoard foe) {
         if (1 == (this.endRow - this.startRow)) {
             if (1 == Math.abs(this.startCol - this.endCol)) {
-                final BitBoard postMoveBitboard = this.getPostMoveBitboard();
+                final BitBoard postMoveBitboard = this.getAttacking();
                 final BitBoard captures = Board.and(postMoveBitboard, foe);
                 if (BitBoard.isEmpty(captures)) {
                     return false;

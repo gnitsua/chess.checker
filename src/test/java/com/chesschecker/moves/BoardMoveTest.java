@@ -117,7 +117,7 @@ public class BoardMoveTest {
         BitBoard expectedOutput = new Board();
         expectedOutput.setOccupancy(this.endrow,this.endcol);
         BoardMove sut = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
-        Assert.assertEquals(sut.getPostMoveBitboard(),expectedOutput);
+        Assert.assertEquals(sut.getAttacking(),expectedOutput);
     }
 
     @Test
