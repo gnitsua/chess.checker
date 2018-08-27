@@ -1,9 +1,12 @@
 package com.chesschecker.input;
 
 import com.chesschecker.util.StringHelper;
+import com.google.common.base.Predicates;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @SuppressWarnings("PublicMethodNotExposedInInterface")
@@ -49,6 +52,7 @@ public class BoardState {
         }
     }
 
+    // I need to test this function somehow
     private static Set<String> flip_rows(final Iterable<String> pieces) {
         final Set<String> result = new HashSet<>(0);
         for (final String piece : pieces) {
@@ -61,11 +65,6 @@ public class BoardState {
         return result;
     }
 
-//    public void flip_black_white() {
-//        this.white = BoardState.flip_rows(this.white);
-//        this.black = BoardState.flip_rows(this.black);
-//    }
-
     public final Set<String> getWhite() {
         if (this.mirrored) {
             return BoardState.flip_rows(this.black);
@@ -73,6 +72,17 @@ public class BoardState {
             return this.white;
         }
     }
+    private static Set<String> filterOutKing(final Collection<String> moves){
+        //noinspection NestedMethodCall,ChainedMethodCall
+        return moves.stream().filter(Predicates.containsPattern("^K").negate()).collect(Collectors.toSet());
+    }
+
+    public final Set<String> getWhiteWhithoutKing() {
+        //noinspection NestedMethodCall,ChainedMethodCall
+        return BoardState.filterOutKing(this.getWhite());
+    }
+
+
 
     public final Set<String> getBlack() {
         if (this.mirrored) {
@@ -80,6 +90,11 @@ public class BoardState {
         } else {
             return this.black;
         }
+    }
+
+    public final Set<String> getBlackWhithoutKing() {
+        //noinspection NestedMethodCall
+        return BoardState.filterOutKing(this.getBlack());
     }
 
     public final Set<String> getMove() {
