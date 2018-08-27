@@ -13,7 +13,7 @@ import com.chesschecker.util.BitBoard;
 public class KnightMove extends ColoredMove {
     private static final String PIECE_ABBREVIATION = "N";
 
-    KnightMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    public KnightMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 

@@ -14,7 +14,7 @@ import com.chesschecker.util.BitBoard;
 public class Pawn37DMove extends ColoredMove {
     private static final String PIECE_ABBREVIATION = "P";
 
-    Pawn37DMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    public Pawn37DMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 

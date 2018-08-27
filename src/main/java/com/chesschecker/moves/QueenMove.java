@@ -10,7 +10,7 @@ import com.chesschecker.util.BitBoard;
 public class QueenMove extends SlideMove {
     private static final String PIECE_ABBREVIATION = "Q";
 
-    QueenMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    public QueenMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 

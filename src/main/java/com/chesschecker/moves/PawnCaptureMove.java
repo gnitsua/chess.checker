@@ -12,7 +12,7 @@ import com.chesschecker.util.BitBoard;
 public class PawnCaptureMove extends SlideMove {
     private static final String PIECE_ABBREVIATION = "P";
 
-    PawnCaptureMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    public PawnCaptureMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 

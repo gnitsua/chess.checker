@@ -4,16 +4,18 @@ import com.chesschecker.input.Board;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.Column;
 
+import java.util.Objects;
+
 /**
  * A board move is defined as a move that starts and ends on a valid square of a 8x8 chess board
  * This comes from rule 2.1 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
 @SuppressWarnings("FieldNotUsedInToString")
 public class BoardMove implements Move {
-    protected int startRow;
-    protected int startCol;
-    int endRow;
-    int endCol;
+    protected final int startRow;
+    protected final int startCol;
+    final int endRow;
+    final int endCol;
 
 
     BoardMove(final int startrow, final int startcol, final int endrow, final int endcol) {
@@ -48,7 +50,15 @@ public class BoardMove implements Move {
         }
     }
 
-    final boolean isSelfMove() {
+    public static Move reverse(final Move move) {
+        final int endRow = move.getEndRow();
+        final int endCol = move.getEndCol();
+        final int startRow = move.getStartRow();
+        final int startCol = move.getStartCol();
+        return new BoardMove(endRow, endCol, startRow, startCol);
+    }
+
+    private boolean isSelfMove() {
         if (this.startRow == this.endRow) {
             if (this.startCol == this.endCol) {
                 return true;
@@ -84,7 +94,6 @@ public class BoardMove implements Move {
         }
     }
 
-
     @Override
     @SuppressWarnings("DesignForExtension")
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
@@ -94,7 +103,13 @@ public class BoardMove implements Move {
     /**
      * @return BitBoard with the final position of the move set to occupied
      */
-    final BitBoard getPostMoveBitboard() {
+    public final BitBoard getAttacking() {
+        final BitBoard result = new Board();
+        result.setOccupancy(this.endRow, this.endCol);
+        return result;
+    }
+
+    public final BitBoard getOccupancy() {
         final BitBoard result = new Board();
         result.setOccupancy(this.endRow, this.endCol);
         return result;
@@ -124,10 +139,45 @@ public class BoardMove implements Move {
         return result.toString();
     }
 
-
     @Override
     @SuppressWarnings("DesignForExtension")
     public String toString() {
         return this.endPositionToString();
+    }
+
+//    @Override
+//    public final boolean equals(final Object obj) {
+//        boolean returnVal = false;
+//        if (obj == this) {
+//            returnVal = true;
+//        } else if (obj instanceof BoardMove) {//TODO: move this to Move?
+//
+//            // typecast o to Complex so that we can compare data members
+//            final Move otherMove = (Move) obj;
+//
+//            // Compare the data members and return accordingly
+//
+//        }
+//
+//        return returnVal;
+//    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(this.startRow, this.startCol, this.endRow, this.endCol);
+    }
+
+    @Override
+    public final int compareTo(final Move o) {
+        if(this.getStartRow() == o.getStartRow()){
+            if(this.getStartCol() == o.getStartCol()) {
+                if(this.getEndRow() == o.getEndRow()) {
+                    if(this.getEndCol() == o.getEndCol()) {
+                        return 1;
+                    }
+                }
+            }
+        }
+        return 0;
     }
 }

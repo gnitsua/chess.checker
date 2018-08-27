@@ -10,7 +10,7 @@ import com.chesschecker.util.BitBoard;
 public class KingMove extends QueenMove {
     private static final String PIECE_ABBREVIATION = "K";
 
-    KingMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    public KingMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
