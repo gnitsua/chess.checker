@@ -1,6 +1,7 @@
 package com.chesschecker.input;
 
 import com.chesschecker.util.StringHelper;
+import com.chesschecker.util.PieceAbbreviation;
 import com.google.common.base.Predicates;
 
 import java.util.Collection;

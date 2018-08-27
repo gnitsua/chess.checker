@@ -2,6 +2,7 @@ package com.chesschecker.moves;
 
 import com.chesschecker.input.Board;
 import com.chesschecker.util.BitBoard;
+import com.chesschecker.util.PieceAbbreviation;
 
 /**
  * This class defines moves for a Pawn.
@@ -10,7 +11,7 @@ import com.chesschecker.util.BitBoard;
  * This is defined in 3.7.c of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
 public class PawnCaptureMove extends SlideMove {
-    private static final String PIECE_ABBREVIATION = "P";
+    private static final String PIECE_ABBREVIATION = PieceAbbreviation.PAWN.getAbbreviation();
 
     public PawnCaptureMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);

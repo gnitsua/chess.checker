@@ -180,4 +180,13 @@ public class BoardMove implements Move {
         }
         return 0;
     }
+
+    @Override
+    public final boolean equals(final Object obj) {
+        if (!(obj instanceof BoardMove)) {
+            return false;
+        } else {
+            return 0 == this.compareTo((Move) obj);
+        }
+    }
 }

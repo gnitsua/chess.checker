@@ -1,63 +1,55 @@
 package com.chesschecker.input;
 
-import com.chesschecker.util.BitBoard;
 import com.chesschecker.moves.*;
+import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.Column;
+import com.chesschecker.util.PieceAbbreviation;
+import com.google.common.base.Predicates;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MoveList extends HashSet<BoardMove> {
-    public MoveList() {
+
+    MoveList() {
         super();
     }
 
-    MoveList(final HashSet<String> positions) {
+    public MoveList(final Collection<String> positions) {
         super();
-        positions.stream().map(MoveList::getSudoValidMoves).flatMap(x -> x).map(this::add);
+        //noinspection ChainedMethodCall,ResultOfMethodCallIgnored
+        positions.stream().map(MoveList::getPseudoLegalMovesForPosition)
+                .map(Collection::stream).flatMap(x -> x).map(this::add);
     }
 
-//    static MoveList flipRows(final MoveList list) {
-//        final HashSet<String> result = new HashSet<>(0);
-//        list.forEach(piece -> {
-//            final char row = piece.charAt(2);
-//            final char newRow = (char) (((int) '8' - (int) row) + (int) '1');
-//            result.add(piece.substring(0, 2) + newRow);
-//        });
-//        return result;
-//
-//    }
-
-
-    static Stream<BoardMove> getSudoValidMoves(final String position) {
+    static Collection<BoardMove> getPseudoLegalMovesForPosition(final String position) {
+        final Collection<BoardMove> result = new HashSet<>(64);
         try {
             assert 3 == position.length();
             final String type = position.substring(0, 1);//TODO: this is assuming that the input is valid
             final int column = Column.columnLetterToNumber(position.substring(1, 2));
             final int row = Integer.parseInt(position.substring(2, 3));
-
-            final HashSet<BoardMove> result = new HashSet<>(64);
             for (int i = 0; 8 > i; i++) {
                 for (int j = 0; 8 > j; j++) {
-                    switch (type) {
-                        case "K":
+                    switch (PieceAbbreviation.valueOf(type)) {
+                        case KING:
                             result.add(new KingMove(row, column, i, j));
                             break;
-                        case "Q":
+                        case QUEEN:
                             result.add(new QueenMove(row, column, i, j));
                             break;
-                        case "R":
+                        case ROOK:
                             result.add(new RookMove(row, column, i, j));
                             break;
-                        case "B":
+                        case BISHOP:
                             result.add(new BishopMove(row, column, i, j));
                             break;
-                        case "N":
+                        case KNIGHT:
                             result.add(new KnightMove(row, column, i, j));
                             break;
-                        case "P":
+                        case PAWN:
                             result.add(new PawnMove(row, column, i, j));
                             result.add(new PawnCaptureMove(row, column, i, j));
                             result.add(new Pawn37DMove(row, column, i, j));
@@ -68,17 +60,19 @@ public class MoveList extends HashSet<BoardMove> {
                     }
                 }
             }
-            return result.stream();
+            return result;
         } catch (final AssertionError e) {
-            return new HashSet<BoardMove>(0).stream();
+            return result;
         }
     }
 
+
+
     public BitBoard getOccupancy() {
-        return this.stream().map(BoardMove::getOccupancy).reduce(new Board(),Board::and);
+        return this.stream().map(BoardMove::getOccupancy).reduce(new Board(), Board::and);
     }
 
-    public BitBoard getAttacking() {
-        return this.stream().map(BoardMove::getAttacking).reduce(new Board(),Board::and);
-    }
+//    public BitBoard getAttacking() {
+//        return this.stream().map(BoardMove::getAttacking).reduce(new Board(),Board::and);
+//    }
 }

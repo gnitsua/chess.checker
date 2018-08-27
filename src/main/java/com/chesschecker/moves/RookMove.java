@@ -1,6 +1,7 @@
 package com.chesschecker.moves;
 
 import com.chesschecker.util.BitBoard;
+import com.chesschecker.util.PieceAbbreviation;
 
 
 /**
@@ -9,13 +10,12 @@ import com.chesschecker.util.BitBoard;
  * This is defined in 3.3 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
 public class RookMove extends QueenMove {
-    private static final String PIECE_ABBREVIATION = "R";
+    private static final String PIECE_ABBREVIATION = PieceAbbreviation.ROOK.getAbbreviation();
 
 
     public RookMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
-
 
 
     @Override
