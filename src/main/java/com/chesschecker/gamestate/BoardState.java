@@ -32,7 +32,7 @@ public abstract class BoardState {
     public final Set<String> getWhiteKing() {
         final Set<String> allWhite = new HashSet<>(this.getWhite());
         final Set<String> whiteWithoutKing = this.getWhiteWithoutKing();
-        allWhite.retainAll(whiteWithoutKing);//intersection is just white king
+        allWhite.removeAll(whiteWithoutKing);//intersection is just white king
         return allWhite;
     }
 
@@ -43,7 +43,7 @@ public abstract class BoardState {
     public final Set<String> getBlackKing() {
         final Set<String> allBlack = new HashSet<>(this.getBlack());
         final Set<String> blackWithoutKing = this.getBlackWithoutKing();
-        allBlack.retainAll(blackWithoutKing);//intersection is just white king
+        allBlack.removeAll(blackWithoutKing);//intersection is just white king
         return allBlack;
     }
 

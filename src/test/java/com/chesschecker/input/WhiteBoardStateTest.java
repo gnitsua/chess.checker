@@ -41,6 +41,18 @@ public class WhiteBoardStateTest {
     }
 
     @Test
+    public void test_ForGettingKing() {
+        PieceList white = new PieceList("Rf1, Kg1, Pf2, Ph2, Pg3");
+        PieceList whiteKing = new PieceList("Kg1");
+        PieceList black = new PieceList("Kb8, Ne8, Pa7, Pb7, Pc7, Ra5");
+        PieceList blackKing = new PieceList("Kb8");
+        WhiteBoardState sut = new WhiteBoardState(white, black);
+
+        Assert.assertEquals("White is not correct", whiteKing, sut.getWhiteKing());
+        Assert.assertEquals("Black is not correct", blackKing, sut.getBlackKing());
+    }
+
+    @Test
     public void test_toString() {
         String testString = "[a, b, c]\n[a, b, c]\n";
         String set = "a, b, c";

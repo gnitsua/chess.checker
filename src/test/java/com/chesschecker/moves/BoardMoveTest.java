@@ -113,11 +113,19 @@ public class BoardMoveTest {
     }
 
     @Test
-    public void getPostmoveBitboard() {
+    public void getAttacking() {
         BitBoard expectedOutput = new Board();
         expectedOutput.setOccupancy(this.endrow,this.endcol);
         BoardMove sut = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(sut.getAttacking(),expectedOutput);
+    }
+
+    @Test
+    public void getOccupancy() {
+        BitBoard expectedOutput = new Board();
+        expectedOutput.setOccupancy(this.startrow,this.startcol);
+        BoardMove sut = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        Assert.assertEquals(expectedOutput,sut.getOccupancy());
     }
 
     @Test
@@ -142,5 +150,27 @@ public class BoardMoveTest {
     public void getEndCol() {
         BoardMove sut = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(sut.getEndCol(),this.endcol);
+    }
+
+
+    @Test
+    public void compareTo() {
+        BoardMove sut = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        BoardMove other = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        Assert.assertEquals(1,sut.compareTo(other));
+    }
+
+    @Test
+    public void compareToSomethingElse() {
+        BoardMove sut = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        BoardMove other = new BoardMove(this.startcol+10, this.startrow+10, this.endrow, this.endcol);
+        Assert.assertEquals(0,sut.compareTo(other));
+    }
+
+    @Test
+    public void equalsSomthingElse() {
+        BoardMove sut = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        String test = "test";
+        Assert.assertEquals(false,sut.equals(test));
     }
 }

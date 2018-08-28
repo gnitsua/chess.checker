@@ -50,22 +50,6 @@ public class BoardMove implements Move {
         }
     }
 
-//    public static BoardMove reverse(final Move move) {
-//        final int endRow = move.getEndRow();
-//        final int endCol = move.getEndCol();
-//        final int startRow = move.getStartRow();
-//        final int startCol = move.getStartCol();
-//        return new BoardMove(endRow, endCol, startRow, startCol);
-//    }
-//
-//    public static Move flipHori(final Move move) {
-//        final int endRow = move.getEndRow();
-//        final int endCol = move.getEndCol();
-//        final int startRow = move.getStartRow();
-//        final int startCol = move.getStartCol();
-//        return new BoardMove(endRow, endCol, startRow, startCol);
-//    }
-
     private boolean isSelfMove() {
         if (this.startRow == this.endRow) {
             if (this.startCol == this.endCol) {
@@ -119,7 +103,7 @@ public class BoardMove implements Move {
 
     public final BitBoard getOccupancy() {
         final BitBoard result = new Board();
-        result.setOccupancy(this.endRow, this.endCol);
+        result.setOccupancy(this.startRow, this.startCol);
         return result;
     }
 
