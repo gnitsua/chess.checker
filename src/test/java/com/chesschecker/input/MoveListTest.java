@@ -31,7 +31,7 @@ public class MoveListTest {
         expectedOuta.addAll(expectedOutb);//Should be the concat of the individual moves
         Set<BoardMove> sut = new MoveList(white);
 
-        Assert.assertEquals(expectedOuta, sut);
+        Assert.assertEquals(true, sut.equals(expectedOuta));
     }
 
 

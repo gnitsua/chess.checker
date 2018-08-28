@@ -48,11 +48,16 @@ public final class Board implements BitBoard {
         return this.state;
     }
 
-    public void setOccupancy(final int row, final int col) {
+    /**
+     * Note: if the position is out of bounds, this function leaves occupancy unchanged
+     * @param row
+     * @param col
+     */
+    public void setOccupancy(final int row, final int col){
         if (0 <= row) {
-            if (8 >= row) {
+            if (8 > row) {
                 if (0 <= col) {
-                    if (8 >= col) {
+                    if (8 > col) {
                         final BigDecimal bigTwo = new BigDecimal("2");
                         final BigDecimal result = bigTwo.pow(((7 - col) + ((7 - row) * 8)));
                         this.state |= result.longValue();
@@ -82,7 +87,7 @@ public final class Board implements BitBoard {
         this.state = (this.state >> threeRow) | (this.state << threeRow);
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return 0L == this.toLong();
     }
 
