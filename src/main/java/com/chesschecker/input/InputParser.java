@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("ClassNamePrefixedWithPackageName")
+public
 class InputParser {
     private static final String WHITE_PROMPT = "WHITE: ";
     private static final String BLACK_PROMPT = "BLACK: ";
@@ -20,7 +21,7 @@ class InputParser {
     private final BufferedReader input;
     private final PrintWriter output;
 
-    InputParser(final InputStream source, final OutputStream prompt) {
+    public InputParser(final InputStream source, final OutputStream prompt) {
         super();
         this.input = new BufferedReader(new InputStreamReader(source, StandardCharsets.UTF_8));
         this.output = new PrintWriter(new OutputStreamWriter(prompt, StandardCharsets.UTF_8));
@@ -37,7 +38,7 @@ class InputParser {
         return new PieceList(s);
     }
 
-    final BoardState parseInput() throws IOException {
+    public final BoardState parseInput() throws IOException {
         final PieceList white = this.promptForInput(InputParser.WHITE_PROMPT);
         final PieceList black = this.promptForInput(InputParser.BLACK_PROMPT);
         // making this assumption that this is a valid input and therefor |move|=1

@@ -1,11 +1,14 @@
 package com.chesschecker.gamestate;
 
 import com.chesschecker.input.PieceList;
-import com.chesschecker.util.StringHelper;
 
 import java.util.Set;
 
 public class BlackBoardState extends BoardState {
+    public BlackBoardState(final PieceList whiteIn, final PieceList blackIn, final PieceList moveIn) {
+        super(whiteIn, blackIn, moveIn);
+    }
+
     public BlackBoardState(final PieceList whiteIn, final PieceList blackIn) {
         super(whiteIn, blackIn);
     }
@@ -19,11 +22,5 @@ public class BlackBoardState extends BoardState {
         return PieceList.flipRows(this.white);
     }
 
-    @Override
-    public final String toString() {
-        return String.valueOf(this.getWhite()) +
-                StringHelper.NEW_LINE +
-                this.getBlack() +
-                StringHelper.NEW_LINE;
-    }
+
 }

@@ -1,21 +1,24 @@
 package com.chesschecker.input;
 
 import com.chesschecker.moves.*;
+import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.Column;
 import com.chesschecker.util.PieceAbbreviation;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"serial", "CloneableClassWithoutClone",
         "CloneableClassInSecureContext", "ClassExtendsConcreteCollection"})
+public
 class MoveList extends HashSet<BoardMove> {
 
-    MoveList(final Collection<String> positions) {
+    public MoveList(final Collection<String> positions) {
         super();
         //noinspection ChainedMethodCall,ResultOfMethodCallIgnored
-        MoveList.getPseudoLegalMovesForPositions(positions).map(this::add);
+        MoveList.getPseudoLegalMovesForPositions(positions).map(this::add).collect(Collectors.toSet());
     }
 
     private static Stream<BoardMove> getPseudoLegalMovesForPositions(final Collection<String> positions) {
@@ -33,7 +36,7 @@ class MoveList extends HashSet<BoardMove> {
             assert 3 == position.length();
             final String type = position.substring(0, 1);//this is assuming that the input is valid
             final int column = Column.columnLetterToNumber(position.substring(1, 2));
-            final int row = Integer.parseInt(position.substring(2, 3));
+            final int row = Integer.parseInt(position.substring(2, 3))-1;
             for (int i = 0; 8 > i; i++) {
                 for (int j = 0; 8 > j; j++) {
                     //noinspection NestedTryStatement
@@ -74,13 +77,30 @@ class MoveList extends HashSet<BoardMove> {
         }
     }
 
+    @Override
+    public boolean equals(final Object obj) {
+        boolean returnVal = false;
+        if (obj == this) {
+            returnVal = true;
+        } else if (obj instanceof MoveList) {
 
-//
-//    public BitBoard getOccupancy() {
-//        return this.stream().map(BoardMove::getOccupancy).reduce(new Board(), Board::and);
-//    }
+            // typecast o to Complex so that we can compare data members
+            final MoveList otherList = (MoveList) obj;
 
-//    public BitBoard getAttacking() {
-//        return this.stream().map(BoardMove::getAttacking).reduce(new Board(),Board::and);
-//    }
+            if(this.size()!=otherList.size()){
+                return false;
+            }
+            return this.containsAll(otherList);
+
+        }
+
+        return returnVal;
+    }
+    public BitBoard getOccupancy() {
+        return this.stream().map(BoardMove::getOccupancy).reduce(new Board(), Board::and);
+    }
+
+    public BitBoard getAttacking() {
+        return this.stream().map(BoardMove::getAttacking).reduce(new Board(),Board::and);
+    }
 }

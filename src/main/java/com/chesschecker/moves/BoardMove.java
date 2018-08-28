@@ -131,6 +131,14 @@ public class BoardMove implements Move {
         return result.toString();
     }
 
+    public final String startPositionToString() {
+        final StringBuilder result = new StringBuilder(0);
+        final String str = Column.columnNumberToLetter(this.startCol);
+        result.append(str);
+        result.append(this.startRow + 1);
+        return result.toString();
+    }
+
     @Override
     @SuppressWarnings("DesignForExtension")
     public String toString() {
@@ -161,7 +169,7 @@ public class BoardMove implements Move {
         if (!(obj instanceof BoardMove)) {
             return false;
         } else {
-            return 0 == this.compareTo((Move) obj);
+            return 1 == this.compareTo((Move) obj);
         }
     }
 }

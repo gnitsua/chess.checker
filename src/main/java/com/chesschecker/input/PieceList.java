@@ -19,7 +19,11 @@ public final class PieceList extends HashSet<String> {
     private static final char MAXROW = '8';
     private static final char MINROW = '1';
 
-    PieceList(final CharSequence lineIn) {
+    public PieceList(Set<String> in) {
+        this.addAll(in);
+    }
+
+    public PieceList(final CharSequence lineIn) {
         super();
         final String[] pieces = PieceList.separator.split(lineIn);
         this.addAll(Arrays.asList(pieces));
@@ -27,8 +31,13 @@ public final class PieceList extends HashSet<String> {
 
     public static Set<String> filterOutKing(final Collection<String> moves) {
         //noinspection ChainedMethodCall
+        return PieceList.filterMoves(moves,'^' + PieceAbbreviation.KING.getAbbreviation());
+    }
+
+    public static Set<String> filterMoves(final Collection<String> moves, final String regex) {
+        //noinspection ChainedMethodCall
         return moves.stream()
-                .filter(Predicates.containsPattern('^' + PieceAbbreviation.KING.getAbbreviation()).negate())
+                .filter(Predicates.containsPattern(regex).negate())
                 .collect(Collectors.toSet());
     }
 

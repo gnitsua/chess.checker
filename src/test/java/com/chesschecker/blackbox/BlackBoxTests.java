@@ -27,7 +27,7 @@ public class BlackBoxTests {
         try {
 
             while (true) {
-                String input = in.readLine()+"\n"+in.readLine()+"\n"+in.readLine();
+                String input = in.readLine()+"\n"+in.readLine()+"\n"+in.readLine()+"\n";
                 String expected = in.readLine();
                 if(expected == null) {
                     break;
@@ -45,8 +45,8 @@ public class BlackBoxTests {
                     failures++;
                     System.out.println("---------------Failure-----------------");
                     System.out.println(input);
-                    System.out.println(expected);
-                    System.out.println(moveList.toString());
+                    System.out.println("Expected: " + expected);
+                    System.out.println("Actual: " + moveList.toString());
                 }
                 tests++;
             }

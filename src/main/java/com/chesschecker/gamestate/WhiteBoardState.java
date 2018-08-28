@@ -1,8 +1,5 @@
 package com.chesschecker.gamestate;
 
-import com.chesschecker.input.PieceList;
-import com.chesschecker.util.StringHelper;
-
 import java.util.Set;
 
 
@@ -16,7 +13,11 @@ public class WhiteBoardState extends BoardState {
         super();
     }
 
-    public WhiteBoardState(final PieceList whiteIn, final PieceList blackIn) {
+    WhiteBoardState(final Set<String> whiteIn, final Set<String> blackIn, final Set<String> moveIn) {
+        super(whiteIn, blackIn, moveIn);
+    }
+
+    public WhiteBoardState(final Set<String> whiteIn, final Set<String> blackIn) {
         super(whiteIn, blackIn);
     }
 
@@ -29,14 +30,5 @@ public class WhiteBoardState extends BoardState {
     @SuppressWarnings("SuspiciousGetterSetter")
     public final Set<String> getOrientedBlack() {
         return this.black;
-    }
-
-
-    @Override
-    public final String toString() {
-        return String.valueOf(this.getWhite()) +
-                StringHelper.NEW_LINE +
-                this.getBlack() +
-                StringHelper.NEW_LINE;
     }
 }
