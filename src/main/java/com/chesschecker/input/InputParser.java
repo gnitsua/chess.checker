@@ -1,40 +1,48 @@
 package com.chesschecker.input;
 
-import java.io.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import com.chesschecker.gamestate.BoardState;
+import com.chesschecker.gamestate.BoardStateFactory;
 
-public class InputParser {
-    public static final String WHITE_PROMPT = "WHITE: ";
-    public static final String BLACK_PROMPT = "BLACK: ";
-    public static final String MOVE_PROMPT = "PIECE TO MOVE: ";
-    private BufferedReader input;
-    private PrintWriter output;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
-    public InputParser(InputStream source, OutputStream prompt) {
+@SuppressWarnings("ClassNamePrefixedWithPackageName")
+class InputParser {
+    private static final String WHITE_PROMPT = "WHITE: ";
+    private static final String BLACK_PROMPT = "BLACK: ";
+    private static final String MOVE_PROMPT = "PIECE TO MOVE: ";
+    private final BufferedReader input;
+    private final PrintWriter output;
+
+    InputParser(final InputStream source, final OutputStream prompt) {
         super();
-        this.input = new BufferedReader(new InputStreamReader(source));
-        this.output = new PrintWriter(new OutputStreamWriter(prompt));
+        this.input = new BufferedReader(new InputStreamReader(source, StandardCharsets.UTF_8));
+        this.output = new PrintWriter(new OutputStreamWriter(prompt, StandardCharsets.UTF_8));
     }
 
     private String readLine() throws IOException {
         return this.input.readLine();
     }
 
-    private PieceList promptForInput(String prompt) throws IOException {
+    private PieceList promptForInput(final String prompt) throws IOException {
         this.output.write(prompt);
         this.output.flush();
         final String s = this.readLine();
         return new PieceList(s);
     }
 
-    public BoardState parseInput() throws IOException {
+    final BoardState parseInput() throws IOException {
         final PieceList white = this.promptForInput(InputParser.WHITE_PROMPT);
         final PieceList black = this.promptForInput(InputParser.BLACK_PROMPT);
         // making this assumption that this is a valid input and therefor |move|=1
         final PieceList move = this.promptForInput(InputParser.MOVE_PROMPT);
-        return BoardStateFactory.createBoardState(white,black,move);
+        return BoardStateFactory.createBoardState(white, black, move);
     }
 
 }

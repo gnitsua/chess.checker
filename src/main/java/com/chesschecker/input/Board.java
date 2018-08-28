@@ -4,9 +4,9 @@ import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.StringHelper;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 
+@SuppressWarnings("EqualsAndHashcode")
 public final class Board implements BitBoard {
 
     private long state;
@@ -21,7 +21,7 @@ public final class Board implements BitBoard {
         this.state = statein;
     }
 
-    public static BitBoard or(final BitBoard x, final BitBoard y) {//TODO: this is x/y because intellij doesn't lie "b"
+    public static BitBoard or(final BitBoard x, final BitBoard y) {
         final long longX = x.toLong();
         final long longY = y.toLong();
         return new Board(longX | longY);
@@ -82,6 +82,10 @@ public final class Board implements BitBoard {
         this.state = (this.state >> threeRow) | (this.state << threeRow);
     }
 
+    public boolean isEmpty(){
+        return 0L == this.toLong();
+    }
+
     @Override
     public String toString() {
         final long oneRow = 8L;
@@ -94,10 +98,6 @@ public final class Board implements BitBoard {
             result.append(StringHelper.NEW_LINE);
         }
         return result.toString();
-    }
-
-    public boolean isEmpty() {
-        return 0L == this.state;
     }
 
     @Override
@@ -115,13 +115,5 @@ public final class Board implements BitBoard {
         }
 
         return returnVal;
-    }
-
-    @Override
-    @SuppressWarnings("ObjectInstantiationInEqualsHashCode")
-    public int hashCode() {
-        final long l = this.toLong();
-        final Long aLong = Long.valueOf(l);
-        return Objects.hash(aLong);
     }
 }

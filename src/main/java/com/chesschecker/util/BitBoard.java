@@ -12,9 +12,7 @@ public interface BitBoard {
     @Override
     String toString();
 
-    static boolean isEmpty(final BitBoard bitBoard){
-        return 0L == bitBoard.toLong();
-    }
+    boolean isEmpty();
 
     @Override
     boolean equals(final Object obj);

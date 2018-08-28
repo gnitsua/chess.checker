@@ -18,7 +18,7 @@ public class BoardMove implements Move {
     final int endCol;
 
 
-    BoardMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    public BoardMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super();
         this.startRow = startrow;
         this.startCol = startcol;
@@ -50,13 +50,21 @@ public class BoardMove implements Move {
         }
     }
 
-    public static Move reverse(final Move move) {
-        final int endRow = move.getEndRow();
-        final int endCol = move.getEndCol();
-        final int startRow = move.getStartRow();
-        final int startCol = move.getStartCol();
-        return new BoardMove(endRow, endCol, startRow, startCol);
-    }
+//    public static BoardMove reverse(final Move move) {
+//        final int endRow = move.getEndRow();
+//        final int endCol = move.getEndCol();
+//        final int startRow = move.getStartRow();
+//        final int startCol = move.getStartCol();
+//        return new BoardMove(endRow, endCol, startRow, startCol);
+//    }
+//
+//    public static Move flipHori(final Move move) {
+//        final int endRow = move.getEndRow();
+//        final int endCol = move.getEndCol();
+//        final int startRow = move.getStartRow();
+//        final int startCol = move.getStartCol();
+//        return new BoardMove(endRow, endCol, startRow, startCol);
+//    }
 
     private boolean isSelfMove() {
         if (this.startRow == this.endRow) {
@@ -144,23 +152,6 @@ public class BoardMove implements Move {
     public String toString() {
         return this.endPositionToString();
     }
-
-//    @Override
-//    public final boolean equals(final Object obj) {
-//        boolean returnVal = false;
-//        if (obj == this) {
-//            returnVal = true;
-//        } else if (obj instanceof BoardMove) {//TODO: move this to Move?
-//
-//            // typecast o to Complex so that we can compare data members
-//            final Move otherMove = (Move) obj;
-//
-//            // Compare the data members and return accordingly
-//
-//        }
-//
-//        return returnVal;
-//    }
 
     @Override
     public final int hashCode() {

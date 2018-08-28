@@ -63,7 +63,7 @@ public class SlideMove extends ColoredMove {
         final BitBoard passesThrough = this.getPassedThroughSquares();
         final BitBoard friendAndFoe = Board.or(friendly, foe);// Intervening pieces can be friend or foe
         final BitBoard temp = Board.and(passesThrough, friendAndFoe);
-        if (BitBoard.isEmpty(temp)) {
+        if (temp.isEmpty()) {
             //there are no intervening pieces
             return true;
         } else {

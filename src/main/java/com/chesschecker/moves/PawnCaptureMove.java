@@ -22,7 +22,7 @@ public class PawnCaptureMove extends SlideMove {
             if (1 == Math.abs(this.startCol - this.endCol)) {
                 final BitBoard postMoveBitboard = this.getAttacking();
                 final BitBoard captures = Board.and(postMoveBitboard, foe);
-                if (BitBoard.isEmpty(captures)) {
+                if (captures.isEmpty()) {
                     return false;
                 } else {
                     return true;
@@ -39,10 +39,10 @@ public class PawnCaptureMove extends SlideMove {
     @Override
     @SuppressWarnings("DesignForExtension")
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if(this.isValidBoardMove()) {
-            if(this.isValidColoredMove(friendly)) {
-                if(this.isValidSlideMove(friendly, foe)) {
-                    if(this.isValidPawnCaptureMove(foe)){
+        if (this.isValidBoardMove()) {
+            if (this.isValidColoredMove(friendly)) {
+                if (this.isValidSlideMove(friendly, foe)) {
+                    if (this.isValidPawnCaptureMove(foe)) {
                         return true;
                     } else {
                         return false;

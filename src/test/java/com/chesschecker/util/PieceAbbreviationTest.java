@@ -18,4 +18,14 @@ public class PieceAbbreviationTest {
         Assert.assertEquals("P", PieceAbbreviation.PAWN.getAbbreviation());
 
     }
+
+
+    public void getAbbreviationFromString() {
+        Assert.assertEquals(PieceAbbreviation.KING,PieceAbbreviation.fromAbbreviation("K"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getBadAbbreviation() {
+        PieceAbbreviation.fromAbbreviation("Z");
+    }
 }

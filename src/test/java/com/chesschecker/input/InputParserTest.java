@@ -1,8 +1,6 @@
-package com.example;
+package com.chesschecker.input;
 
-import com.chesschecker.input.BoardState;
-import com.chesschecker.input.WhiteBoardState;
-import com.chesschecker.input.InputParser;
+import com.chesschecker.gamestate.BoardState;
 import org.junit.Assert;
 import org.junit.Test;
 

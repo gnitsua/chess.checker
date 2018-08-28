@@ -21,10 +21,10 @@ public class RookMove extends QueenMove {
     @Override
     @SuppressWarnings("DesignForExtension")
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if(this.isValidBoardMove()){
-            if(this.isValidColoredMove(friendly)){
-                if(this.isValidSlideMove(friendly, foe)){
-                    if(this.isValidQueenMove()) {
+        if (this.isValidBoardMove()) {
+            if (this.isValidColoredMove(friendly)) {
+                if (this.isValidSlideMove(friendly, foe)) {
+                    if (this.isValidQueenMove()) {
                         if (this.isValidBishopMove()) {
                             return false;
                         } else {

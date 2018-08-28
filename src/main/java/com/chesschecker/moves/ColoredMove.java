@@ -18,7 +18,7 @@ public class ColoredMove extends BoardMove {
         final BitBoard temp = new Board();
         temp.setOccupancy(this.endRow, this.endCol);
         final BitBoard overlapWithFriendly = Board.and(temp, friendly);
-        if (BitBoard.isEmpty(overlapWithFriendly)) {
+        if (overlapWithFriendly.isEmpty()) {
             return true;
         } else {
             return false;
