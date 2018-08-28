@@ -97,10 +97,10 @@ class MoveList extends HashSet<BoardMove> {
         return returnVal;
     }
     public BitBoard getOccupancy() {
-        return this.stream().map(BoardMove::getOccupancy).reduce(new Board(), Board::and);
+        return this.stream().map(BoardMove::getOccupancy).reduce(new Board(), Board::or);
     }
 
     public BitBoard getAttacking() {
-        return this.stream().map(BoardMove::getAttacking).reduce(new Board(),Board::and);
+        return this.stream().map(BoardMove::getAttacking).reduce(new Board(),Board::or);
     }
 }
