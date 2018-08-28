@@ -9,6 +9,7 @@ import com.chesschecker.moves.PawnCaptureMove;
 import com.chesschecker.moves.PawnMove;
 import com.chesschecker.moves.QueenMove;
 import com.chesschecker.moves.RookMove;
+import com.chesschecker.util.BitBoard;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class MoveListTest {
 
     @Test
     public void getSudoValidMovesKing() {
-        final int startRow = 1;
+        final int startRow = 0;
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("Kf1");
         sut.forEach(boardMove -> {
@@ -49,7 +50,7 @@ public class MoveListTest {
 
     @Test
     public void getSudoValidMovesQueen() {
-        final int startRow = 1;
+        final int startRow = 0;
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("Qf1");
         sut.forEach(boardMove -> {
@@ -61,7 +62,7 @@ public class MoveListTest {
 
     @Test
     public void getSudoValidMovesRook() {
-        final int startRow = 1;
+        final int startRow = 0;
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("Rf1");
         sut.forEach(boardMove -> {
@@ -73,7 +74,7 @@ public class MoveListTest {
 
     @Test
     public void getSudoValidMovesBishop() {
-        final int startRow = 1;
+        final int startRow = 0;
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("Bf1");
         sut.forEach(boardMove -> {
@@ -85,7 +86,7 @@ public class MoveListTest {
 
     @Test
     public void getSudoValidMovesKnight() {
-        final int startRow = 1;
+        final int startRow = 0;
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("Nf1");
         sut.forEach(boardMove -> {
@@ -97,7 +98,7 @@ public class MoveListTest {
 
     @Test
     public void getSudoValidMovesPawn() {
-        final int startRow = 1;
+        final int startRow = 0;
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("Pf1");
         sut.forEach(boardMove -> {
@@ -113,7 +114,7 @@ public class MoveListTest {
 
     @Test
     public void getSudoValidMovesInvalidString() {
-        final int startRow = 1;
+        final int startRow = 0;
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("f1");
         Assert.assertEquals(new HashSet<BoardMove>(), sut);
@@ -121,9 +122,23 @@ public class MoveListTest {
 
     @Test
     public void getSudoValidMovesInvalidType() {
-        final int startRow = 1;
+        final int startRow = 0;
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("Zf1");
         Assert.assertEquals(new HashSet<BoardMove>(), sut);
+    }
+
+    @Test
+    public void getOccupancy() {
+        PieceList white = new PieceList("Ph2, Pg3");
+        MoveList sut = new MoveList(white);
+        Board expectedOut = new Board();
+        expectedOut.setOccupancy(1,7);
+        expectedOut.setOccupancy(2,6);
+        Assert.assertEquals(expectedOut,sut.getOccupancy());
+    }
+
+    @Test
+    public void getAttacking() {
     }
 }
