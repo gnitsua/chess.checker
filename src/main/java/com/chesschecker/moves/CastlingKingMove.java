@@ -2,11 +2,14 @@ package com.chesschecker.moves;
 
 import com.chesschecker.util.BitBoard;
 
+import java.util.Objects;
+
 /**
  * This class defines the king's half of the castling move.
  * The king is transferred from its original square two squares towards the rook on its original square
  * This is defined in 3.8.b of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
+@SuppressWarnings("EqualsAndHashcode")
 public class CastlingKingMove extends QueenMove {
     private static final String PIECE_ABBREVIATION = "K";
 
@@ -59,6 +62,11 @@ public class CastlingKingMove extends QueenMove {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(CastlingKingMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override

@@ -146,22 +146,18 @@ public class BoardMove implements Move {
     }
 
     @Override
-    public final int hashCode() {
+    @SuppressWarnings("DesignForExtension")
+    public int hashCode() {
         return Objects.hash(this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override
     public final int compareTo(final Move o) {
-        if(this.getStartRow() == o.getStartRow()){
-            if(this.getStartCol() == o.getStartCol()) {
-                if(this.getEndRow() == o.getEndRow()) {
-                    if(this.getEndCol() == o.getEndCol()) {
-                        return 1;
-                    }
-                }
-            }
+        if(this.hashCode() == o.hashCode()){
+            return 1;
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     @Override

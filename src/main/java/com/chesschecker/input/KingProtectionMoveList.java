@@ -28,7 +28,8 @@ class KingProtectionMoveList extends MoveList {
      * @return a set of positions such that the King has been replaced by each type
      * of piece inclusive (though the king is not necessary).
      */
-    private static Collection<String> generateImpostors(final String kingPosition) {
+    static Collection<String> generateImpostors(final String kingPosition) {
+        assert 3 == kingPosition.length();
         final String kingLocation = kingPosition.substring(1);//crop off the King part
         final Collection<String> impostors = new HashSet<>(6);
         for (final PieceAbbreviation pieceAbbreviation : PieceAbbreviation.values()) {

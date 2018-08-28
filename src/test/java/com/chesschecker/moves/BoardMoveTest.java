@@ -168,6 +168,13 @@ public class BoardMoveTest {
     }
 
     @Test
+    public void compareToAnotherSubclass() {
+        BoardMove sut = new QueenMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        BoardMove other = new RookMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        Assert.assertEquals(0,sut.compareTo(other));
+    }
+
+    @Test
     public void equalsSomthingElse() {
         BoardMove sut = new BoardMove(this.startrow, this.startcol, this.endrow, this.endcol);
         String test = "test";

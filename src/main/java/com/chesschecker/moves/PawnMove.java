@@ -3,6 +3,8 @@ package com.chesschecker.moves;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.PieceAbbreviation;
 
+import java.util.Objects;
+
 /**
  * This class defines moves for a Pawn (not including special moves.
  * The pawn may move forward to the square immediately in front of it
@@ -11,6 +13,7 @@ import com.chesschecker.util.PieceAbbreviation;
  * in front of it on an adjacent file, capturing that piece.
  * This is defined in 3.7.a of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
+@SuppressWarnings("EqualsAndHashcode")
 public class PawnMove extends SlideMove {
     private static final String PIECE_ABBREVIATION = PieceAbbreviation.PAWN.getAbbreviation();
 
@@ -68,6 +71,11 @@ public class PawnMove extends SlideMove {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(PawnMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override

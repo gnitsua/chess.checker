@@ -3,6 +3,8 @@ package com.chesschecker.moves;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.PieceAbbreviation;
 
+import java.util.Objects;
+
 /**
  * This class defines moves for a Pawn. A pawn occupying a square
  * on the same rank as and on an adjacent file to an opponent’s pawn
@@ -12,6 +14,7 @@ import com.chesschecker.util.PieceAbbreviation;
  * on the move following this advance and is called an ‘en passant’ capture.
  * This is defined in 3.7.a of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
+@SuppressWarnings("EqualsAndHashcode")
 public class Pawn37DMove extends ColoredMove {
     private static final String PIECE_ABBREVIATION = PieceAbbreviation.PAWN.getAbbreviation();
 
@@ -50,6 +53,11 @@ public class Pawn37DMove extends ColoredMove {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(Pawn37DMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override

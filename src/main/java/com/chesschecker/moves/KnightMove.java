@@ -3,6 +3,8 @@ package com.chesschecker.moves;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.PieceAbbreviation;
 
+import java.util.Objects;
+
 /**
  * This class defines of a piece a Knight
  * The knight may move to one of the squares nearest to that on
@@ -11,6 +13,7 @@ import com.chesschecker.util.PieceAbbreviation;
  * than 2 squares in any direction.
  * This is defined in 3.6 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
+@SuppressWarnings("EqualsAndHashcode")
 public class KnightMove extends ColoredMove {
     private static final String PIECE_ABBREVIATION = PieceAbbreviation.KNIGHT.getAbbreviation();
 
@@ -51,6 +54,11 @@ public class KnightMove extends ColoredMove {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(KnightMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override

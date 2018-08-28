@@ -3,11 +3,14 @@ package com.chesschecker.moves;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.PieceAbbreviation;
 
+import java.util.Objects;
+
 /**
  * This class defines of a piece a Queen.
  * A Queen can make both Rook and Bishop moves
  * This is defined in 3.4 of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
+@SuppressWarnings("EqualsAndHashcode")
 public class QueenMove extends SlideMove {
     private static final String PIECE_ABBREVIATION = PieceAbbreviation.QUEEN.getAbbreviation();
 
@@ -35,6 +38,12 @@ public class QueenMove extends SlideMove {
         } else {
             return false;
         }
+    }
+
+    @SuppressWarnings("DesignForExtension")
+    @Override
+    public int hashCode() {
+        return Objects.hash(QueenMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override

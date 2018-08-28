@@ -3,11 +3,14 @@ package com.chesschecker.moves;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.PieceAbbreviation;
 
+import java.util.Objects;
+
 /**
  * This class defines of a piece a King
  * The king may move by moving to an adjoining square
  * This is defined in 3.8.a of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
+@SuppressWarnings("EqualsAndHashcode")
 public class KingMove extends QueenMove {
     private static final String PIECE_ABBREVIATION = PieceAbbreviation.KING.getAbbreviation();
 
@@ -51,6 +54,11 @@ public class KingMove extends QueenMove {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(KingMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override

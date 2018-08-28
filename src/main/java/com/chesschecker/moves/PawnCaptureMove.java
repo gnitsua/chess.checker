@@ -4,6 +4,8 @@ import com.chesschecker.input.Board;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.PieceAbbreviation;
 
+import java.util.Objects;
+
 /**
  * This class defines moves for a Pawn.
  * The pawn may move to a square occupied by an opponent’s piece diagonally
@@ -56,6 +58,11 @@ public class PawnCaptureMove extends SlideMove {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(PawnCaptureMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override
