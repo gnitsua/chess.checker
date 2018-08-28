@@ -168,9 +168,16 @@ public class BoardMoveTest {
     }
 
     @Test
+    public void compareToAnotherSubclassSameToString() {
+        BoardMove sut = new PawnMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        BoardMove other = new PawnCaptureMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        Assert.assertEquals(0,sut.compareTo(other));
+    }
+
+    @Test
     public void compareToAnotherSubclass() {
         BoardMove sut = new QueenMove(this.startrow, this.startcol, this.endrow, this.endcol);
-        BoardMove other = new RookMove(this.startrow, this.startcol, this.endrow, this.endcol);
+        BoardMove other = new KnightMove(this.startrow, this.startcol, this.endrow, this.endcol);
         Assert.assertEquals(0,sut.compareTo(other));
     }
 
