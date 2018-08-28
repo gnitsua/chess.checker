@@ -16,6 +16,11 @@ import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Stream;
 
+/**
+ * These tests use actual game data to ensure that the generator produces at least
+ * one valid move. In this case we are testing that it returns at least the move
+ * that was taken next by a real player which we assume is valid.
+ */
 @SuppressWarnings("ALL")
 public class BlackBoxTests {
     @Test
