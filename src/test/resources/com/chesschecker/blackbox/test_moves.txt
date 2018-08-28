@@ -485,7 +485,7 @@ Pf5
 Ra7, Pb7, Pa4, Pf3, Kg2, Ph2
 Pe5, Kf5
 Pb7
-Pb8q
+Pb8
 Qb8, Ra7, Pa4, Pf3, Kg2, Ph2
 Kf5, Pe4
 Ra7
@@ -925,7 +925,7 @@ Pb7
 Pb7, Kf2, Ph2
 Kf4, Pf3, Ph3
 Pb7
-Pb8q
+Pb8
 Qb8, Kf2, Ph2
 Ke4, Pf3, Ph3
 Qb8
@@ -6545,7 +6545,7 @@ Kh2
 Ph7, Kh2
 Pb5, Pa4, Pd4, Kf4, Re1
 Ph7
-Ph8q
+Ph8
 Qh8, Kh2
 Pb5, Pa4, Kf4, Pd3, Re1
 Qh8
