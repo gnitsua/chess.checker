@@ -1,0 +1,123 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: KingProtectionMoveList</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.chesschecker.input</a> ]
+</div>
+
+<h1>Coverage Summary for Class: KingProtectionMoveList (com.chesschecker.input)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">KingProtectionMoveList</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.chesschecker.input;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.chesschecker.util.PieceAbbreviation;
+<i>4</i>&nbsp;import com.google.common.base.Predicates;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.util.Collection;
+<i>7</i>&nbsp;import java.util.HashSet;
+<i>8</i>&nbsp;import java.util.stream.Collectors;
+<i>9</i>&nbsp;
+<b class="fc"><i>10</i>&nbsp;@SuppressWarnings({&quot;serial&quot;, &quot;CloneableClassWithoutClone&quot;, &quot;CloneableClassInSecureContext&quot;})</b>
+<i>11</i>&nbsp;class KingProtectionMoveList extends MoveList {
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    /**
+<i>14</i>&nbsp;     * This constructor first generates a list of imposter positions, then creates
+<i>15</i>&nbsp;     * a move list for them by calling super
+<i>16</i>&nbsp;     *
+<i>17</i>&nbsp;     * @param positions: list of positions
+<i>18</i>&nbsp;     */
+<i>19</i>&nbsp;    KingProtectionMoveList(final Collection&lt;String&gt; positions) {
+<b class="fc"><i>20</i>&nbsp;        super(positions.stream()</b>
+<b class="fc"><i>21</i>&nbsp;                .filter(Predicates.containsPattern(&#39;^&#39; + PieceAbbreviation.KING.getAbbreviation()))</b>
+<b class="fc"><i>22</i>&nbsp;                .map(KingProtectionMoveList::generateImpostors)</b>
+<b class="fc"><i>23</i>&nbsp;                .map(Collection::stream).flatMap(x -&gt; x).collect(Collectors.toList()));</b>
+<b class="fc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * @param kingPosition the position for the king
+<i>28</i>&nbsp;     * @return a set of positions such that the King has been replaced by each type
+<i>29</i>&nbsp;     * of piece inclusive (though the king is not necessary).
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    static Collection&lt;String&gt; generateImpostors(final String kingPosition) {
+<b class="fc"><i>32</i>&nbsp;        assert 3 == kingPosition.length();</b>
+<b class="fc"><i>33</i>&nbsp;        final String kingLocation = kingPosition.substring(1);//crop off the King part</b>
+<b class="fc"><i>34</i>&nbsp;        final Collection&lt;String&gt; impostors = new HashSet&lt;&gt;(6);</b>
+<b class="fc"><i>35</i>&nbsp;        for (final PieceAbbreviation pieceAbbreviation : PieceAbbreviation.values()) {</b>
+<b class="fc"><i>36</i>&nbsp;            impostors.add(pieceAbbreviation.getAbbreviation() + kingLocation);</b>
+<i>37</i>&nbsp;        }
+<b class="fc"><i>38</i>&nbsp;        return impostors;</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-08-28 21:28</div>
+</div>
+</body>
+</html>

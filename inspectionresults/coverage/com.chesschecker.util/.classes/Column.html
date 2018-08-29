@@ -1,0 +1,100 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Column</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.chesschecker.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Column (com.chesschecker.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Column</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.chesschecker.util;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;public final class Column {
+<b class="nc"><i>4</i>&nbsp;    private Column() {</b>
+<b class="nc"><i>5</i>&nbsp;    }</b>
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;    public static String columnNumberToLetter(final int col) {
+<i>8</i>&nbsp;        //Apparently negative numbers don&#39;t break this. So no need for input checking
+<b class="fc"><i>9</i>&nbsp;        return Character.toString((char) ((int) &#39;a&#39; + col));</b>
+<i>10</i>&nbsp;    }
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    public static int columnLetterToNumber(final String col) {
+<i>13</i>&nbsp;        //Apparently negative numbers don&#39;t break this. So no need for input checking
+<b class="fc"><i>14</i>&nbsp;        final char columnLetter = col.charAt(0);</b>
+<b class="fc"><i>15</i>&nbsp;        return (int)columnLetter-(int)&#39;a&#39;;</b>
+<i>16</i>&nbsp;    }
+<i>17</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-08-28 21:28</div>
+</div>
+</body>
+</html>
