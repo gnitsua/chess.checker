@@ -7,6 +7,7 @@ import com.chesschecker.util.PieceAbbreviation;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,10 +16,11 @@ import java.util.stream.Stream;
 public
 class MoveList extends HashSet<BoardMove> {
 
+    @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public MoveList(final Collection<String> positions) {
         super();
         //noinspection ChainedMethodCall,ResultOfMethodCallIgnored
-        MoveList.getPseudoLegalMovesForPositions(positions).map(this::add).collect(Collectors.toSet());
+        this.addAll(MoveList.getPseudoLegalMovesForPositions(positions).collect(Collectors.toSet()));
     }
 
     private static Stream<BoardMove> getPseudoLegalMovesForPositions(final Collection<String> positions) {
@@ -44,6 +46,8 @@ class MoveList extends HashSet<BoardMove> {
                         switch (PieceAbbreviation.fromAbbreviation(type)) {
                             case KING:
                                 result.add(new KingMove(row, column, i, j));
+                                result.add(new CastlingKingMove(row, column, i, j));
+                                result.add(new CastlingKingMove(row, column, i, j));
                                 break;
                             case QUEEN:
                                 result.add(new QueenMove(row, column, i, j));

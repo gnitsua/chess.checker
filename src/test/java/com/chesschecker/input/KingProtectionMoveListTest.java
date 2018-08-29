@@ -19,7 +19,6 @@ public class KingProtectionMoveListTest {
         PieceList whiteNoKing = new PieceList("Kg1, Qg1, Rg1, Bg1, Ng1, Pg1");
         KingProtectionMoveList sut = new KingProtectionMoveList(white);
         MoveList baseclass = new MoveList(whiteNoKing);
-        System.out.println(baseclass);
         Assert.assertEquals(sut,baseclass);
     }
 

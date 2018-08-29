@@ -1,14 +1,6 @@
 package com.chesschecker.input;
 
-import com.chesschecker.moves.BishopMove;
-import com.chesschecker.moves.BoardMove;
-import com.chesschecker.moves.KingMove;
-import com.chesschecker.moves.KnightMove;
-import com.chesschecker.moves.Pawn37DMove;
-import com.chesschecker.moves.PawnCaptureMove;
-import com.chesschecker.moves.PawnMove;
-import com.chesschecker.moves.QueenMove;
-import com.chesschecker.moves.RookMove;
+import com.chesschecker.moves.*;
 import com.chesschecker.util.BitBoard;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -42,7 +34,10 @@ public class MoveListTest {
         final int startCol = 5;
         Collection<BoardMove> sut = MoveList.getPseudoLegalMovesForPosition("Kf1");
         sut.forEach(boardMove -> {
-            Assert.assertThat(boardMove, CoreMatchers.instanceOf(KingMove.class));
+            Assert.assertEquals(true,
+                    (boardMove instanceof KingMove) ||
+                            (boardMove instanceof CastlingKingMove)
+            );
             Assert.assertEquals(startRow, boardMove.getStartRow());
             Assert.assertEquals(startCol, boardMove.getStartCol());
         });

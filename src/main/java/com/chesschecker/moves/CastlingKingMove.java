@@ -14,7 +14,7 @@ public class CastlingKingMove extends QueenMove {
     private static final String PIECE_ABBREVIATION = "K";
 
 
-    CastlingKingMove(final int startrow, final int startcol, final int endrow, final int endcol) {
+    public CastlingKingMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super(startrow, startcol, endrow, endcol);
     }
 
@@ -66,7 +66,7 @@ public class CastlingKingMove extends QueenMove {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(CastlingKingMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
+        return Objects.hash("C",CastlingKingMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override
