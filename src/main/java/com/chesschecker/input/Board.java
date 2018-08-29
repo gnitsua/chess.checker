@@ -16,7 +16,7 @@ public final class Board implements BitBoard {
         this.state = 0L;
     }
 
-    private Board(final long statein) {
+    public Board(final long statein) {
         super();
         this.state = statein;
     }
@@ -82,9 +82,9 @@ public final class Board implements BitBoard {
         final long oneRow = 8L;
         final long twoRow = 16L;
         final long threeRow = 32L;
-        this.state = ((this.state >> oneRow) & k1) | ((this.state & k1) << oneRow);
-        this.state = ((this.state >> twoRow) & k2) | ((this.state & k2) << twoRow);
-        this.state = (this.state >> threeRow) | (this.state << threeRow);
+        this.state = ((this.state >>> oneRow) & k1) | ((this.state & k1) << oneRow);
+        this.state = ((this.state >>>twoRow) & k2) | ((this.state & k2) << twoRow);
+        this.state = (this.state >>> threeRow) | (this.state << threeRow);
     }
 
     public boolean isEmpty() {

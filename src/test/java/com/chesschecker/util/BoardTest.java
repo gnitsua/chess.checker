@@ -39,12 +39,11 @@ public class BoardTest {
 
     @Test
     public void test_flipVertical() {
-        final Board expectedOut = new Board();
-        expectedOut.setOccupancy(5, 4);
-        Board sut = new Board();
-        sut.setOccupancy(2, 4);
+        final Board expectedOut = new Board(Long.parseUnsignedLong("0000000000000000000000000000000010000000001010001100001111111011",2));;
+        Board sut = new Board(-305355819510136832L);
+        System.out.println(sut);
         sut.mirrorVertical();
-        Assert.assertEquals(sut, expectedOut);
+        Assert.assertEquals(expectedOut,sut);
     }
 
     @Test
