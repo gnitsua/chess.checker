@@ -14,6 +14,16 @@ LEGAL MOVES FOR Rf1: e1, d1, c1, b1, a1
 
 ```
 
+A code coverage report can be found as an HTML document here (you will have to download the repository to view this:
+https://github.com/mudkipmaster/chess.checker/blob/1ba78a6a4b72bb21b0a96385f3e7deabe5a467c4/inspectionresults/coverage/index.html
+
+A static analysis report can be found here:
+https://github.com/mudkipmaster/chess.checker/blob/1ba78a6a4b72bb21b0a96385f3e7deabe5a467c4/inspectionresults/staticanalysis/index.html
+
+All tests can be found in the `src/test` directory. They are Junit tests. I think these can be run using my Gradle build config, but I'm honestly not sure how to do that. Instead I just use Intellij
+
+See the bottom of this README for information about the status of this program.
+
 ## Move Validation
 The goal of this project was not performance but rather to be highly "dependable". To do this, move validation was done using a set subtraction system wherein each peices valid moves are a subset of every possible valid move. The following figure sets up this hieracy.
 
@@ -91,3 +101,8 @@ for (int i = 0; 8 > i; i++) {
 ```
 
 As you can see, we define a few special types of moves to handle the intricacies of chess. Pawns can make 3 types of moves, and the King can make both regular moves and special Castling moves. As such, having a piece of this position will add more than one move to the move set.
+
+## Black box testing
+
+## Issues
+
