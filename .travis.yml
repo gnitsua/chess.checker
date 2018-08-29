@@ -5,3 +5,7 @@ before_install:
 
 jdk:
 - oraclejdk10
+
+script: "sbt clean coverage test"
+
+after_success: "sbt coveralls"
