@@ -90,6 +90,7 @@ public abstract class BoardState {
 //        //Move list expects positions to be from the white perspective, so flip first
         MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(this.getBlack()));
         BitBoard blackOccupancy = pseudoBlackAttacks.getOccupancy();
+        blackOccupancy.mirrorVertical();//TODO: does this mean there should be a BlackMoveList class?
 //
 //        Set<BoardMove> blackAttacks = pseudoBlackAttacks.stream()
 //                .filter(x -> x.isValid(blackOccupancy, whiteOccupancy))
@@ -102,7 +103,7 @@ public abstract class BoardState {
 //        Set<BoardMove> movesForCheck = psuedoMovesForCheck.stream()
 //                .filter(x -> x.isValid(whiteOccupancy, blackOccupancy))
 //                .map(BoardMove::reverse).collect(Collectors.toSet());
-//
+//TODO: need to check both with the piece removed, and with it in its new location
 //
         MoveList psuedoMovesForMove = new MoveList(this.move);
         Set<BoardMove> movesForMoveWithoutPins = psuedoMovesForMove.stream()
