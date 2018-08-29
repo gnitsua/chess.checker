@@ -30,7 +30,6 @@ public final class PieceList extends HashSet<String> {
     }
 
     public static Set<String> filterOutKing(final Collection<String> moves) {
-        //noinspection ChainedMethodCall
         return PieceList.filterMoves(moves,'^' + PieceAbbreviation.KING.getAbbreviation());
     }
 

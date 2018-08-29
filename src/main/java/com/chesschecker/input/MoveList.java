@@ -19,12 +19,12 @@ class MoveList extends HashSet<BoardMove> {
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public MoveList(final Collection<String> positions) {
         super();
-        //noinspection ChainedMethodCall,ResultOfMethodCallIgnored
+        // noinspection ChainedMethodCall
         this.addAll(MoveList.getPseudoLegalMovesForPositions(positions).collect(Collectors.toSet()));
     }
 
     private static Stream<BoardMove> getPseudoLegalMovesForPositions(final Collection<String> positions) {
-        //noinspection ChainedMethodCall,ResultOfMethodCallIgnored
+        // noinspection ChainedMethodCall
         return positions.stream().map(MoveList::getPseudoLegalMovesForPosition)
                 .map(Collection::stream).flatMap(x -> x);
     }
