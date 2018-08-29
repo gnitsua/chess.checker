@@ -12,6 +12,7 @@ import java.util.Objects;
  * in front of it on an adjacent file, capturing that piece.
  * This is defined in 3.7.c of https://www.fide.com/fide/handbook.html?id=171&view=article
  */
+@SuppressWarnings("EqualsAndHashcode")
 public class PawnCaptureMove extends SlideMove {
     private static final String PIECE_ABBREVIATION = PieceAbbreviation.PAWN.getAbbreviation();
 

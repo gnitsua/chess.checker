@@ -12,8 +12,8 @@ import java.util.Objects;
  */
 @SuppressWarnings("FieldNotUsedInToString")
 public class BoardMove implements Move {
-    protected final int startRow;
-    protected final int startCol;
+    final int startRow;
+    final int startCol;
     final int endRow;
     final int endCol;
 
@@ -131,14 +131,6 @@ public class BoardMove implements Move {
         return result.toString();
     }
 
-    public final String startPositionToString() {
-        final StringBuilder result = new StringBuilder(0);
-        final String str = Column.columnNumberToLetter(this.startCol);
-        result.append(str);
-        result.append(this.startRow + 1);
-        return result.toString();
-    }
-
     @Override
     @SuppressWarnings("DesignForExtension")
     public String toString() {
@@ -164,10 +156,10 @@ public class BoardMove implements Move {
 
     @Override
     public final boolean equals(final Object obj) {
-        if (!(obj instanceof BoardMove)) {
-            return false;
-        } else {
+        if (obj instanceof BoardMove) {
             return 1 == this.compareTo((Move) obj);
+        } else {
+            return false;
         }
     }
 }

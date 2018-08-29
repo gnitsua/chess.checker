@@ -51,7 +51,14 @@ public class RookMoveTest {
                 {2, 3, 2, 0, empty, empty, "Ra3", true},
                 {2, 3, 7, 3, empty, empty, "Rd8", true},
                 {2, 3, 0, 3, empty, empty, "Rd1", true},
+
+                /*
+                * Tests for Bishop Move
+                */
                 {3, 4, 6, 7, empty, empty, "Rh7", false},
+                {3, 4, 0, 7, empty, empty, "Rh1", false},
+                {3, 4, 7, 0, empty, empty, "Ra8", false},
+                {3, 4, 0, 1, empty, empty, "Rb1", false},
         });
     }
 
