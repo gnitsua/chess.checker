@@ -82,6 +82,8 @@ public abstract class BoardState {
         return this.black;
     }
 
+    public final Set<String> getMove() { return this.move; }
+
     public final Set<BoardMove> getValidMoves() {
         MoveList pseudoWhiteMoves = new MoveList(this.getWhite());//without king enables Xray attacks
         BitBoard whiteOccupancy = pseudoWhiteMoves.getOccupancy();//TODO: this is a super inefficient way to get this

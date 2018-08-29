@@ -18,4 +18,6 @@ public interface Move extends Comparable<Move>{
     BitBoard getAttacking();
 
     String toString();
+
+    String toBoringString();
 }
