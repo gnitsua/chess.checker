@@ -3,14 +3,12 @@ package com.chesschecker.gamestate;
 import com.chesschecker.input.MoveList;
 import com.chesschecker.input.PieceList;
 import com.chesschecker.moves.BoardMove;
-import com.chesschecker.moves.Move;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.StringHelper;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class BoardState {
 
@@ -82,17 +80,31 @@ public abstract class BoardState {
         return this.black;
     }
 
-    public final Set<String> getMove() { return this.move; }
+    public final Set<String> getMove() {
+        return this.move;
+    }
 
-    public final Set<BoardMove> getValidMoves() {
-        MoveList pseudoWhiteMoves = new MoveList(this.getWhite());//without king enables Xray attacks
-        BitBoard whiteOccupancy = pseudoWhiteMoves.getOccupancy();//TODO: this is a super inefficient way to get this
+    /**
+     * @return This Bitboard could be white or black occupancy depending on the current move
+     */
+    BitBoard getFriendlyOccupancy() {
+        MoveList pseudoFriendlyMoves = new MoveList(this.getOrientedWhite());//without king enables Xray attacks
+        return pseudoFriendlyMoves.getOccupancy();//TODO: this is a super inefficient way to get this
+    }
+
+    BitBoard getFoeOccupancy() {
+        MoveList pseudoFoeMoves = new MoveList(this.getOrientedBlack());
+        return pseudoFoeMoves.getOccupancy();
+    }
+
+    protected Set<BoardMove> getValidWhiteMoves() {
+
 //        System.out.println(whiteOccupancy);
 //        return null;
 //        //Move list expects positions to be from the white perspective, so flip first
-        MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(this.getBlack()));
-        BitBoard blackOccupancy = pseudoBlackAttacks.getOccupancy();
-        blackOccupancy.mirrorVertical();//TODO: does this mean there should be a BlackMoveList class?
+//        MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(this.getOrientedBlack()));
+//        BitBoard blackOccupancy = pseudoBlackAttacks.getOccupancy();
+//        blackOccupancy.mirrorVertical();//TODO: does this mean there should be a BlackMoveList class?
 //
 //        Set<BoardMove> blackAttacks = pseudoBlackAttacks.stream()
 //                .filter(x -> x.isValid(blackOccupancy, whiteOccupancy))
@@ -107,9 +119,12 @@ public abstract class BoardState {
 //                .map(BoardMove::reverse).collect(Collectors.toSet());
 //TODO: need to check both with the piece removed, and with it in its new location
 //
-        MoveList psuedoMovesForMove = new MoveList(this.move);
-        Set<BoardMove> movesForMoveWithoutPins = psuedoMovesForMove.stream()
-                .filter(x -> x.isValid(whiteOccupancy, blackOccupancy)).collect(Collectors.toSet());
+        MoveList pseudoFriendlyMoves = new MoveList(this.getOrientedMove());//without king enables Xray attacks
+//        MoveList psuedoMovesForMove = new MoveList(this.move);
+        BitBoard friendly = this.getFriendlyOccupancy();
+        BitBoard foe = this.getFoeOccupancy();
+        Set<BoardMove> movesForMoveWithoutPins = pseudoFriendlyMoves.stream()
+                .filter(x -> x.isValid(friendly, foe)).collect(Collectors.toSet());
 ////        Set<BoardMove> movesForMoveWithPins = movesForMoveWithoutPins.filter();
 //        return null;
 
@@ -117,9 +132,13 @@ public abstract class BoardState {
         return movesForMoveWithoutPins;
     }
 
+    public abstract Set<BoardMove> getValidMoves();
+
     abstract Set<String> getOrientedWhite();
 
     abstract Set<String> getOrientedBlack();
+
+    abstract Set<String> getOrientedMove();
 
     @Override
     public final String toString() {

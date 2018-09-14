@@ -5,6 +5,8 @@ import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.Column;
 import com.chesschecker.util.PieceAbbreviation;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +17,10 @@ import java.util.stream.Stream;
         "CloneableClassInSecureContext", "ClassExtendsConcreteCollection"})
 public
 class MoveList extends HashSet<BoardMove> {
+
+    public MoveList() {
+        super();
+    }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public MoveList(final Collection<String> positions) {
@@ -29,6 +35,28 @@ class MoveList extends HashSet<BoardMove> {
                 .map(Collection::stream).flatMap(x -> x);
     }
 
+    public static Set<BoardMove> getEvilTwinList(final Iterable<? extends BoardMove> in) {
+        final Set<BoardMove> result = new MoveList();
+        for (final BoardMove move : in) {
+            try {
+                final Class<? extends BoardMove> aClass = move.getClass();
+                final Constructor<? extends BoardMove> constructor = aClass.getConstructor(Integer.TYPE, Integer.TYPE,
+                        Integer.TYPE, Integer.TYPE);
+                result.add(constructor.newInstance(7 - move.getStartRow(), move.getStartCol(), 7 - move.getEndRow(),
+                        move.getEndCol()));
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
 
     @SuppressWarnings({"ObjectAllocationInLoop", "SwitchStatement", "OverlyComplexMethod", "OverlyLongMethod"})
     static Collection<BoardMove> getPseudoLegalMovesForPosition(final String position) {
@@ -38,7 +66,7 @@ class MoveList extends HashSet<BoardMove> {
             assert 3 == position.length();
             final String type = position.substring(0, 1);//this is assuming that the input is valid
             final int column = Column.columnLetterToNumber(position.substring(1, 2));
-            final int row = Integer.parseInt(position.substring(2, 3))-1;
+            final int row = Integer.parseInt(position.substring(2, 3)) - 1;
             for (int i = 0; 8 > i; i++) {
                 for (int j = 0; 8 > j; j++) {
                     //noinspection NestedTryStatement
@@ -91,7 +119,7 @@ class MoveList extends HashSet<BoardMove> {
             // typecast o to Complex so that we can compare data members
             final MoveList otherList = (MoveList) obj;
 
-            if(this.size()!=otherList.size()){
+            if (this.size() != otherList.size()) {
                 return false;
             }
             return this.containsAll(otherList);
@@ -100,11 +128,12 @@ class MoveList extends HashSet<BoardMove> {
 
         return returnVal;
     }
+
     public BitBoard getOccupancy() {
         return this.stream().map(BoardMove::getOccupancy).reduce(new Board(), Board::or);
     }
 
     public BitBoard getAttacking() {
-        return this.stream().map(BoardMove::getAttacking).reduce(new Board(),Board::or);
+        return this.stream().map(BoardMove::getAttacking).reduce(new Board(), Board::or);
     }
 }

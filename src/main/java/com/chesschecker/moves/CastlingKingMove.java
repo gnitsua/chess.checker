@@ -41,9 +41,9 @@ public class CastlingKingMove extends QueenMove {
     @Override
     @SuppressWarnings("DesignForExtension")
     public boolean isValid(final BitBoard friendly, final BitBoard foe) {
-        if(this.isValidBoardMove()){
-            if(this.isValidColoredMove(friendly)){
-                if(this.isValidSlideMove(friendly, foe)) {
+        if (this.isValidBoardMove()) {
+            if (this.isValidColoredMove(friendly)) {
+                if (this.isValidSlideMove(friendly, foe)) {
                     if (this.isValidQueenMove()) {
                         if (this.isValidCastlingKingMove()) {
                             return true;
@@ -66,7 +66,7 @@ public class CastlingKingMove extends QueenMove {
 
     @Override
     public final int hashCode() {
-        return Objects.hash("C",CastlingKingMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
+        return Objects.hash("C", CastlingKingMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override

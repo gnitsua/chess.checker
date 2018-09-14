@@ -1,5 +1,7 @@
 package com.chesschecker.gamestate;
 
+import com.chesschecker.moves.BoardMove;
+
 import java.util.Set;
 
 
@@ -13,7 +15,7 @@ public class WhiteBoardState extends BoardState {
         super();
     }
 
-    WhiteBoardState(final Set<String> whiteIn, final Set<String> blackIn, final Set<String> moveIn) {
+    public WhiteBoardState(final Set<String> whiteIn, final Set<String> blackIn, final Set<String> moveIn) {
         super(whiteIn, blackIn, moveIn);
     }
 
@@ -30,5 +32,14 @@ public class WhiteBoardState extends BoardState {
     @SuppressWarnings("SuspiciousGetterSetter")
     public final Set<String> getOrientedBlack() {
         return this.black;
+    }
+
+    @SuppressWarnings("SuspiciousGetterSetter")
+    public final Set<String> getOrientedMove() {
+        return this.move;
+    }
+
+    public final Set<BoardMove> getValidMoves() {
+        return super.getValidWhiteMoves();
     }
 }

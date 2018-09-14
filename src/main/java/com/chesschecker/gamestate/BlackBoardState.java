@@ -1,6 +1,8 @@
 package com.chesschecker.gamestate;
 
+import com.chesschecker.input.MoveList;
 import com.chesschecker.input.PieceList;
+import com.chesschecker.moves.BoardMove;
 
 import java.util.Set;
 
@@ -20,6 +22,15 @@ public class BlackBoardState extends BoardState {
 
     public final Set<String> getOrientedBlack() {
         return PieceList.flipRows(this.white);
+    }
+
+    @SuppressWarnings("SuspiciousGetterSetter")
+    public final Set<String> getOrientedMove() {
+        return PieceList.flipRows(this.move);
+    }
+
+    public final Set<BoardMove> getValidMoves() {
+        return MoveList.getEvilTwinList(super.getValidWhiteMoves());
     }
 
 

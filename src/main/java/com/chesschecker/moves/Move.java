@@ -2,7 +2,7 @@ package com.chesschecker.moves;
 
 import com.chesschecker.util.BitBoard;
 
-public interface Move extends Comparable<Move>{
+public interface Move extends Comparable<Move> {
     boolean isValid(final BitBoard friendly, final BitBoard foe);
 
     int getStartRow();
@@ -19,5 +19,4 @@ public interface Move extends Comparable<Move>{
 
     String toString();
 
-    String toBoringString();
 }

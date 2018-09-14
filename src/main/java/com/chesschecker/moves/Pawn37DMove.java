@@ -57,7 +57,7 @@ public class Pawn37DMove extends ColoredMove {
 
     @Override
     public final int hashCode() {
-        return Objects.hash("37D",Pawn37DMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
+        return Objects.hash("37D", Pawn37DMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override
