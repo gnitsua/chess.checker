@@ -50,10 +50,11 @@ public final class Board implements BitBoard {
 
     /**
      * Note: if the position is out of bounds, this function leaves occupancy unchanged
+     *
      * @param row
      * @param col
      */
-    public void setOccupancy(final int row, final int col){
+    public void setOccupancy(final int row, final int col) {
         if (0 <= row) {
             if (8 > row) {
                 if (0 <= col) {
@@ -83,7 +84,7 @@ public final class Board implements BitBoard {
         final long twoRow = 16L;
         final long threeRow = 32L;
         this.state = ((this.state >>> oneRow) & k1) | ((this.state & k1) << oneRow);
-        this.state = ((this.state >>>twoRow) & k2) | ((this.state & k2) << twoRow);
+        this.state = ((this.state >>> twoRow) & k2) | ((this.state & k2) << twoRow);
         this.state = (this.state >>> threeRow) | (this.state << threeRow);
     }
 

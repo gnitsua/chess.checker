@@ -42,7 +42,7 @@ class MoveList extends HashSet<BoardMove> {
                 final Class<? extends BoardMove> aClass = move.getClass();
                 final Constructor<? extends BoardMove> constructor = aClass.getConstructor(Integer.TYPE, Integer.TYPE,
                         Integer.TYPE, Integer.TYPE);
-                result.add(constructor.newInstance(7-move.getStartRow(), move.getStartCol(), 7-move.getEndRow(),
+                result.add(constructor.newInstance(7 - move.getStartRow(), move.getStartCol(), 7 - move.getEndRow(),
                         move.getEndCol()));
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();

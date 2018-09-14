@@ -3,14 +3,12 @@ package com.chesschecker.gamestate;
 import com.chesschecker.input.MoveList;
 import com.chesschecker.input.PieceList;
 import com.chesschecker.moves.BoardMove;
-import com.chesschecker.moves.Move;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.StringHelper;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class BoardState {
 
@@ -82,17 +80,19 @@ public abstract class BoardState {
         return this.black;
     }
 
-    public final Set<String> getMove() { return this.move; }
+    public final Set<String> getMove() {
+        return this.move;
+    }
 
     /**
      * @return This Bitboard could be white or black occupancy depending on the current move
      */
-    BitBoard getFriendlyOccupancy(){
+    BitBoard getFriendlyOccupancy() {
         MoveList pseudoFriendlyMoves = new MoveList(this.getOrientedWhite());//without king enables Xray attacks
         return pseudoFriendlyMoves.getOccupancy();//TODO: this is a super inefficient way to get this
     }
 
-    BitBoard getFoeOccupancy(){
+    BitBoard getFoeOccupancy() {
         MoveList pseudoFoeMoves = new MoveList(this.getOrientedBlack());
         return pseudoFoeMoves.getOccupancy();
     }

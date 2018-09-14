@@ -63,7 +63,7 @@ public class PawnCaptureMove extends SlideMove {
 
     @Override
     public final int hashCode() {
-        return Objects.hash("C",PawnCaptureMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
+        return Objects.hash("C", PawnCaptureMove.PIECE_ABBREVIATION, this.startRow, this.startCol, this.endRow, this.endCol);
     }
 
     @Override

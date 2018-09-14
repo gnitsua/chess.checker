@@ -31,7 +31,7 @@ public final class PieceList extends HashSet<String> {
     }
 
     public static Set<String> filterOutKing(final Collection<String> moves) {
-        return PieceList.filterMoves(moves,'^' + PieceAbbreviation.KING.getAbbreviation());
+        return PieceList.filterMoves(moves, '^' + PieceAbbreviation.KING.getAbbreviation());
     }
 
     public static Set<String> filterMoves(final Collection<String> moves, final String regex) {
