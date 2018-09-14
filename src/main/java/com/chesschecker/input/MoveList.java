@@ -50,7 +50,7 @@ class MoveList extends HashSet<BoardMove> {
             assert 3 == position.length();
             final String type = position.substring(0, 1);//this is assuming that the input is valid
             final int column = Column.columnLetterToNumber(position.substring(1, 2));
-            final int row = Integer.parseInt(position.substring(2, 3))-1;
+            final int row = Integer.parseInt(position.substring(2, 3)) - 1;
             for (int i = 0; 8 > i; i++) {
                 for (int j = 0; 8 > j; j++) {
                     //noinspection NestedTryStatement
@@ -103,7 +103,7 @@ class MoveList extends HashSet<BoardMove> {
             // typecast o to Complex so that we can compare data members
             final MoveList otherList = (MoveList) obj;
 
-            if(this.size()!=otherList.size()){
+            if (this.size() != otherList.size()) {
                 return false;
             }
             return this.containsAll(otherList);
@@ -112,11 +112,12 @@ class MoveList extends HashSet<BoardMove> {
 
         return returnVal;
     }
+
     public BitBoard getOccupancy() {
         return this.stream().map(BoardMove::getOccupancy).reduce(new Board(), Board::or);
     }
 
     public BitBoard getAttacking() {
-        return this.stream().map(BoardMove::getAttacking).reduce(new Board(),Board::or);
+        return this.stream().map(BoardMove::getAttacking).reduce(new Board(), Board::or);
     }
 }
