@@ -3,8 +3,11 @@ package com.chesschecker.input;
 import com.chesschecker.gamestate.BlackBoardState;
 import com.chesschecker.gamestate.WhiteBoardState;
 import com.chesschecker.moves.BoardMove;
+import com.chesschecker.moves.Move;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Set;
 
 @SuppressWarnings("ALL")
 public class BlackBoardStateTest {
@@ -67,6 +70,7 @@ public class BlackBoardStateTest {
         WhiteBoardState sut2 = new WhiteBoardState(white, black, whiteMove);
         System.out.println(sut.getValidMoves());
         System.out.println(sut2.getValidMoves());
-        Assert.assertEquals(sut2.getValidMoves(),sut.getValidMoves());
+        Set<BoardMove> test = sut.getValidMoves();
+        Assert.assertTrue(MoveList.getEvilTwinList(sut2.getValidMoves()).equals(sut.getValidMoves()));
     }
 }
