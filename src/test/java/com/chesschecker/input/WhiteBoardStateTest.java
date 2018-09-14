@@ -1,5 +1,6 @@
 package com.chesschecker.input;
 
+import com.chesschecker.gamestate.BlackBoardState;
 import com.chesschecker.gamestate.WhiteBoardState;
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,5 +62,19 @@ public class WhiteBoardStateTest {
         WhiteBoardState sut = new WhiteBoardState(white, black);
 
         Assert.assertEquals(testString, sut.toString());
+    }
+
+    @Test
+    public void test_getOritented() {
+        PieceList white = new PieceList("Rf1, Pf2, Ph2, Pg3");
+        PieceList black = new PieceList("Ne8, Pa7, Pb7, Pc7, Ra5");
+        PieceList whiteFlipped = new PieceList("Rf1, Pf2, Ph2, Pg3");
+        PieceList blackFlipped= new PieceList("Ne8, Pa7, Pb7, Pc7, Ra5");
+        WhiteBoardState sut = new WhiteBoardState(whiteFlipped, blackFlipped);
+        WhiteBoardState sut2 = new WhiteBoardState(white, black);
+
+        Assert.assertEquals("White is not correct", sut2.getWhite(), sut.getOrientedWhite());
+        Assert.assertEquals("Black is not correct", sut2.getBlack(), sut.getOrientedBlack());
+
     }
 }
