@@ -17,7 +17,6 @@ public class BoardMove implements Move {
     final int endRow;
     final int endCol;
 
-
     public BoardMove(final int startrow, final int startcol, final int endrow, final int endcol) {
         super();
         this.startRow = startrow;
@@ -137,7 +136,9 @@ public class BoardMove implements Move {
         return this.endPositionToString();
     }
 
-    public final String toBoringString() { return this.endPositionToString(); }
+    public final String toBoringString() {
+        return this.endPositionToString();
+    }
 
     @Override
     @SuppressWarnings("DesignForExtension")
@@ -147,7 +148,7 @@ public class BoardMove implements Move {
 
     @Override
     public final int compareTo(final Move o) {
-        if(this.hashCode() == o.hashCode()){
+        if (this.hashCode() == o.hashCode()) {
             return 1;
         } else {
             return 0;
