@@ -26,6 +26,9 @@ public class BlackBoardState extends BoardState {
         return PieceList.flipRows(this.white);
     }
 
+    @SuppressWarnings("SuspiciousGetterSetter")
+    public final Set<String> getOrientedMove() { return PieceList.flipRows(this.move); }
+
     public final Set<BoardMove> getValidMoves() {
         return MoveList.getEvilTwinList(super.getValidWhiteMoves());
     }

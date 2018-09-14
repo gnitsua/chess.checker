@@ -5,6 +5,8 @@ import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.Column;
 import com.chesschecker.util.PieceAbbreviation;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,10 +35,24 @@ class MoveList extends HashSet<BoardMove> {
                 .map(Collection::stream).flatMap(x -> x);
     }
 
-    public static Set<BoardMove> getEvilTwinList(final Set<BoardMove> in) {
-        MoveList result = new MoveList();
-        for (BoardMove move : in) {
-            result.add(new BoardMove(move.getStartRow(), move.getStartCol(),  move.getEndRow(), move.getEndCol()));
+    public static Set<BoardMove> getEvilTwinList(final Iterable<? extends BoardMove> in) {
+        final Set<BoardMove> result = new MoveList();
+        for (final BoardMove move : in) {
+            try {
+                final Class<? extends BoardMove> aClass = move.getClass();
+                final Constructor<? extends BoardMove> constructor = aClass.getConstructor(Integer.TYPE, Integer.TYPE,
+                        Integer.TYPE, Integer.TYPE);
+                result.add(constructor.newInstance(7-move.getStartRow(), move.getStartCol(), 7-move.getEndRow(),
+                        move.getEndCol()));
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }

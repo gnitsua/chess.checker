@@ -119,7 +119,7 @@ public abstract class BoardState {
 //                .map(BoardMove::reverse).collect(Collectors.toSet());
 //TODO: need to check both with the piece removed, and with it in its new location
 //
-        MoveList pseudoFriendlyMoves = new MoveList(this.getOrientedWhite());//without king enables Xray attacks
+        MoveList pseudoFriendlyMoves = new MoveList(this.getOrientedMove());//without king enables Xray attacks
 //        MoveList psuedoMovesForMove = new MoveList(this.move);
         BitBoard friendly = this.getFriendlyOccupancy();
         BitBoard foe = this.getFoeOccupancy();
@@ -137,6 +137,8 @@ public abstract class BoardState {
     abstract Set<String> getOrientedWhite();
 
     abstract Set<String> getOrientedBlack();
+
+    abstract Set<String> getOrientedMove();
 
     @Override
     public final String toString() {

@@ -8530,10 +8530,6 @@ Pc4, Pb3, Pa2, Bb2, Pd2, Pe2, Pf2, Pg2, Ph2, Ra1, Nb1, Qd1, Ke1, Bf1, Ng1, Rh1
 Ra8, Nb8, Bc8, Qd8, Ke8, Bf8, Ng8, Rh8, Pa7, Pb7, Pc7, Pf7, Pg7, Ph7, Pd5, Pe4
 Pd2
 Pd4
-Pc4, Pd4, Pb3, Pa2, Bb2, Pe2, Pf2, Pg2, Ph2, Ra1, Nb1, Qd1, Ke1, Bf1, Ng1, Rh1
-Ra8, Nb8, Bc8, Qd8, Ke8, Bf8, Ng8, Rh8, Pa7, Pb7, Pc7, Pf7, Pg7, Ph7, Pd5, Pe4
-Pe4
-Pd3
 Pc4, Pb3, Pa2, Bb2, Pe2, Pf2, Pg2, Ph2, Ra1, Nb1, Qd1, Ke1, Bf1, Ng1, Rh1
 Ra8, Nb8, Bc8, Qd8, Ke8, Bf8, Ng8, Rh8, Pa7, Pb7, Pc7, Pf7, Pg7, Ph7, Pd5, Pd3
 Qd1
