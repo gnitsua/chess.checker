@@ -16,6 +16,10 @@ import java.util.stream.Stream;
 public
 class MoveList extends HashSet<BoardMove> {
 
+    public MoveList() {
+        super();
+    }
+
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public MoveList(final Collection<String> positions) {
         super();
@@ -27,6 +31,14 @@ class MoveList extends HashSet<BoardMove> {
         // noinspection ChainedMethodCall
         return positions.stream().map(MoveList::getPseudoLegalMovesForPosition)
                 .map(Collection::stream).flatMap(x -> x);
+    }
+
+    public static Set<BoardMove> getEvilTwinList(final Set<BoardMove> in) {
+        MoveList result = new MoveList();
+        for (BoardMove move : in) {
+            result.add(new BoardMove(move.getStartRow(), move.getStartCol(),  move.getEndRow(), move.getEndCol()));
+        }
+        return result;
     }
 
 

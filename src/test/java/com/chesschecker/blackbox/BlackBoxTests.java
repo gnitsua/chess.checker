@@ -2,6 +2,7 @@ package com.chesschecker.blackbox;
 
 import com.chesschecker.gamestate.BlackBoardState;
 import com.chesschecker.gamestate.BoardState;
+import com.chesschecker.gamestate.WhiteBoardState;
 import com.chesschecker.input.InputParser;
 import com.chesschecker.input.MoveList;
 import com.chesschecker.moves.BoardMove;

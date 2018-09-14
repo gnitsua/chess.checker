@@ -22,8 +22,6 @@ public class BoardStateFactoryTest {
         BoardState sut = BoardStateFactory.createBoardState(white, black,move);
 
         Assert.assertThat(sut, instanceOf(WhiteBoardState.class));
-        Assert.assertEquals("White is not correct", white, sut.getWhite());
-        Assert.assertEquals("Black is not correct", black, sut.getBlack());
     }
 
     @Test
@@ -34,8 +32,6 @@ public class BoardStateFactoryTest {
         BoardState sut = BoardStateFactory.createBoardState(white, black,move);
 
         Assert.assertThat(sut, instanceOf(BlackBoardState.class));
-        Assert.assertEquals("White is not correct", white, sut.getWhite());
-        Assert.assertEquals("Black is not correct", black, sut.getBlack());
     }
 
     @Test
@@ -47,7 +43,5 @@ public class BoardStateFactoryTest {
         BoardState sut = BoardStateFactory.createBoardState(white, black,move);
 
         Assert.assertThat(sut, instanceOf(WhiteBoardState.class));
-        Assert.assertEquals("White is not correct", empty, sut.getWhite());
-        Assert.assertEquals("Black is not correct", empty, sut.getBlack());
     }
 }
