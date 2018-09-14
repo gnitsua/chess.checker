@@ -136,6 +136,8 @@ public class BoardMove implements Move {
         return this.endPositionToString();
     }
 
+    public final String toBoringString() { return this.endPositionToString(); }
+
     @Override
     @SuppressWarnings("DesignForExtension")
     public int hashCode() {

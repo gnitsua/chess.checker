@@ -12,6 +12,6 @@ public final class Column {
     public static int columnLetterToNumber(final String col) {
         //Apparently negative numbers don't break this. So no need for input checking
         final char columnLetter = col.charAt(0);
-        return (int)columnLetter-(int)'a';
+        return (int) columnLetter - (int) 'a';
     }
 }

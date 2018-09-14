@@ -35,7 +35,9 @@ public class WhiteBoardState extends BoardState {
     }
 
     @SuppressWarnings("SuspiciousGetterSetter")
-    public final Set<String> getOrientedMove() { return this.move; }
+    public final Set<String> getOrientedMove() {
+        return this.move;
+    }
 
     public final Set<BoardMove> getValidMoves() {
         return super.getValidWhiteMoves();
