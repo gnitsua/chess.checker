@@ -103,16 +103,48 @@ As you can see, we define a few special types of moves to handle the intricacies
 
 ## Black box testing
 
-Early on, to generate some test input data, I wrote a little script to generate sample input for this program from real game data. You can read more about this in the REA DME in the repository:
+Early on, to generate some test input data, I wrote a little script to generate sample input for this program from real game data. You can read more about this in the README in the repository:
 https://github.com/mudkipmaster/ChessGameToMoveList
 
-While this does not exhaustively test moves, it does give us at least one legal move for each board state. We generate 2,500 tests from this data which achieves 75% coverage of the code. While this may not be the most efficient method of testing, it does allow a lot of tests to be generated quickly (though this test only counts as one in our total test count). Fun fact: Castling moves appeared 58 times in our test data.
+While this does not exhaustively test moves, it does give us at least one legal move for each board state. We generate 4,536 tests from 1000 games which achieves 75% coverage of the code. While this may not be the most efficient method of testing, it does allow a lot of tests to be generated quickly (though this test only counts as one in our total test count). Fun fact: Castling moves appeared 58 times in our test data.
+
+## Black Move Support
+
+In order to reduce the number of execution paths for move validation, it was decided that the validation would only work for white moves. In order to support black moves, we need to orient the board such that it appears to the move validator to be a white move. To do this, we introduce the idea of "Oriented" or the board state from the white perspective. When we parse the board state from the input, we use the following factory:
+
+```
+if (whiteIn.containsAll(moveIn)) {
+    return new WhiteBoardState(whiteIn, blackIn, moveIn);
+} else {
+    if (blackIn.containsAll(moveIn)) {
+        return new BlackBoardState(whiteIn, blackIn, moveIn);
+    } else {// The piece that is supposed to be moved is not actually a piece. Or
+        // the piece list contains pieces that are both black and white
+        // Default to white, and return no pieces
+    return new WhiteBoardState();
+}       
+```
+
+WhiteBoardState has the following `getOrientedWhite()` method:
+```
+public final Set<String> getOrientedWhite() {
+    return this.white;
+}
+```
+
+While BlackBoardState has the following `getOrientedWhite()` method, which serves to flip the black positions so that they appear as they would from the white perspective:
+```
+public final Set<String> getOrientedWhite() {
+    return PieceList.flipRows(this.black);
+}
+```
+
+This handles the majority of the change in perspective. From there we need only to flip the resulting `MoveList` (which is done in BlackBoardState's `getValidMoves()`. This resulting list is called the `MoveList`'s "Evil twin".
 
 ## Issues
 
 While technically all of our black box tests pass, due to the nature of our testing protocol (simply verifying that the ground truth move is within the list of valid moves we could also pass all of our tests simply by returning the list of all possible moves for a give piece. So while for the example shown in the beginning we return the correct results, there are a few issues outstanding:
 
-- Right now we can only generate valid moves for white pieces. This is because in an effort to reduce the complexity of the move validation all rules were made from the perspective of a white player. The infrastructure for accepting black moves is in place (there are both white and black board state classes that handle orienting and mirroring) the code has not yet been debugged.
 - As previously stated, Castling appears relatively infrequently. While Castling moves will return for a King that is in the correct location on the board, no checks are currently done to ensure that the Rook is also in place, its castling move is uninhibited, and that none of the spaces this King must traverse are in check. As such a Castling move may appear in the results and not actually be valid. This problem lingers because it is the only type of move whose validity is dependent on board state rather than just peace state. It will probably be handled as part of the final filtering for check, but this isn't finalized
 - Finally the big one, right now we don't verify that moves do not place or leave the King in check. Most of the logic has actually been worked out for this, but it is currently commented out pending further testing. This is a big one, but its also a pretty complicated thing to verify without adding a ton of additional logic outside of generic piece validation.
 
