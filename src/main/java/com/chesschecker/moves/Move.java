@@ -19,4 +19,6 @@ public interface Move extends Comparable<Move> {
 
     String toString();
 
+    String toBoringString();
+
 }

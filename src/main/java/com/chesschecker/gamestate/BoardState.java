@@ -104,7 +104,10 @@ public abstract class BoardState {
         return pseudoFoeMoves.getOccupancy();
     }
 
-
+    private Set<String> getNextBlackPieceList(final Move moveIn){
+        final Set<String> currentBlack = this.getOrientedBlack();
+        return PieceList.filterMoves(currentBlack,moveIn.toBoringString()+ '$');
+    }
 
     private boolean safeFromCheck(final Move moveIn){
         final BitBoard friendly = this.getFriendlyOccupancy();
@@ -113,26 +116,18 @@ public abstract class BoardState {
         final BitBoard friendlyNoPiece = Board.xor(friendly,moveIn.getOccupancy());
         final BitBoard friendlyNextState = Board.or(friendlyNoPiece,moveIn.getAttacking());
 
+
         //Move list expects positions to be from the white perspective, so flip first
-        final MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(this.getOrientedBlack()));
+        final MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(getNextBlackPieceList(moveIn)));
         final Set<BoardMove> blackAttacksReversed = pseudoBlackAttacks.stream()
-                .filter(x -> x.isValid(Board.mirrorVertical(foe),Board.mirrorVertical(friendlyNoPiece)))
+                .filter(x -> x.isValid(Board.mirrorVertical(foe),Board.mirrorVertical(friendlyNextState)))
                 .collect(Collectors.toSet());
         final MoveList blackMoves = MoveList.getEvilTwinList(blackAttacksReversed);
         final BitBoard blackAttacks = blackMoves.getAttacking();
         if(0L == Board.and(friendlyKing, blackAttacks).toLong()){//not currently in check, not pinned
             return true;
         } else {
-            Set<BoardMove> blackAttacksReversed2 = pseudoBlackAttacks.stream()
-                    .filter(x -> x.isValid(Board.mirrorVertical(foe),Board.mirrorVertical(friendlyNextState)))
-                    .collect(Collectors.toSet());
-            final MoveList blackMoves2 = MoveList.getEvilTwinList(blackAttacksReversed2);
-            final BitBoard blackAttacks2 = blackMoves2.getAttacking();
-            if(0L == Board.and(friendlyKing, blackAttacks2).toLong()){//does not leave the king in check
-                return true;
-            } else {
-                return false;
-            }
+            return false;
         }
     }
 
