@@ -35,8 +35,8 @@ class MoveList extends HashSet<BoardMove> {
                 .map(Collection::stream).flatMap(x -> x);
     }
 
-    public static Set<BoardMove> getEvilTwinList(final Iterable<? extends BoardMove> in) {
-        final Set<BoardMove> result = new MoveList();
+    public static MoveList getEvilTwinList(final Iterable<? extends BoardMove> in) {
+        final MoveList result = new MoveList();
         for (final BoardMove move : in) {
             try {
                 final Class<? extends BoardMove> aClass = move.getClass();

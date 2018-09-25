@@ -31,10 +31,11 @@ public class CheckTests {
     public static Collection<Object[]> data() {
         BitBoard empty = new Board();
         ArrayList<Object[]> data = new ArrayList();
-
+        //These tests come from section 3.9 of https://www.fide.com/fide/handbook.html?id=171&view=article
         data.add(new String[]{"Ke1, Rd2\nRe8\nRd2\n","Rd3"});//White is pinned (not currently blocking check)
         data.add(new String[]{"Ke1, Re2\nRe8\nRe2\n","Rf2"});//White is pinned
-        data.add(new String[]{"Ke1, Rf2\nRe8\nKe1\n","Ke2"});//King can't move into check
+        data.add(new String[]{"Kd1, Rf2\nRe8\nKe1\n","Ke1"});//King can't move into check
+        data.add(new String[]{"Ke2, Rf2\nRe8\nKe2\n","Ke1"});//Xray attacks
 
         return data;
     }
