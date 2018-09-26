@@ -4,6 +4,7 @@ import com.chesschecker.input.Board;
 import com.chesschecker.input.MoveList;
 import com.chesschecker.input.PieceList;
 import com.chesschecker.moves.BoardMove;
+import com.chesschecker.moves.KingMove;
 import com.chesschecker.moves.Move;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.StringHelper;
@@ -112,7 +113,12 @@ public abstract class BoardState {
     private boolean safeFromCheck(final Move moveIn){
         final BitBoard friendly = this.getFriendlyOccupancy();
         final BitBoard foe = this.getFoeOccupancy();
-        final BitBoard friendlyKing = this.getFriendlyKingOccupancy();
+        final BitBoard friendlyKing;
+        if(moveIn instanceof KingMove){
+            friendlyKing = moveIn.getAttacking();//calculate check based on final location of king
+        } else {
+            friendlyKing = this.getFriendlyKingOccupancy();
+        }
         final BitBoard friendlyNoPiece = Board.xor(friendly,moveIn.getOccupancy());
         final BitBoard friendlyNextState = Board.or(friendlyNoPiece,moveIn.getAttacking());
 
@@ -124,6 +130,8 @@ public abstract class BoardState {
                 .collect(Collectors.toSet());
         final MoveList blackMoves = MoveList.getEvilTwinList(blackAttacksReversed);
         final BitBoard blackAttacks = blackMoves.getAttacking();
+//        System.out.println(blackAttacks);
+//        System.out.println(Board.and(friendlyKing, blackAttacks));
         if(0L == Board.and(friendlyKing, blackAttacks).toLong()){//not currently in check, not pinned
             return true;
         } else {
