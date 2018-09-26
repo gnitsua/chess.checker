@@ -130,8 +130,8 @@ public abstract class BoardState {
                 .collect(Collectors.toSet());
         final MoveList blackMoves = MoveList.getEvilTwinList(blackAttacksReversed);
         final BitBoard blackAttacks = blackMoves.getAttacking();
-//        System.out.println(blackAttacks);
-//        System.out.println(Board.and(friendlyKing, blackAttacks));
+        System.out.println(blackAttacks);
+        System.out.println(Board.and(friendlyKing, blackAttacks));
         if(0L == Board.and(friendlyKing, blackAttacks).toLong()){//not currently in check, not pinned
             return true;
         } else {

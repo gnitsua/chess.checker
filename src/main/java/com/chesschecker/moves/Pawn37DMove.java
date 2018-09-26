@@ -23,11 +23,15 @@ public class Pawn37DMove extends ColoredMove {
     }
 
     private boolean isValidPawn37DMove(final BitBoard friendly, final BitBoard foe) {
-        final Move movePart1 = new PawnMove(this.startRow, this.startCol, 3, this.startCol);
-        final Move movePart2 = new PawnCaptureMove(3, this.startCol, this.endRow, this.endCol);
-        if (movePart1.isValid(friendly, foe)) {
-            if (movePart2.isValid(friendly, foe)) {
-                return true;
+        if(1 == this.startRow) {
+            final Move movePart1 = new PawnMove(this.startRow, this.startCol, 3, this.startCol);
+            final Move movePart2 = new PawnCaptureMove(3, this.startCol, this.endRow, this.endCol);
+            if (movePart1.isValid(friendly, foe)) {
+                if (movePart2.isValid(friendly, foe)) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }

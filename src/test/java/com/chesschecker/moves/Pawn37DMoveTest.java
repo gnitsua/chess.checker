@@ -42,6 +42,7 @@ public class Pawn37DMoveTest {
         friendly.setOccupancy(0, 0);//There will always be a friendly at the start position
         friendly.setOccupancy(4, 2);
         friendly.setOccupancy(4, 4);
+        friendly.setOccupancy(4, 6);
 
         return Arrays.asList(new Object[][]{
                 /**
@@ -55,6 +56,7 @@ public class Pawn37DMoveTest {
                 {1, 3, 4, 4, friendly, empty, "Pe5", false},
 
                 {0, 0, 1, 2, empty, empty, "Pc2", false},
+                {2, 5, 4, 6, empty, friendly, "Pg5", false}
 
         });
     }
