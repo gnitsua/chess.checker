@@ -6,6 +6,7 @@ import com.chesschecker.input.PieceList;
 import com.chesschecker.moves.BoardMove;
 import com.chesschecker.moves.KingMove;
 import com.chesschecker.moves.Move;
+import com.chesschecker.moves.PawnMove;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.StringHelper;
 
@@ -126,6 +127,7 @@ public abstract class BoardState {
         //Move list expects positions to be from the white perspective, so flip first
         final MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(getNextBlackPieceList(moveIn)));
         final Set<BoardMove> blackAttacksReversed = pseudoBlackAttacks.stream()
+                .filter(x -> !(x instanceof PawnMove))//PawnMoves cannot capture King
                 .filter(x -> x.isValid(Board.mirrorVertical(foe),Board.mirrorVertical(friendlyNextState)))
                 .collect(Collectors.toSet());
         final MoveList blackMoves = MoveList.getEvilTwinList(blackAttacksReversed);
