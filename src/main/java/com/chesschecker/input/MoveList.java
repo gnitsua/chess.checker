@@ -92,7 +92,6 @@ class MoveList extends HashSet<BoardMove> {
                             case PAWN:
                                 result.add(new PawnMove(row, column, i, j));
                                 result.add(new PawnCaptureMove(row, column, i, j));
-                                result.add(new Pawn37DMove(row, column, i, j));
                                 break;
                             default:
                                 //Don't add moves that don't have a valid piece type

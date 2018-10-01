@@ -99,8 +99,7 @@ public class MoveListTest {
         sut.forEach(boardMove -> {
             Assert.assertEquals(true,
                     (boardMove instanceof PawnMove) ||
-                            (boardMove instanceof PawnCaptureMove) ||
-                            (boardMove instanceof Pawn37DMove)
+                            (boardMove instanceof PawnCaptureMove)
             );
             Assert.assertEquals(startRow, boardMove.getStartRow());
             Assert.assertEquals(startCol, boardMove.getStartCol());

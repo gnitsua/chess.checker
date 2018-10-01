@@ -3,10 +3,7 @@ package com.chesschecker.gamestate;
 import com.chesschecker.input.Board;
 import com.chesschecker.input.MoveList;
 import com.chesschecker.input.PieceList;
-import com.chesschecker.moves.BoardMove;
-import com.chesschecker.moves.KingMove;
-import com.chesschecker.moves.Move;
-import com.chesschecker.moves.PawnMove;
+import com.chesschecker.moves.*;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.StringHelper;
 
@@ -119,7 +116,7 @@ public abstract class BoardState {
         final BitBoard friendlyNextState = Board.or(friendlyNoPiece, moveIn.getAttacking());
 
         if (moveIn instanceof KingMove) {
-            friendlyKing = new Board();//because we will be moving the king (and its occupancy will be added later, return empty bitboard
+            friendlyKing = moveIn.getAttacking();//because we will be moving the king (and its occupancy will be added later, return empty bitboard
         } else {
             friendlyKing = this.getFriendlyKingOccupancy();
         }
