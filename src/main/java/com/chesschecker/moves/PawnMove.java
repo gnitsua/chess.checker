@@ -72,7 +72,7 @@ public class PawnMove extends SlideMove {
             return false;
         }
     }
-    
+
 
     @Override
     public final int hashCode() {

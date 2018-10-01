@@ -106,35 +106,36 @@ public abstract class BoardState {
         return pseudoFoeMoves.getOccupancy();
     }
 
-    private Set<String> getNextBlackPieceList(final Move moveIn){
+    private Set<String> getNextBlackPieceList(final Move moveIn) {
         final Set<String> currentBlack = this.getOrientedBlack();
-        return PieceList.filterMoves(currentBlack,moveIn.toBoringString()+ '$');
+        return PieceList.filterMoves(currentBlack, moveIn.toBoringString() + '$');
     }
 
-    private boolean safeFromCheck(final Move moveIn){
+    private boolean safeFromCheck(final Move moveIn) {
         final BitBoard friendly = this.getFriendlyOccupancy();
         final BitBoard foe = this.getFoeOccupancy();
         final BitBoard friendlyKing;
-        if(moveIn instanceof KingMove){
-            friendlyKing = moveIn.getAttacking();//calculate check based on final location of king
+        final BitBoard friendlyNoPiece = Board.xor(friendly, moveIn.getOccupancy());
+        final BitBoard friendlyNextState = Board.or(friendlyNoPiece, moveIn.getAttacking());
+
+        if (moveIn instanceof KingMove) {
+            friendlyKing = new Board();//because we will be moving the king (and its occupancy will be added later, return empty bitboard
         } else {
             friendlyKing = this.getFriendlyKingOccupancy();
         }
-        final BitBoard friendlyNoPiece = Board.xor(friendly,moveIn.getOccupancy());
-        final BitBoard friendlyNextState = Board.or(friendlyNoPiece,moveIn.getAttacking());
 
 
         //Move list expects positions to be from the white perspective, so flip first
         final MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(getNextBlackPieceList(moveIn)));
         final Set<BoardMove> blackAttacksReversed = pseudoBlackAttacks.stream()
                 .filter(x -> !(x instanceof PawnMove))//PawnMoves cannot capture King
-                .filter(x -> x.isValid(Board.mirrorVertical(foe),Board.mirrorVertical(friendlyNextState)))
+                .filter(x -> x.isValid(Board.mirrorVertical(foe), Board.mirrorVertical(friendlyNextState)))
                 .collect(Collectors.toSet());
         final MoveList blackMoves = MoveList.getEvilTwinList(blackAttacksReversed);
         final BitBoard blackAttacks = blackMoves.getAttacking();
-        System.out.println(blackAttacks);
-        System.out.println(Board.and(friendlyKing, blackAttacks));
-        if(0L == Board.and(friendlyKing, blackAttacks).toLong()){//not currently in check, not pinned
+//        System.out.println(blackAttacks);
+//        System.out.println(friendlyKing);
+        if (0L == Board.and(friendlyKing, blackAttacks).toLong()) {//not currently in check, not pinned
             return true;
         } else {
             return false;
@@ -144,10 +145,6 @@ public abstract class BoardState {
     protected Set<BoardMove> getValidWhiteMoves() {
         BitBoard friendly = this.getFriendlyOccupancy();
         BitBoard foe = this.getFoeOccupancy();
-
-
-
-
 
 
 //
