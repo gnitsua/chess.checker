@@ -141,11 +141,22 @@ public final Set<String> getOrientedWhite() {
 
 This handles the majority of the change in perspective. From there we need only to flip the resulting `MoveList` (which is done in BlackBoardState's `getValidMoves()`. This resulting list is called the `MoveList`'s "Evil twin".
 
+## Check
+
+Check was the entire reason that this piece of software needed to generate all possible moves for a side, rather than just the moves for a given piece. To know whether a piece can move, even with that piece isn't the king, we need to know all the moves the other side can make and whether the King is attacked. Check is defined as:
+
+>The king is said to be 'in check' if it is attacked by one or more of the opponent's pieces, even if such pieces are constrained from moving to the square occupied by the king because they would then leave or place their own king in check. No piece can be moved that will either expose the king of the same color to check or leave that king in check. 
+
+To do this we the list of all moves the opponent (Black or White depending on the move) can make next turn. We generate a bitboard that represents the occupancy of friendly pieces for each pseudo valid move, removing the piece from its current location and placing it at its end position. We use this (after mirroring it) as the foe bitboard in the calculation of the black moves which results in a bitboard of all possible opponent moves.
+
+Actually checking for check is easy, we simply need to check whether the square that the friendly King is on at the end of its turn is attacked by the opponent. Based on this check, and moves are removed from the set of pseudo valid moves to obtain moves that are valid
+
+Unfortunately because the moves the opponent can make next turn are dependent on the current move, we must calculate opponent moves for each possible pseudo valid move. This is computationally inefficient, and it should be possible to do this more efficiently.
+
 ## Issues
 
 While technically all of our black box tests pass, due to the nature of our testing protocol (simply verifying that the ground truth move is within the list of valid moves we could also pass all of our tests simply by returning the list of all possible moves for a give piece. So while for the example shown in the beginning we return the correct results, there are a few issues outstanding:
 
 - As previously stated, Castling appears relatively infrequently. While Castling moves will return for a King that is in the correct location on the board, no checks are currently done to ensure that the Rook is also in place, its castling move is uninhibited, and that none of the spaces this King must traverse are in check. As such a Castling move may appear in the results and not actually be valid. This problem lingers because it is the only type of move whose validity is dependent on board state rather than just peace state. It will probably be handled as part of the final filtering for check, but this isn't finalized
-- Finally the big one, right now we don't verify that moves do not place or leave the King in check. Most of the logic has actually been worked out for this, but it is currently commented out pending further testing. This is a big one, but its also a pretty complicated thing to verify without adding a ton of additional logic outside of generic piece validation.
 
 Overall I'm not sure the solution I came up with was the best one. I hadn't written in Java since high school, and I think that I could have organized my code differently if I better grasped how the language handles object orientation. I also might have developed more than I needed. This program really generates all valid moves for a side rather than focusing on just the peice in question. I did this because it made it easy to obtain the attacks and verify check, but there might have been a more elegant solution. Also my set method comes at the expense of performance. My inital list of moves is quite large even for relatively simple boards, but the use of Java Streams (my first experience) actually means that it runs pretty quickly. I could probably further optimize my use of Streams to improve performance.
