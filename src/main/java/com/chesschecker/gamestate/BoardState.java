@@ -1,8 +1,9 @@
 package com.chesschecker.gamestate;
 
+import com.chesschecker.input.Board;
 import com.chesschecker.input.MoveList;
 import com.chesschecker.input.PieceList;
-import com.chesschecker.moves.BoardMove;
+import com.chesschecker.moves.*;
 import com.chesschecker.util.BitBoard;
 import com.chesschecker.util.StringHelper;
 
@@ -92,23 +93,57 @@ public abstract class BoardState {
         return pseudoFriendlyMoves.getOccupancy();//TODO: this is a super inefficient way to get this
     }
 
+    BitBoard getFriendlyKingOccupancy() {
+        MoveList noKing = new MoveList(this.getWhiteKing());//No king allows for check of xray attack
+        return noKing.getOccupancy();
+    }
+
     BitBoard getFoeOccupancy() {
         MoveList pseudoFoeMoves = new MoveList(this.getOrientedBlack());
         return pseudoFoeMoves.getOccupancy();
     }
 
-    protected Set<BoardMove> getValidWhiteMoves() {
+    private Set<String> getNextBlackPieceList(final Move moveIn) {
+        final Set<String> currentBlack = this.getOrientedBlack();
+        return PieceList.filterMoves(currentBlack, moveIn.toBoringString() + '$');
+    }
 
-//        System.out.println(whiteOccupancy);
-//        return null;
-//        //Move list expects positions to be from the white perspective, so flip first
-//        MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(this.getOrientedBlack()));
-//        BitBoard blackOccupancy = pseudoBlackAttacks.getOccupancy();
-//        blackOccupancy.mirrorVertical();//TODO: does this mean there should be a BlackMoveList class?
-//
-//        Set<BoardMove> blackAttacks = pseudoBlackAttacks.stream()
-//                .filter(x -> x.isValid(blackOccupancy, whiteOccupancy))
-//                .collect(Collectors.toSet());
+    private boolean safeFromCheck(final Move moveIn) {
+        final BitBoard friendly = this.getFriendlyOccupancy();
+        final BitBoard foe = this.getFoeOccupancy();
+        final BitBoard friendlyKing;
+        final BitBoard friendlyNoPiece = Board.xor(friendly, moveIn.getOccupancy());
+        final BitBoard friendlyNextState = Board.or(friendlyNoPiece, moveIn.getAttacking());
+
+        if (moveIn instanceof KingMove) {
+            friendlyKing = moveIn.getAttacking();//because we will be moving the king (and its occupancy will be added later, return empty bitboard
+        } else {
+            friendlyKing = this.getFriendlyKingOccupancy();
+        }
+
+
+        //Move list expects positions to be from the white perspective, so flip first
+        final MoveList pseudoBlackAttacks = new MoveList(PieceList.flipRows(getNextBlackPieceList(moveIn)));
+        final Set<BoardMove> blackAttacksReversed = pseudoBlackAttacks.stream()
+                .filter(x -> !(x instanceof PawnMove))//PawnMoves cannot capture King
+                .filter(x -> x.isValid(Board.mirrorVertical(foe), Board.mirrorVertical(friendlyNextState)))
+                .collect(Collectors.toSet());
+        final MoveList blackMoves = MoveList.getEvilTwinList(blackAttacksReversed);
+        final BitBoard blackAttacks = blackMoves.getAttacking();
+//        System.out.println(blackAttacks);
+//        System.out.println(friendlyKing);
+        if (0L == Board.and(friendlyKing, blackAttacks).toLong()) {//not currently in check, not pinned
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected Set<BoardMove> getValidWhiteMoves() {
+        BitBoard friendly = this.getFriendlyOccupancy();
+        BitBoard foe = this.getFoeOccupancy();
+
+
 //
 //        MoveList psuedoMovesForCheck = new KingProtectionMoveList(this.getWhiteKing());
 //        //Moves that could put white into check are any black moves into the King position
@@ -120,11 +155,9 @@ public abstract class BoardState {
 //TODO: need to check both with the piece removed, and with it in its new location
 //
         MoveList pseudoFriendlyMoves = new MoveList(this.getOrientedMove());//without king enables Xray attacks
-//        MoveList psuedoMovesForMove = new MoveList(this.move);
-        BitBoard friendly = this.getFriendlyOccupancy();
-        BitBoard foe = this.getFoeOccupancy();
+
         Set<BoardMove> movesForMoveWithoutPins = pseudoFriendlyMoves.stream()
-                .filter(x -> x.isValid(friendly, foe)).collect(Collectors.toSet());
+                .filter(x -> x.isValid(friendly, foe)).filter(this::safeFromCheck).collect(Collectors.toSet());
 ////        Set<BoardMove> movesForMoveWithPins = movesForMoveWithoutPins.filter();
 //        return null;
 

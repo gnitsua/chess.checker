@@ -35,8 +35,8 @@ class MoveList extends HashSet<BoardMove> {
                 .map(Collection::stream).flatMap(x -> x);
     }
 
-    public static Set<BoardMove> getEvilTwinList(final Iterable<? extends BoardMove> in) {
-        final Set<BoardMove> result = new MoveList();
+    public static MoveList getEvilTwinList(final Iterable<? extends BoardMove> in) {
+        final MoveList result = new MoveList();
         for (final BoardMove move : in) {
             try {
                 final Class<? extends BoardMove> aClass = move.getClass();
@@ -92,7 +92,6 @@ class MoveList extends HashSet<BoardMove> {
                             case PAWN:
                                 result.add(new PawnMove(row, column, i, j));
                                 result.add(new PawnCaptureMove(row, column, i, j));
-                                result.add(new Pawn37DMove(row, column, i, j));
                                 break;
                             default:
                                 //Don't add moves that don't have a valid piece type
@@ -120,9 +119,15 @@ class MoveList extends HashSet<BoardMove> {
             final MoveList otherList = (MoveList) obj;
 
             if (this.size() != otherList.size()) {
-                return false;
+                returnVal = false;
             }
-            return this.containsAll(otherList);
+            else {
+                if(this.containsAll(otherList)){
+                    returnVal = true;
+                } else {
+                    returnVal = false;
+                }
+            }
 
         }
 

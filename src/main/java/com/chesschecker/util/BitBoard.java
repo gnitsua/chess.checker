@@ -7,7 +7,7 @@ public interface BitBoard {
 
     long toLong();
 
-    void mirrorVertical();
+
 
     @Override
     String toString();

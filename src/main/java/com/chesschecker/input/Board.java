@@ -44,6 +44,19 @@ public final class Board implements BitBoard {
         return new Board(~longX);
     }
 
+    public static BitBoard mirrorVertical(final BitBoard x) {
+        final long k1 = 0x00FF00FF00FF00FFL;
+        final long k2 = 0x0000FFFF0000FFFFL;
+        final long oneRow = 8L;
+        final long twoRow = 16L;
+        final long threeRow = 32L;
+        long temp = x.toLong();
+        temp = ((temp >>> oneRow) & k1) | ((temp & k1) << oneRow);
+        temp = ((temp >>> twoRow) & k2) | ((temp & k2) << twoRow);
+        temp = (temp >>> threeRow) | (temp << threeRow);
+        return new Board(temp);
+    }
+
     public long toLong() {
         return this.state;
     }
@@ -75,17 +88,6 @@ public final class Board implements BitBoard {
             return;
         }
 
-    }
-
-    public void mirrorVertical() {
-        final long k1 = 0x00FF00FF00FF00FFL;
-        final long k2 = 0x0000FFFF0000FFFFL;
-        final long oneRow = 8L;
-        final long twoRow = 16L;
-        final long threeRow = 32L;
-        this.state = ((this.state >>> oneRow) & k1) | ((this.state & k1) << oneRow);
-        this.state = ((this.state >>> twoRow) & k2) | ((this.state & k2) << twoRow);
-        this.state = (this.state >>> threeRow) | (this.state << threeRow);
     }
 
     public boolean isEmpty() {

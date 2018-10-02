@@ -30,6 +30,7 @@ public class InputParserTest {
             BoardState test = sut.parseInput();
             Assert.assertEquals(test.getWhite(), whiteSet);
             Assert.assertEquals(test.getBlack(), blackSet);
+            Assert.assertEquals(test.getMove(), moveSet);
             Assert.assertEquals(expectedOutput,baos.toString());
         } catch (IOException e) {
             e.printStackTrace();

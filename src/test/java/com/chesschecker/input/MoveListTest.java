@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @SuppressWarnings("ALL")
@@ -99,8 +100,7 @@ public class MoveListTest {
         sut.forEach(boardMove -> {
             Assert.assertEquals(true,
                     (boardMove instanceof PawnMove) ||
-                            (boardMove instanceof PawnCaptureMove) ||
-                            (boardMove instanceof Pawn37DMove)
+                            (boardMove instanceof PawnCaptureMove)
             );
             Assert.assertEquals(startRow, boardMove.getStartRow());
             Assert.assertEquals(startCol, boardMove.getStartCol());
@@ -135,5 +135,33 @@ public class MoveListTest {
 
     @Test
     public void getAttacking() {
+    }
+
+    @Test
+    public void equalitySameObject(){
+        PieceList white = new PieceList("Ph2, Pg3");
+        MoveList sut = new MoveList(white);
+        Assert.assertEquals(sut,sut);
+    }
+
+    @Test
+    public void equalityDifferentLength(){
+        PieceList white = new PieceList("Ph2, Pg3");
+        MoveList sut = new MoveList(white);
+        MoveList sut2 = new MoveList(white);
+        sut2.remove(sut2.iterator().next());
+        Assert.assertNotEquals(sut,sut2);
+    }
+
+    @Test
+    public void equalitySameLengthDifferentPieces(){
+        PieceList white = new PieceList("Ph2, Pg3");
+        MoveList sut = new MoveList(white);
+        Iterator i = sut.iterator();
+        i.next();
+        sut.remove(i.next());
+        MoveList sut2 = new MoveList(white);
+        sut2.remove(sut2.iterator().next());
+        Assert.assertNotEquals(sut,sut2);
     }
 }
