@@ -119,9 +119,15 @@ class MoveList extends HashSet<BoardMove> {
             final MoveList otherList = (MoveList) obj;
 
             if (this.size() != otherList.size()) {
-                return false;
+                returnVal = false;
             }
-            return this.containsAll(otherList);
+            else {
+                if(this.containsAll(otherList)){
+                    returnVal = true;
+                } else {
+                    returnVal = false;
+                }
+            }
 
         }
 
