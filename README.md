@@ -23,8 +23,13 @@ All tests can be found in the `src/test` directory. They are Junit tests. I thin
 
 See the bottom of this README for information about the status of this program.
 
+## Architecture
+The goal of this project was not performance but rather to be highly "dependable". To do this, move validation was done using a set subtraction system wherein each piece’s valid moves are a subset of every possible valid move. The goal of the architecture was to reduce code reuse and eliminate unnecessary complexity while maintaining modularity. The following figure shows the general structure of the code.
+
+![Image of DataFlow](https://github.com/mudkipmaster/chess.checker/blob/66e21967e9ca18356845e2fde1eb0a4d216e978e/inspectionresults/Dataflow.png)
+
 ## Move Validation
-The goal of this project was not performance but rather to be highly "dependable". To do this, move validation was done using a set subtraction system wherein each pieces valid moves are a subset of every possible valid move. The following figure sets up this hieracy.
+The following figure sets up this hieracy.
 
 ![Image of Class Hierarchy](https://github.com/mudkipmaster/chess.checker/blob/ba3636c97f0209adf60ac8316bb1a6ae6ad8633e/inspectionresults/ClassHeirarchy.png)
 
